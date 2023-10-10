@@ -1,8 +1,11 @@
-// import React from 'react'
+// import React from 'react';
+import NavBar from '../../../components/NavBar/NavBar';
 
 export const LichHoc = () => {
     return (
-        <div>
-            Lich Hoc</div>
-    )
-}
+        <>
+            <NavBar />
+            <div>Lịch học</div>
+        </>
+    );
+};
