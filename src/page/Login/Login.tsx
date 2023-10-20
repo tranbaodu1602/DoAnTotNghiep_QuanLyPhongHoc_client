@@ -67,7 +67,7 @@ export const Login = () => {
                                 <div className="icon-user">
                                     <i className="fa-solid fa-user"></i>
                                 </div>
-                                <input type="text" placeholder="Nhập tài khoản" />
+                                <input type="text" placeholder="Nhập tài khoản..." />
                             </div>
                         </div>
                         <div className="password">
@@ -76,7 +76,7 @@ export const Login = () => {
                                 <div className="icon-key">
                                     <i className="fa-solid fa-key"></i>
                                 </div>
-                                <input type="text" placeholder="Nhập mật khẩu" />
+                                <input type="text" placeholder="Nhập mật khẩu..." />
                             </div>
                         </div>
                         <button className="btn-submit" onClick={handleSubmit}>

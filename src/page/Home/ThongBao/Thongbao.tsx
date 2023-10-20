@@ -1,10 +1,11 @@
 // import React from 'react'
-import NavBar from '../../../components/NavBar/NavBar'
+import NavBar from '../../../components/NavBar/NavBar';
 
 export const Thongbao = () => {
     return (
         <>
             <NavBar />
-            <div>Thong Bao</div></>
-    )
-}
+            <div>Thong Bao</div>
+        </>
+    );
+};

@@ -3,7 +3,10 @@
     height: 8vh;
     border-bottom: 1px solid #ccc;
     box-shadow: rgba(33, 35, 38, 0.3) 0px 10px 10px -10px;
+    background-color: #fff;
     display: flex;
+    position: fixed;
+    z-index: 1000;
 
     & .logo {
         width: 20%;
@@ -52,11 +55,16 @@
             align-items: center;
         }
 
+        & .active {
+            box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+        }
+
         & .ul .li {
             text-decoration: none;
             display: inline-block;
-            margin: 0px 32px;
+            margin: 0px 8px;
             color: #878787;
+            padding: 8px 24px;
 
             & .dir {
                 margin-left: 8px;
@@ -110,10 +118,11 @@
 
             & .modal-logout {
                 position: absolute;
-                top: 8%;
+                top: 110%;
                 width: 220px;
                 background-color: #fff;
                 box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+                z-index: 10;
 
                 & ul {
                     display: flex;

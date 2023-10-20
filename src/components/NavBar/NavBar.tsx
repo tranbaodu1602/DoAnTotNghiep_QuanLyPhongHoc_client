@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Badge } from 'antd';
 import logo from '../../assets/images/tieude4.png';
 import avt from '../../assets/images/avt4.jpg';
 import './navbar.scss';
@@ -28,9 +29,11 @@ const NavBar: React.FC = () => {
                 <ul className="ul">
                     <li className="li">
                         <i className="fa-solid fa-house-chimney"></i>
-                        <Link className="dir" to="/home">
-                            Trang Chủ
-                        </Link>
+                        <Badge count={5} style={{ right: '-10px' }}>
+                            <Link className="dir" to="/home">
+                                Trang Chủ
+                            </Link>
+                        </Badge>
                     </li>
                     <li className="li">
                         <i className="fa-solid fa-message"></i>

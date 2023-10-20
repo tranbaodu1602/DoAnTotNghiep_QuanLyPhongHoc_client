@@ -6,6 +6,7 @@
 //import {PrivateRoute} from "../../route/"
 import NavBar from '../../components/NavBar/NavBar.tsx';
 import Sider from '../../components/Sider/Sider.tsx';
+import Content from '../../components/Content/Content.tsx';
 import Footer from '../../components/Footer/Footer.tsx';
 import { Outlet } from 'react-router-dom';
 
@@ -20,16 +21,16 @@ const Home = () => {
             <NavBar />
 
             <Sider />
-            <div style={{ backgroundColor: 'red', height: '100px', width: '200px' }}>
-                abv
-                <Outlet />
-                {/* <PrivateRoute path="\home\lichhoc"
+            <Content />
+            {/* <div> */}
+            <Outlet />
+            {/* <PrivateRoute path="\home\lichhoc"
                 component={LichHoc}>
                 </PrivateRoute>
                 <PrivateRoute path="\home\thongbao"
                 component={Thongbao}>
                 </PrivateRoute> */}
-            </div>
+            {/* </div> */}
             <Footer />
         </>
     );
