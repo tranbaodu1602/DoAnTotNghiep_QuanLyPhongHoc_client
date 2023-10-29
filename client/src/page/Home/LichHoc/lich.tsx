@@ -16,7 +16,7 @@ import {
     DateNavigator,
     TodayButton,
 } from '@devexpress/dx-react-scheduler-material-ui';
-import { SinhVien } from '../../../../DataSample';
+import { MonHoc } from '../../../../DataSample';
 
 const ExternalViewSwitcher = ({
     currentViewName,
@@ -37,22 +37,6 @@ const ExternalViewSwitcher = ({
     </RadioGroup>
 );
 
-const Appointment: React.FC<{
-    children: React.ReactNode;
-    style: React.CSSProperties;
-}> = ({ children, style, ...restProps }) => (
-    <Appointments.Appointment
-        {...restProps}
-        style={{
-            ...style,
-            backgroundColor: '#FFC107',
-            borderRadius: '8px',
-        }}
-    >
-        {children}
-    </Appointments.Appointment>
-);
-
 const CustomTimeTableCell: React.FC<{ startDate: Date }> = ({ startDate }) => {
     const hour = startDate.getHours();
     let timeSlotText = '';
@@ -69,12 +53,57 @@ const CustomTimeTableCell: React.FC<{ startDate: Date }> = ({ startDate }) => {
 };
 
 const LearningCalendar: React.FC = () => {
-    const [data] = useState(SinhVien.ThongTinHocPhan.appointments);
+    const [data] = useState(MonHoc.data.roomData[0].thongTinLich);
     const [currentViewName, setCurrentViewName] = useState('Week');
 
     const currentViewNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCurrentViewName(e.target.value);
     };
+
+    const Appointment: React.FC<{
+        children: React.ReactNode;
+        style: React.CSSProperties;
+        data: any;
+    }> = ({ children, style, data, ...restProps }) => (
+        <Appointments.Appointment
+            {...restProps}
+            style={{
+                ...style,
+                /* backgroundColor: '#FFC107', */
+                borderRadius: '8px',
+            }}
+        >
+            {children}
+            <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
+                GV: <span style={{ color: 'red' }}>{data.tenGV}</span>
+            </div>
+            <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
+                Tiết: <span style={{ color: 'red' }}>{data.tietHoc}</span>
+            </div>
+            <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
+                Phòng: <span style={{ color: 'red' }}>{data.phongHoc}</span>
+            </div>
+            <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
+                Ghi chú: <span style={{ color: 'red' }}>{data.ghiChu}</span>{' '}
+            </div>
+        </Appointments.Appointment>
+    );
+
+    const customAppointment: React.FC<{
+        children: React.ReactNode;
+        style: React.CSSProperties;
+    }> = ({ children, style, ...restProps }) => (
+        <Appointments.Appointment
+            {...restProps}
+            style={{
+                ...style,
+                /* backgroundColor: '#FFC107', */
+                borderRadius: '8px',
+            }}
+        >
+            {children}
+        </Appointments.Appointment>
+    );
 
     return (
         <React.Fragment>
@@ -86,14 +115,14 @@ const LearningCalendar: React.FC = () => {
                         startDayHour={6.5} // Giờ bắt đầu buổi sáng
                         endDayHour={21} // Giờ kết thúc buổi tối
                         cellDuration={60}
+                        // timeTableCellComponent={CustomTimeTableCell}
                     />
-
                     <MonthView />
                     <Toolbar />
                     <DateNavigator />
                     <TodayButton />
-                    <Appointments /*appointmentComponent={Appointment}*/ />
-                    <AppointmentTooltip showCloseButton />
+                    <Appointments appointmentComponent={currentViewName === 'Week' ? Appointment : customAppointment} />
+                    {currentViewName === 'Month' ? <AppointmentTooltip showCloseButton /> : <></>}
                 </Scheduler>
             </Paper>
         </React.Fragment>
