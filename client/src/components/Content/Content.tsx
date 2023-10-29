@@ -4,6 +4,7 @@ import { Row, Col, Card, Table } from 'antd';
 import './content.scss';
 import { SinhVien, GiaoVien } from '../../../DataSample';
 import avt from '../../assets/images/avt4.jpg';
+import { Link } from 'react-router-dom';
 
 const Content: React.FC = () => {
     const thongTinCaNhan = SinhVien.ThongTinCaNhan;
@@ -75,19 +76,21 @@ const Content: React.FC = () => {
             <div className="learning-calendar">
                 <Row className="row">
                     <Col className="col" span={12}>
-                        <Card
-                            className={`card1 ${statusScroll === false ? '' : 'animate__jackInTheBox'} `}
-                            title="Lịch học theo tuần"
-                            style={{ color: '#1da1f2', backgroundColor: '#e0fbff' }}
-                        >
-                            <div className="" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <h1>0</h1>
-                                <div className="card-icon">
-                                    <i className="fa-solid fa-calendar-days"></i>
+                        <Link className="dir" to="/home/lichhoc">
+                            <Card
+                                className={`card1 ${statusScroll === false ? '' : 'animate__jackInTheBox'} `}
+                                title="Lịch học theo tuần"
+                                style={{ color: '#1da1f2', backgroundColor: '#e0fbff' }}
+                            >
+                                <div className="" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <h1>{thongTinHocPhan.appointments.length}</h1>
+                                    <div className="card-icon">
+                                        <i className="fa-solid fa-calendar-days"></i>
+                                    </div>
                                 </div>
-                            </div>
-                            <p>Xem chi tiết</p>
-                        </Card>
+                                <p>Xem chi tiết</p>
+                            </Card>
+                        </Link>
                     </Col>
                     <Col className="col" span={12}>
                         <Card
@@ -127,7 +130,7 @@ const Content: React.FC = () => {
                             style={{ color: '#737373', position: 'absolute', bottom: 0 }}
                         >
                             <div className="" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <h1>0</h1>
+                                <h1>{thongTinHocPhan.dataSource.length}</h1>
                                 <div className="card-icon">
                                     <i className="fa-solid fa-book"></i>
                                 </div>

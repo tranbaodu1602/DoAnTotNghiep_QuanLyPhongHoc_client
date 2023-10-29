@@ -55,11 +55,11 @@
             align-items: center;
         }
 
-        & .active {
+        & .active-box-shadow {
             box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
         }
 
-        & .ul .li {
+        & .ul li {
             text-decoration: none;
             display: inline-block;
             margin: 0px 8px;
@@ -71,6 +71,10 @@
                 height: 100%;
                 color: #878787;
                 text-decoration: none;
+            }
+
+            & i {
+                padding: 8px;
             }
 
             &:hover {

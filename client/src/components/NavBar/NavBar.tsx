@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Badge } from 'antd';
 import logo from '../../assets/images/tieude4.png';
@@ -27,26 +27,27 @@ const NavBar: React.FC = () => {
             </div>
             <div className="menu">
                 <ul className="ul">
-                    <li className="li">
-                        <i className="fa-solid fa-house-chimney"></i>
-                        <Badge count={5} style={{ right: '-10px' }}>
-                            <Link className="dir" to="/home">
-                                Trang Chủ
-                            </Link>
-                        </Badge>
-                    </li>
-                    <li className="li">
-                        <i className="fa-solid fa-message"></i>
-                        <Link className="dir" to="/home/thongbao">
+                    <Link className="dir" to="/home">
+                        <li>
+                            <i className="fa-solid fa-house-chimney"></i>
+                            Trang Chủ
+                        </li>
+                    </Link>
+
+                    <Link className="dir" to="/home/thongbao">
+                        <li>
+                            <i className="fa-solid fa-message"></i>
                             Thông báo
-                        </Link>
-                    </li>
-                    <li className="li">
-                        <i className="fa-solid fa-calendar-days"></i>
-                        <Link className="dir" to="/home/lichhoc">
+                        </li>
+                    </Link>
+
+                    <Link className="dir" to="/home/lichhoc">
+                        <li>
+                            <i className="fa-solid fa-calendar-days"></i>
                             Lịch Học
-                        </Link>
-                    </li>
+                        </li>
+                    </Link>
+
                     <li className="infomation">
                         <div className="avt">
                             <img src={avt} alt="" />

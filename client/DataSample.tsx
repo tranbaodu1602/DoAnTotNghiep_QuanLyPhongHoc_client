@@ -43,6 +43,55 @@ export const SinhVien = {
             { title: 'Số tín chỉ', dataIndex: 'soTC', key: 'soTC' },
             { title: 'Số tiết', dataIndex: 'soTiet', key: 'soTiet' },
         ],
+        appointments: [
+            {
+                title: 'Lập trình phân tán',
+                startDate: new Date(2023, 9, 23, 6, 30),
+                endDate: new Date(2023, 9, 23, 9, 0),
+                phongHoc: 'X10.06',
+                ghiChu: 'Kiem Tra TK1',
+            },
+            {
+                title: 'Kiến trúc thiết kế phần mềm',
+                startDate: new Date(2023, 9, 23, 9, 10),
+                endDate: new Date(2023, 9, 23, 11, 40),
+            },
+            {
+                title: 'Kiến trúc thiết kế phần mềm',
+                startDate: new Date(2023, 9, 24, 12, 30),
+                endDate: new Date(2023, 9, 24, 15, 0),
+            },
+            {
+                title: 'Lập trình phân tán',
+                startDate: new Date(2023, 9, 25, 6, 30),
+                endDate: new Date(2023, 9, 25, 9, 0),
+            },
+            {
+                title: 'Kiểm thử phần mềm',
+                startDate: new Date(2023, 9, 26, 12, 30),
+                endDate: new Date(2023, 9, 26, 15, 0),
+            },
+            {
+                title: 'An toàn thông tin',
+                startDate: new Date(2023, 9, 27, 6, 30),
+                endDate: new Date(2023, 9, 27, 9, 0),
+            },
+            {
+                title: 'Kiến trúc thiết kế phần mềm',
+                startDate: new Date(2023, 9, 27, 9, 10),
+                endDate: new Date(2023, 9, 27, 11, 40),
+            },
+            {
+                title: 'Lập trình Hướng đối tượng',
+                startDate: new Date(2023, 9, 27, 15, 10),
+                endDate: new Date(2023, 9, 27, 17, 40),
+            },
+            {
+                title: 'Lập trình phân tán',
+                startDate: new Date(2023, 9, 28, 9, 10),
+                endDate: new Date(2023, 9, 28, 11, 40),
+            },
+        ],
     },
 };
 
