@@ -1,0 +1,11 @@
+.ChiTietMonHoc_Content {
+    margin-top: 70px;
+    min-height: 700px;
+    display: grid;
+    grid-template-columns: 3fr 1fr; /* Chia thành 2 cột, tỷ lệ 3/4 và 1/4 */
+    gap: 16px;
+}
+.ChiTietMonHoc_Lich {
+}
+.ChiTietMonHoc_Form {
+}

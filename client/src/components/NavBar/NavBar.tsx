@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Badge } from 'antd';
 import logo from '../../assets/images/tieude4.png';
 import avt from '../../assets/images/avt4.jpg';
 import './navbar.scss';

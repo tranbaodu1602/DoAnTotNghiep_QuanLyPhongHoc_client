@@ -1,0 +1,21 @@
+.PhongHoc__content {
+    padding-top: 65px;
+    min-height: 700px;
+    display: grid;
+    grid-template-columns: 3fr 1fr; /* Chia thành 2 cột, tỷ lệ 3/4 và 1/4 */
+    gap: 16px; /* Khoảng cách giữa hai cột */
+}
+
+.PhongHoc__lichHoc {
+    margin-left: 10px;
+    .PhongHoc__ten {
+        background-color: burlywood;
+    }
+    .PhongHoc__lich {
+        background-color: yellow;
+    }
+}
+
+.PhongHoc_forrm {
+    background-color: blue;
+}

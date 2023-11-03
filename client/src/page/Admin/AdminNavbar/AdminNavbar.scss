@@ -1,4 +1,4 @@
-.navbar-component {
+.admin_navbar-component {
     width: 100%;
     height: 8vh;
     border-bottom: 1px solid #ccc;
@@ -8,7 +8,7 @@
     position: fixed;
     z-index: 1000;
 
-    & .logo {
+    & .admin_logo {
         width: 20%;
         height: 100%;
         // background-color: #ccc;
@@ -21,14 +21,14 @@
         }
     }
 
-    & .search-bar {
-        width: 24%;
+    & .admin_search-bar {
+        width: 30%;
         height: 100%;
         display: flex;
         align-items: center;
         position: relative;
 
-        & .search-input {
+        & .admin_search-input {
             margin-left: 2%;
             height: 60%;
             width: 80%;
@@ -42,12 +42,12 @@
         }
     }
 
-    & .menu {
+    & .admin_menu {
         width: 56%;
         height: 100%;
         display: flex;
         align-items: center;
-
+        justify-content: end;
         & ul {
             margin: 0 !important;
             height: 100%;
@@ -55,21 +55,19 @@
             align-items: center;
         }
 
-        & .active-box-shadow {
+        & .admin_active-box-shadow {
             box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
         }
 
-        & .ul li {
+        & .admin_ul li {
             text-decoration: none;
             display: inline-block;
             margin: 0px 8px;
             color: #878787;
-            padding: 8px 10px;
+            padding: 8px 24px;
 
-            & .dir {
+            & .admin_dir {
                 margin-left: 8px;
-                //
-                width: 100px;
                 height: 100%;
                 color: #878787;
                 text-decoration: none;
@@ -83,18 +81,18 @@
                 color: #1b1b1b;
                 cursor: pointer;
 
-                & .dir {
+                & .admin_dir {
                     color: #1b1b1b;
                 }
             }
         }
 
-        & .infomation {
+        & .admin_infomation {
             display: inline-block;
             height: 100%;
             margin-left: 20px;
 
-            & .avt {
+            & .admin_avt {
                 height: 100%;
                 display: flex;
                 align-items: center;
@@ -116,13 +114,13 @@
                         cursor: pointer;
                     }
 
-                    & .transform {
+                    & .admin_transform {
                         transform: rotate(180deg);
                     }
                 }
             }
 
-            & .modal-logout {
+            & .admin_modal-logout {
                 position: absolute;
                 top: 110%;
                 width: 220px;

@@ -1,3 +1,192 @@
+export const Nha = [
+    {
+        id: 1,
+        tenNha: "A",
+    }
+]
+
+export const Phong = [
+    {
+        id: "1",
+        tenPhong: "A1.03",
+        sucChua: "50",
+        trangThai: "1",
+        tenNha: "A",
+        loaiPhong: {
+            id: "loai1",
+            tenLoai: "Phòng Lý Thuyết",
+            thietBi: [
+                {
+                    id: 'tb1',
+                    tenThietBi: "Máy chiếu",
+                    loai: 'may-chieu',
+                    ngayMua: new Date('2023-08-20'),
+                    nhaCungCap: "LG ĐN"
+                },
+                {
+                    id: 'tb2',
+                    tenThietBi: "Màn trắng",
+                    loai: 'man-trang',
+                    ngayMua: new Date('2023-05-20'),
+                    nhaCungCap: "LG ĐN"
+                }
+            ]
+        }
+    },
+    {
+        id: "1.1",
+        tenPhong: "A12.03",
+        sucChua: "50",
+        trangThai: "1",
+        tenNha: "A",
+        loaiPhong: {
+            id: "loai1",
+            tenLoai: "Phòng Lý Thuyết",
+            thietBi: [
+                {
+                    id: 'tb1',
+                    tenThietBi: "Máy chiếu",
+                    loai: 'may-chieu',
+                    ngayMua: new Date('2023-08-20'),
+                    nhaCungCap: "LG ĐN"
+                },
+                {
+                    id: 'tb2',
+                    tenThietBi: "Màn trắng",
+                    loai: 'man-trang',
+                    ngayMua: new Date('2023-05-20'),
+                    nhaCungCap: "LG ĐN"
+                }
+            ]
+        }
+    },
+    {
+        id: "2",
+        tenPhong: "H1.03",
+        sucChua: "50",
+        trangThai: "1",
+        tenNha: "H",
+        loaiPhong: {
+            id: "loai1",
+            tenLoai: "Phòng Thực Hành",
+            thietBi: [
+                {
+                    id: 'tb1',
+                    tenThietBi: "Máy chiếu",
+                    loai: 'may-chieu',
+                    ngayMua: new Date('2023-08-20'),
+                    nhaCungCap: "LG ĐN"
+                },
+                {
+                    id: 'tb2',
+                    tenThietBi: "Màn trắng",
+                    loai: 'man-trang',
+                    ngayMua: new Date('2023-05-20'),
+                    nhaCungCap: "LG ĐN"
+                }
+            ]
+        }
+    },
+    {
+        id: "3",
+        tenPhong: "A2.01",
+        sucChua: "50",
+        trangThai: "1",
+        tenNha: "A",
+        loaiPhong: {
+            id: "loai1",
+            tenLoai: "Phòng Lý Thuyết",
+            thietBi: [
+                {
+                    id: 'tb1',
+                    tenThietBi: "Máy chiếu",
+                    loai: 'may-chieu',
+                    ngayMua: new Date('2023-08-20'),
+                    nhaCungCap: "LG ĐN"
+                },
+                {
+                    id: 'tb2',
+                    tenThietBi: "Màn trắng",
+                    loai: 'man-trang',
+                    ngayMua: new Date('2023-05-20'),
+                    nhaCungCap: "LG ĐN"
+                }
+            ]
+        }
+    },
+    {
+        id: "4",
+        tenPhong: "E3",
+        sucChua: "400",
+        trangThai: "1",
+        tenNha: "E",
+        loaiPhong: {
+            id: "loai1",
+            tenLoai: "Phòng Hội Trường",
+            thietBi: [
+
+            ]
+        }
+    },
+    {
+        id: "5",
+        tenPhong: "X1.03",
+        sucChua: "50",
+        trangThai: "1",
+        tenNha: "X",
+        loaiPhong: {
+            id: "loai1",
+            tenLoai: "Phòng Lý Thuyết",
+            thietBi: [
+
+            ]
+        }
+    },
+    {
+        id: "6",
+        tenPhong: "V4.03",
+        sucChua: "50",
+        trangThai: "1",
+        tenNha: "V",
+        loaiPhong: {
+            id: "loai1",
+            tenLoai: "Phòng Lý Thuyết",
+            thietBi: [
+
+            ]
+        }
+    },
+    {
+        id: "7",
+        tenPhong: "B1.04",
+        sucChua: "50",
+        trangThai: "1",
+        tenNha: "B",
+        loaiPhong: {
+            id: "loai1",
+            tenLoai: "Phòng Lý Thuyết",
+            thietBi: [
+
+            ]
+        }
+    },
+    {
+        id: "8",
+        tenPhong: "H8.03",
+        sucChua: "50",
+        trangThai: "1",
+        tenNha: "H",
+        loaiPhong: {
+            id: "loai1",
+            tenLoai: "Phòng Lý Thuyết",
+            thietBi: [
+
+            ]
+        }
+    },
+
+]
+
 export const SinhVien = {
     ThongTinCaNhan: {
         hoTenSV: 'Ngô Hữu Nghị',
@@ -302,7 +491,7 @@ export const MonHoc = {
                         title: 'Lập trình phân tán',
                         startDate: new Date(2023, 9, 26, 12, 30),
                         endDate: new Date(2023, 9, 26, 15, 0),
-                        phongHoc: 'X10.06',
+                        phongHoc: 'A10.06',
                         ghiChu: 'Kiem Tra TK1',
                         tenGV: 'Châu Thị Bảo Hà',
                         tietHoc: '7-9',
@@ -320,7 +509,7 @@ export const MonHoc = {
                         title: 'Lập trình phân tán',
                         startDate: new Date(2023, 9, 27, 9, 10),
                         endDate: new Date(2023, 9, 27, 11, 40),
-                        phongHoc: 'X10.06',
+                        phongHoc: 'A1.03',
                         ghiChu: 'Kiem Tra TK1',
                         tenGV: 'Châu Thị Bảo Hà',
                         tietHoc: '4-6',
@@ -338,11 +527,87 @@ export const MonHoc = {
                         title: 'Lập trình phân tán',
                         startDate: new Date(2023, 9, 28, 9, 10),
                         endDate: new Date(2023, 9, 28, 11, 40),
-                        phongHoc: 'X10.06',
+                        phongHoc: 'A1.03',
                         ghiChu: 'Kiem Tra TK1',
                         tenGV: 'Châu Thị Bảo Hà',
                         tietHoc: '4-6',
                     },
+                ],
+            },
+            {
+                maLopHocPhan: '19509301',
+                tenMonHoc: 'Lập trình hướng đối tượng',
+                soTinChi: '3',
+                soTietLT: 40,
+                soTietTH: 20,
+                soBuoiHoc: 20,
+                tenNhomThucHanh: 'Nhóm 1',
+                trangThai: 'Đã mở lớp',
+                thongTinLich: [
+                    {
+                        title: 'Lập trình hướng đối tượng',
+                        startDate: new Date(2023, 9, 23, 6, 30),
+                        endDate: new Date(2023, 9, 23, 9, 0),
+                        phongHoc: 'X10.06',
+                        ghiChu: 'Kiem Tra TK1',
+                        tenGV: 'Châu Thị Bảo Hà',
+                        tietHoc: '1-3',
+                    },
+
+                ],
+            },
+            {
+                maLopHocPhan: '19509300',
+                tenMonHoc: 'An toàn thông tin',
+                soTinChi: '3',
+                soTietLT: 40,
+                soTietTH: 20,
+                soBuoiHoc: 20,
+                tenNhomThucHanh: 'Nhóm 1',
+                trangThai: 'Đã mở lớp',
+                thongTinLich: [
+                    {
+                        title: 'An toàn thông tin',
+                        startDate: new Date(2023, 9, 23, 6, 30),
+                        endDate: new Date(2023, 9, 23, 9, 0),
+                        phongHoc: 'X10.06',
+                        ghiChu: 'Kiem Tra TK1',
+                        tenGV: 'Châu Thị Bảo Hà',
+                        tietHoc: '1-3',
+                    },
+
+                ],
+            },
+            {
+                maLopHocPhan: '195093010',
+                tenMonHoc: 'An toàn thông tin a',
+                soTinChi: '3',
+                soTietLT: 40,
+                soTietTH: 20,
+                soBuoiHoc: 20,
+                tenNhomThucHanh: 'Nhóm 1',
+                trangThai: 'Đã mở lớp',
+                thongTinLich: [
+                    {
+
+                    },
+
+                ],
+            },
+            {
+                maLopHocPhan: '19509303',
+                tenMonHoc: 'An toàn thông tin a1',
+                soTinChi: '3',
+                soTietLT: 40,
+                soTietTH: 20,
+                soBuoiHoc: 20,
+                tenNhomThucHanh: 'Nhóm 1',
+                trangThai: 'Đã mở lớp',
+                thongTinLich: [
+                    {
+
+                    },
+
                 ],
             },
         ],

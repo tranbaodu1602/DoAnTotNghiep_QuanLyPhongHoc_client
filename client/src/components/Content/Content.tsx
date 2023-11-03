@@ -11,6 +11,9 @@ const Content: React.FC = () => {
     const thongTinHocVan = SinhVien.ThongTinHocVan;
     const thongTinHocPhan = SinhVien.ThongTinHocPhan;
     const [statusScroll, setStatusScroll] = useState(false);
+    //
+    console.log(GiaoVien);
+
 
     useEffect(() => {
         window.addEventListener('scroll', function () {
