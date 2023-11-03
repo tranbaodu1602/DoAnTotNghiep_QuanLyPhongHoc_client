@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -17,6 +17,17 @@ import {
     TodayButton,
 } from '@devexpress/dx-react-scheduler-material-ui';
 import { MonHoc } from '../../../../DataSample';
+
+
+interface AppointmentData {
+    startDate: Date,
+    endDate: Date,
+    phongHoc: string,
+    ghiChu: string,
+    tenGV: string,
+    tietHoc: string,
+
+}
 
 const ExternalViewSwitcher = ({
     currentViewName,
@@ -37,23 +48,19 @@ const ExternalViewSwitcher = ({
     </RadioGroup>
 );
 
-const CustomTimeTableCell: React.FC<{ startDate: Date }> = ({ startDate }) => {
-    const hour = startDate.getHours();
-    let timeSlotText = '';
+const AdminLich: React.FC<{ maLich: string }> = ({ maLich }) => {
+    //const [data] = useState(MonHoc.data.roomData[0].thongTinLich);
+    const [data, setData] = useState([]);
+    useEffect(() => {
+        const tenMonHocCanTim = maLich; // Tên môn học bạn muốn tìm
+        const monHocDaTim = MonHoc.data.roomData.find(item => item.maLopHocPhan === tenMonHocCanTim);
+        if (monHocDaTim) {
+            // Nếu tìm thấy môn học, cập nhật data bằng môn học đó
+            setData(monHocDaTim.thongTinLich);
+        }
+    }, [maLich]);
 
-    if (hour >= 6 && hour < 12) {
-        timeSlotText = 'Buổi sáng';
-    } else if (hour >= 12 && hour < 18) {
-        timeSlotText = 'Buổi chiều';
-    } else {
-        timeSlotText = 'Buổi tối';
-    }
 
-    return <div style={{ textAlign: 'center' }}>{timeSlotText}</div>;
-};
-
-const LearningCalendar: React.FC = () => {
-    const [data] = useState(MonHoc.data.roomData[0].thongTinLich);
     const [currentViewName, setCurrentViewName] = useState('Week');
 
     const currentViewNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +70,7 @@ const LearningCalendar: React.FC = () => {
     const Appointment: React.FC<{
         children: React.ReactNode;
         style: React.CSSProperties;
-        data: any;
+        data: AppointmentData;
     }> = ({ children, style, data, ...restProps }) => (
         <Appointments.Appointment
             {...restProps}
@@ -112,15 +119,16 @@ const LearningCalendar: React.FC = () => {
                 <Scheduler data={data} height={620}>
                     <ViewState defaultCurrentDate="2023-10-24" currentViewName={currentViewName} />
                     <WeekView
-                        startDayHour={6.5} // Giờ bắt đầu buổi sáng
-                        endDayHour={21} // Giờ kết thúc buổi tối
+                        startDayHour={5} // Giờ bắt đầu buổi sáng
+                        endDayHour={22} // Giờ kết thúc buổi tối
                         cellDuration={60}
-                        // timeTableCellComponent={CustomTimeTableCell}
+                    // timeTableCellComponent={CustomTimeTableCell}
                     />
                     <MonthView />
                     <Toolbar />
                     <DateNavigator />
                     <TodayButton />
+
                     <Appointments appointmentComponent={currentViewName === 'Week' ? Appointment : customAppointment} />
                     {currentViewName === 'Month' ? <AppointmentTooltip showCloseButton /> : <></>}
                 </Scheduler>
@@ -129,4 +137,4 @@ const LearningCalendar: React.FC = () => {
     );
 };
 
-export default LearningCalendar;
+export default AdminLich;

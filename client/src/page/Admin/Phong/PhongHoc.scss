@@ -1,0 +1,60 @@
+/* Container cho toàn bộ nội dung */
+.body__content {
+    display: flex;
+}
+.loaiphong {
+    padding: 20px;
+    font-size: 35px;
+    font-weight: 700;
+}
+/* CSS cho danh sách phòng */
+.list__nha {
+    padding: 30px;
+    width: full;
+    max-height: 700px;
+    overflow-y: auto;
+    height: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Tạo 4 cột có chiều rộng bằng nhau */
+    gap: 15px; /* Khoảng cách giữa các phần tử */
+}
+
+/* CSS cho phần tử phòng */
+.phong {
+    height: 300px;
+    width: auto;
+    border: 1px solid #ccc;
+    padding: 5px;
+    text-align: center;
+    transition: transform 0.2s; /* Hiệu ứng khi hover */
+    border-radius: 15px;
+    box-shadow: 3px 3px 7px 5px rgba(151, 148, 148, 0.5);
+}
+.list_phong {
+    max-height: 300px;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px; /* Tạo 4 cột có chiều rộng bằng nhau */
+}
+.item {
+    border: 1px solid #ccc;
+    background-color: rgb(244, 238, 238);
+    border-radius: 6px;
+}
+.phong:hover {
+    transform: scale(1.05); /* Phóng to khi hover */
+}
+
+/* CSS cho liên kết */
+.phong a {
+    text-decoration: none;
+    color: #333;
+}
+
+/* CSS cho liên kết khi hover hoặc focus */
+.phong a:hover,
+.phong a:focus {
+    color: #007bff; /* Màu văn bản khi hover hoặc focus */
+    font-weight: 700;
+}

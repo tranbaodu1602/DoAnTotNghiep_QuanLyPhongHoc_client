@@ -24,13 +24,6 @@ const Home = () => {
             <Content />
             {/* <div> */}
             <Outlet />
-            {/* <PrivateRoute path="\home\lichhoc"
-                component={LichHoc}>
-                </PrivateRoute>
-                <PrivateRoute path="\home\thongbao"
-                component={Thongbao}>
-                </PrivateRoute> */}
-            {/* </div> */}
             <Footer />
         </>
     );
