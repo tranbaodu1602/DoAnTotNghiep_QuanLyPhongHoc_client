@@ -1,4 +1,4 @@
-// import React from 'react'
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.scss';
 import logo1 from '../../assets/images/tieude4.png';
@@ -9,6 +9,7 @@ import slider2 from '../../assets/images/slide2.png';
 
 export const Login = () => {
     const navigate = useNavigate();
+
     const handleSubmit = () => {
         navigate('/home');
     };
@@ -56,33 +57,35 @@ export const Login = () => {
                 </div>
 
                 <div className="form-login">
-                    <div className="form-header">
-                        <img src={logo3} alt="" />
-                    </div>
-                    <div className="input-form">
-                        <p className="title-form">Đăng nhập hệ thống</p>
-                        <div className="username">
-                            <div className="title-name">Tài khoản</div>
-                            <div className="input-name">
-                                <div className="icon-user">
-                                    <i className="fa-solid fa-user"></i>
-                                </div>
-                                <input type="text" placeholder="Nhập tài khoản..." />
-                            </div>
+                    <form action="" method="get">
+                        <div className="form-header">
+                            <img src={logo3} alt="" />
                         </div>
-                        <div className="password">
-                            <div className="title-password">Mật khẩu</div>
-                            <div className="input-password">
-                                <div className="icon-key">
-                                    <i className="fa-solid fa-key"></i>
+                        <div className="input-form">
+                            <p className="title-form">Đăng nhập hệ thống</p>
+                            <div className="username">
+                                <div className="title-name">Tài khoản</div>
+                                <div className="input-name">
+                                    <div className="icon-user">
+                                        <i className="fa-solid fa-user"></i>
+                                    </div>
+                                    <input type="text" placeholder="Nhập tài khoản..." />
                                 </div>
-                                <input type="text" placeholder="Nhập mật khẩu..." />
                             </div>
+                            <div className="password">
+                                <div className="title-password">Mật khẩu</div>
+                                <div className="input-password">
+                                    <div className="icon-key">
+                                        <i className="fa-solid fa-key"></i>
+                                    </div>
+                                    <input type="text" placeholder="Nhập mật khẩu..." />
+                                </div>
+                            </div>
+                            <button type="submit" className="btn-submit" onClick={handleSubmit}>
+                                Đăng Nhập
+                            </button>
                         </div>
-                        <button className="btn-submit" onClick={handleSubmit}>
-                            Đăng Nhập
-                        </button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>

@@ -114,7 +114,7 @@ const LearningCalendar: React.FC = () => {
                     <WeekView
                         startDayHour={6.5} // Giờ bắt đầu buổi sáng
                         endDayHour={21} // Giờ kết thúc buổi tối
-                        cellDuration={60}
+                        cellDuration={30}
                         // timeTableCellComponent={CustomTimeTableCell}
                     />
                     <MonthView />
