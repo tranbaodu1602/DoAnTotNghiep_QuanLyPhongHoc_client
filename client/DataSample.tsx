@@ -1,7 +1,51 @@
+export const TaiKhoan = [
+    {
+        id: 1,
+        taiKhoan: "19509301",
+        matKhau: "19509301",
+        loaiTaiKhoan: "sinhvien",
+        khoa: "15"
+    },
+    {
+        id: 2,
+        taiKhoan: "19509302",
+        matKhau: "19509302",
+        loaiTaiKhoan: "sinhvien",
+        khoa: "14"
+    },
+    {
+        id: 3,
+        taiKhoan: "19509303",
+        matKhau: "19509303",
+        loaiTaiKhoan: "sinhvien",
+        khoa: "15"
+    },
+    {
+        id: 4,
+        taiKhoan: "19000000",
+        matKhau: "19000000",
+        loaiTaiKhoan: "giangvien",
+        khoa: ""
+    },
+    {
+        id: 5,
+        taiKhoan: "admin",
+        matKhau: "admin",
+        loaiTaiKhoan: "khoa",
+        khoa: ""
+    },
+    {
+        id: 7,
+        taiKhoan: "19509333",
+        matKhau: "19509333",
+        loaiTaiKhoan: "sinhvien",
+        khoa: "17"
+    },
+]
 export const Nha = [
     {
         id: 1,
-        tenNha: "A",
+        te: "A",
     }
 ]
 

@@ -1,21 +1,130 @@
 .PhongHoc__content {
-    padding-top: 65px;
+    margin-top: 55px;
     min-height: 700px;
-    display: grid;
-    grid-template-columns: 3fr 1fr; /* Chia thành 2 cột, tỷ lệ 3/4 và 1/4 */
-    gap: 16px; /* Khoảng cách giữa hai cột */
+    padding: 25px;
+    position: relative;
 }
-
 .PhongHoc__lichHoc {
-    margin-left: 10px;
-    .PhongHoc__ten {
-        background-color: burlywood;
+}
+.PhongHoc__button {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+}
+.PhongHoc__add {
+    text-align: left;
+}
+.PhongHoc__update {
+    text-align: right;
+    border: 1px solid rgb(208, 201, 201);
+    height: 50px;
+    width: 450px;
+    justify-items: center;
+    align-items: center;
+    display: flex;
+
+    .date {
+        margin-left: 10px;
     }
-    .PhongHoc__lich {
-        background-color: yellow;
+    .update {
+        margin-left: 10px;
     }
 }
+.PhongHoc__danhsach {
+}
+.faded {
+    opacity: 0.5; /* Điều chỉnh độ mờ tùy theo nhu cầu */
+    pointer-events: none; /* Ngăn chặn sự tương tác với các phần tử bên dưới */
+}
+.PhongHoc_form {
+    position: absolute;
+    top: 5%;
+    left: 35%;
+    z-index: 80;
+}
 
-.PhongHoc_forrm {
-    background-color: blue;
+.form-container {
+    background-color: #e8e3e3; /* Màu xám nhạt cho nền */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 2px 3px 10px rgba(0, 0, 0, 0.3);
+    width: 400px; /* Điều chỉnh kích thước của biểu mẫu tùy theo nhu cầu */
+    margin: 0 auto;
+    text-align: left;
+    position: relative;
+}
+.form-button-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: red;
+    height: 25px;
+    width: 25px;
+    border-radius: 3px;
+    align-items: center;
+}
+.form-button-close-x {
+    background-color: transparent;
+    color: white;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+}
+
+.form-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* CSS cho các mục input và label */
+.form-container label {
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.form-container input[type='text'],
+.form-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-container input[type='text'][readonly],
+.form-container textarea[readonly] {
+    background-color: #eee;
+    cursor: not-allowed;
+}
+
+/* CSS cho nút cập nhật */
+.form-container button {
+    background-color: #007bff; /* Màu xanh dương */
+    color: #fff; /* Màu chữ trắng */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.form-container button:hover {
+    background-color: #0056b3; /* Màu xanh dương nhạt khi hover */
+}
+
+/* CSS cho nút cập nhật */
+.form-container button {
+    background-color: #007bff; /* Màu xanh dương */
+    color: #fff; /* Màu chữ trắng */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.form-container button:hover {
+    background-color: #0056b3; /* Màu xanh dương nhạt khi hover */
 }
