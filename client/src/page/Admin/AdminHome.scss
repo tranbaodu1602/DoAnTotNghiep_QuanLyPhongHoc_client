@@ -1,11 +1,13 @@
-.content {
-    min-height: 100vh;
-    margin-top: 5px;
-}
-.right {
-    margin: 2px;
-    min-height: 280px;
-    background-image: url('/src/assets/images/adminHone.jpg');
-    background-size: cover;
-    background-position: 'center center';
+.admin-home-component {
+    & .content {
+        min-height: 100vh;
+        margin-top: 5px;
+    }
+    & .right {
+        margin: 2px;
+        min-height: 280px;
+        background-image: url('/src/assets/images/adminHone.jpg');
+        background-size: cover;
+        background-position: 'center center';
+    }
 }
