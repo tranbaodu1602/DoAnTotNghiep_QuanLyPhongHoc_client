@@ -8,9 +8,9 @@ import { Thongbao } from './page/Home/ThongBao/Thongbao'
 import AdminHome from './page/Admin/AdminHome'
 import PhongHoc from './page/Admin/Phong/PhongHoc'
 import QLThongbao from './page/Admin/QLThongBao/QLThongBao'
-import TaiKhoan from './page/Admin/TaiKhoan/TaiKhoan'
 import ChiTietPhongHoc from './page/Admin/ChiTietPhong/ChiTietPhong'
 import ChiTietMonHoc from './page/Admin/ChiTietMonHoc/ChiTietMonHoc'
+import ChiTietTaiKhoan from './page/Admin/ChiTietTaiKhoan/ChiTietTaiKhoan'
 
 
 function App() {
@@ -28,13 +28,13 @@ function App() {
           <Route path="/admin/home" element={<AdminHome />} />
           <Route path="/admin/lichhoc" element={<PhongHoc />} />
           {/*  */}
-          <Route path="/admin/taikhoan" element={<TaiKhoan />} />
           <Route path="/admin/thongbao" element={<QLThongbao />} />
           {/*  */}
           <Route path="/admin/phonghoc/:loaiphong" element={<PhongHoc />} ></Route>
           <Route path="/admin/phonghoc/:loaiphong/:toanha" element={<ChiTietPhongHoc />} ></Route>
           <Route path="/admin/monhoc/:tenMonHoc" element={<ChiTietMonHoc />} />
-
+          {/*  */}
+          <Route path="/admin/quanlitaikhoan/:loaitaikhoan" element={<ChiTietTaiKhoan />} />
         </Routes>
       </BrowserRouter>
     </>

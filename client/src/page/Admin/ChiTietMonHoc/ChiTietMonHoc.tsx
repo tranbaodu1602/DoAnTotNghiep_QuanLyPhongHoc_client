@@ -1,10 +1,10 @@
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import { Layout } from 'antd';
 import AdminSider from '../AdminSider/AdminSider';
 import AdminNavbar from '../AdminNavbar/AdminNavbar';
 import Footer from '../../../components/Footer/Footer';
 import { useParams } from 'react-router-dom';
 import './ChiTietMonHoc.scss';
-import React, { useState, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -23,7 +23,7 @@ import {
     TodayButton,
 } from '@devexpress/dx-react-scheduler-material-ui';
 import { MonHoc } from '../../../../DataSample';
-import AdminFormMonHoc from '../AdminFormMonHoc/AdminFormMonHoc';
+
 const { Content } = Layout;
 
 interface AppointmentData {
@@ -70,7 +70,6 @@ const ChiTietMonHoc: React.FC = () => {
             setData(monHocDaTim.thongTinLich);
         }
     }, [tenMonHoc]);
-
     const [currentViewName, setCurrentViewName] = useState('Week');
 
     const currentViewNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +88,10 @@ const ChiTietMonHoc: React.FC = () => {
                 /* backgroundColor: '#FFC107', */
                 borderRadius: '8px',
             }}
-            onClick={() => handleAppointmentClick(data)}
+            onClick={() => {
+                handleAppointmentClick(data);
+                toggleModelVisibility();
+            }}
         >
             {children}
             <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
@@ -128,15 +130,55 @@ const ChiTietMonHoc: React.FC = () => {
         setSelectedAppointment(data);
         console.log('datatest', selectedAppointment);
     };
+
+    const [isModelVisible, setModelVisible] = useState(false);
+
+    const toggleModelVisibility = () => {
+        setModelVisible(!isModelVisible);
+    };
+    const toggleClose = () => {
+        setModelVisible(false);
+        setSelectedAppointment({})
+    }
+    //--------------------------------
+    // const initialFormData: FormData = selectedAppointment !=null
+    // ?
+    //     {
+    //         title: 'a',
+    //     tenGV: 'a',
+    //     phongHoc: 'a',
+    //     tiet: 'a',
+    //     ghiChu: 'a',
+    //     }:{
+    //         title: '',
+    //         tenGV: '',
+    //         phongHoc: '',
+    //         tiet: '',
+    //         ghiChu: '',
+    //     }
+
+    //   const [formData, setFormData] = useState<FormData>(initialFormData);
+
+    //   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    //     const { name, value } = e.target;
+    //     setFormData({ ...formData, [name]: value });
+    //   };
+    //-------------------------------
+
     return (
         <>
             <AdminNavbar />
             <Layout style={{ minHeight: '100vh', marginTop: '2px' }}>
                 <AdminSider />
                 <Layout>
+
                     <Content>
-                        <div className="ChiTietMonHoc_Content">
-                            <div className="ChiTietMonHoc_Lich">
+                        <div className="ChiTietMonHoc_Content ">
+                            <h2>Lịch theo môn học</h2>
+                            <div className='ChiTietMonHoc_Add' >
+                                <button onClick={toggleModelVisibility}>Thêm lịch</button>
+                            </div>
+                            <div className={`ChiTietMonHoc_Lich  ${isModelVisible ? 'faded' : ''}`}>
                                 <React.Fragment>
                                     <ExternalViewSwitcher
                                         currentViewName={currentViewName}
@@ -151,9 +193,7 @@ const ChiTietMonHoc: React.FC = () => {
                                             <WeekView
                                                 startDayHour={6.5} // Giờ bắt đầu buổi sáng
                                                 endDayHour={22} // Giờ kết thúc buổi tối
-                                                cellDuration={30}
-
-                                                // timeTableCellComponent={CustomTimeTableCell}
+                                                cellDuration={60}
                                             />
                                             <MonthView />
                                             <Toolbar />
@@ -174,8 +214,64 @@ const ChiTietMonHoc: React.FC = () => {
                                     </Paper>
                                 </React.Fragment>
                             </div>
-                            <div className="ChiTietMonHoc_Form">
-                                <AdminFormMonHoc selectedAppointment={selectedAppointment} />
+                            <div className="ChiTietMonHoc_Form" >
+                                {isModelVisible && (
+                                    <div className="form-container">
+                                        <h2>Thông tin lịch</h2>
+                                        <div onClick={toggleClose} className="form-button-close">
+                                            <div className="form-button-close-x">x</div>
+                                        </div>
+                                        <div>
+                                            <label className="form-label">Tên môn :</label>
+                                            <input
+                                                type="text"
+                                                className="form-input"
+
+                                                value={selectedAppointment ? selectedAppointment.title : ''}
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="form-label">Tên giảng viên: </label>
+                                            <input
+                                                type="text"
+                                                className="form-input"
+                                                value={selectedAppointment ? selectedAppointment.tenGV : ''}
+
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="form-label">Phòng học: </label>
+                                            <input
+                                                type="text"
+                                                className="form-input"
+
+                                                value={selectedAppointment ? selectedAppointment.phongHoc : ''}
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="form-label">Tiết học: </label>
+                                            <input
+                                                type="text"
+                                                className="form-input"
+
+                                                value={selectedAppointment ? selectedAppointment.tietHoc : ''}
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="form-label">Ghi chú: </label>
+                                            <textarea
+                                                className="form-textarea"
+                                                value={selectedAppointment ? selectedAppointment.ghiChu : ''}
+                                            />
+                                        </div>
+                                        <div>
+                                            <button className="form-button">Cập nhật</button>
+                                            <button style={{ marginLeft: "5px" }}>tạm hoãn</button>
+
+                                        </div>
+                                    </div>
+                                )}
+
                             </div>
                         </div>
                     </Content>
