@@ -158,10 +158,8 @@ const userLogin = async (dataLogin) => {
                                 status: 'SUCCESS',
                                 message: 'Đăng nhập thành công',
                                 checkUser,
-                                data: {
-                                    data,
-                                    lich,
-                                },
+                                data: data,
+                                lich: lich,
                                 path: '/home',
                             },
                         });
