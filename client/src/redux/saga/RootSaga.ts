@@ -6,5 +6,5 @@ import * as loginSaga from '../saga/login/LoginSaga';
  * @return {void}
  */
 export default function* rootSaga() {
-    yield all([fork(loginSaga.watchGetDataLogin), fork(loginSaga.watchGetLogin)]);
+    yield all([fork(loginSaga.watchGetDataLogin)]);
 }

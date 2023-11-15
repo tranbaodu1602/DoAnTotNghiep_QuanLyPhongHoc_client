@@ -17,13 +17,12 @@ const loginSlice = createSlice({
         reqGetDataLogin: (state, action: Types.ActionReqGetDataLogin) => {
             state.isLoading = true;
             state.isLoadingBlock = false;
-            console.log('action', action);
         },
         resGetDataLogin: (state, action: Types.ActionResGetDataLogin) => {
             const { dataLogin } = action.payload;
             state.isLoading = false;
             state.dataLogin = dataLogin;
-            console.log('dataLogin', dataLogin);
+            console.log(state.dataLogin);
         },
         reqLogin: (state, action) => {
             state.isLoading = true;

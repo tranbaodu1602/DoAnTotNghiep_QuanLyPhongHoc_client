@@ -11,14 +11,10 @@ const Content: React.FC = () => {
     const thongTinHocVan = SinhVien.ThongTinHocVan;
     const thongTinHocPhan = SinhVien.ThongTinHocPhan;
     const [statusScroll, setStatusScroll] = useState(false);
-    //
-    console.log(GiaoVien);
-
 
     useEffect(() => {
         window.addEventListener('scroll', function () {
             const currentScrollPosition = window.scrollY;
-            console.log('Chiều cao hiện tại khi cuộn chuột:', currentScrollPosition, 'pixels');
             if (currentScrollPosition >= 300) {
                 setStatusScroll(true);
             } else if (currentScrollPosition <= 200) {

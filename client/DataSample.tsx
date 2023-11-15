@@ -1,235 +1,224 @@
 export const TaiKhoan = [
     {
         id: 1,
-        taiKhoan: "19509301",
-        matKhau: "19509301",
-        loaiTaiKhoan: "sinhvien",
-        khoa: "15"
+        taiKhoan: '19509301',
+        matKhau: '19509301',
+        loaiTaiKhoan: 'sinhvien',
+        khoa: '15',
     },
     {
         id: 2,
-        taiKhoan: "19509302",
-        matKhau: "19509302",
-        loaiTaiKhoan: "sinhvien",
-        khoa: "14"
+        taiKhoan: '19509302',
+        matKhau: '19509302',
+        loaiTaiKhoan: 'sinhvien',
+        khoa: '14',
     },
     {
         id: 3,
-        taiKhoan: "19509303",
-        matKhau: "19509303",
-        loaiTaiKhoan: "sinhvien",
-        khoa: "15"
+        taiKhoan: '19509303',
+        matKhau: '19509303',
+        loaiTaiKhoan: 'sinhvien',
+        khoa: '15',
     },
     {
         id: 4,
-        taiKhoan: "19000000",
-        matKhau: "19000000",
-        loaiTaiKhoan: "giangvien",
-        khoa: ""
+        taiKhoan: '19000000',
+        matKhau: '19000000',
+        loaiTaiKhoan: 'giangvien',
+        khoa: '',
     },
     {
         id: 5,
-        taiKhoan: "admin",
-        matKhau: "admin",
-        loaiTaiKhoan: "khoa",
-        khoa: ""
+        taiKhoan: 'admin',
+        matKhau: 'admin',
+        loaiTaiKhoan: 'khoa',
+        khoa: '',
     },
     {
         id: 7,
-        taiKhoan: "19509333",
-        matKhau: "19509333",
-        loaiTaiKhoan: "sinhvien",
-        khoa: "17"
+        taiKhoan: '19509333',
+        matKhau: '19509333',
+        loaiTaiKhoan: 'sinhvien',
+        khoa: '17',
     },
-]
+];
 export const Nha = [
     {
         id: 1,
-        te: "A",
-    }
-]
+        te: 'A',
+    },
+];
 
 export const Phong = [
     {
-        id: "1",
-        tenPhong: "A1.03",
-        sucChua: "50",
-        trangThai: "1",
-        tenNha: "A",
+        id: '1',
+        tenPhong: 'A1.03',
+        sucChua: '50',
+        trangThai: '1',
+        tenNha: 'A',
         loaiPhong: {
-            id: "loai1",
-            tenLoai: "Phòng Lý Thuyết",
+            id: 'loai1',
+            tenLoai: 'Phòng Lý Thuyết',
             thietBi: [
                 {
                     id: 'tb1',
-                    tenThietBi: "Máy chiếu",
+                    tenThietBi: 'Máy chiếu',
                     loai: 'may-chieu',
                     ngayMua: new Date('2023-08-20'),
-                    nhaCungCap: "LG ĐN"
+                    nhaCungCap: 'LG ĐN',
                 },
                 {
                     id: 'tb2',
-                    tenThietBi: "Màn trắng",
+                    tenThietBi: 'Màn trắng',
                     loai: 'man-trang',
                     ngayMua: new Date('2023-05-20'),
-                    nhaCungCap: "LG ĐN"
-                }
-            ]
-        }
+                    nhaCungCap: 'LG ĐN',
+                },
+            ],
+        },
     },
     {
-        id: "1.1",
-        tenPhong: "A12.03",
-        sucChua: "50",
-        trangThai: "1",
-        tenNha: "A",
+        id: '1.1',
+        tenPhong: 'A12.03',
+        sucChua: '50',
+        trangThai: '1',
+        tenNha: 'A',
         loaiPhong: {
-            id: "loai1",
-            tenLoai: "Phòng Lý Thuyết",
+            id: 'loai1',
+            tenLoai: 'Phòng Lý Thuyết',
             thietBi: [
                 {
                     id: 'tb1',
-                    tenThietBi: "Máy chiếu",
+                    tenThietBi: 'Máy chiếu',
                     loai: 'may-chieu',
                     ngayMua: new Date('2023-08-20'),
-                    nhaCungCap: "LG ĐN"
+                    nhaCungCap: 'LG ĐN',
                 },
                 {
                     id: 'tb2',
-                    tenThietBi: "Màn trắng",
+                    tenThietBi: 'Màn trắng',
                     loai: 'man-trang',
                     ngayMua: new Date('2023-05-20'),
-                    nhaCungCap: "LG ĐN"
-                }
-            ]
-        }
+                    nhaCungCap: 'LG ĐN',
+                },
+            ],
+        },
     },
     {
-        id: "2",
-        tenPhong: "H1.03",
-        sucChua: "50",
-        trangThai: "1",
-        tenNha: "H",
+        id: '2',
+        tenPhong: 'H1.03',
+        sucChua: '50',
+        trangThai: '1',
+        tenNha: 'H',
         loaiPhong: {
-            id: "loai1",
-            tenLoai: "Phòng Thực Hành",
+            id: 'loai1',
+            tenLoai: 'Phòng Thực Hành',
             thietBi: [
                 {
                     id: 'tb1',
-                    tenThietBi: "Máy chiếu",
+                    tenThietBi: 'Máy chiếu',
                     loai: 'may-chieu',
                     ngayMua: new Date('2023-08-20'),
-                    nhaCungCap: "LG ĐN"
+                    nhaCungCap: 'LG ĐN',
                 },
                 {
                     id: 'tb2',
-                    tenThietBi: "Màn trắng",
+                    tenThietBi: 'Màn trắng',
                     loai: 'man-trang',
                     ngayMua: new Date('2023-05-20'),
-                    nhaCungCap: "LG ĐN"
-                }
-            ]
-        }
+                    nhaCungCap: 'LG ĐN',
+                },
+            ],
+        },
     },
     {
-        id: "3",
-        tenPhong: "A2.01",
-        sucChua: "50",
-        trangThai: "1",
-        tenNha: "A",
+        id: '3',
+        tenPhong: 'A2.01',
+        sucChua: '50',
+        trangThai: '1',
+        tenNha: 'A',
         loaiPhong: {
-            id: "loai1",
-            tenLoai: "Phòng Lý Thuyết",
+            id: 'loai1',
+            tenLoai: 'Phòng Lý Thuyết',
             thietBi: [
                 {
                     id: 'tb1',
-                    tenThietBi: "Máy chiếu",
+                    tenThietBi: 'Máy chiếu',
                     loai: 'may-chieu',
                     ngayMua: new Date('2023-08-20'),
-                    nhaCungCap: "LG ĐN"
+                    nhaCungCap: 'LG ĐN',
                 },
                 {
                     id: 'tb2',
-                    tenThietBi: "Màn trắng",
+                    tenThietBi: 'Màn trắng',
                     loai: 'man-trang',
                     ngayMua: new Date('2023-05-20'),
-                    nhaCungCap: "LG ĐN"
-                }
-            ]
-        }
+                    nhaCungCap: 'LG ĐN',
+                },
+            ],
+        },
     },
     {
-        id: "4",
-        tenPhong: "E3",
-        sucChua: "400",
-        trangThai: "1",
-        tenNha: "E",
+        id: '4',
+        tenPhong: 'E3',
+        sucChua: '400',
+        trangThai: '1',
+        tenNha: 'E',
         loaiPhong: {
-            id: "loai1",
-            tenLoai: "Phòng Hội Trường",
-            thietBi: [
-
-            ]
-        }
+            id: 'loai1',
+            tenLoai: 'Phòng Hội Trường',
+            thietBi: [],
+        },
     },
     {
-        id: "5",
-        tenPhong: "X1.03",
-        sucChua: "50",
-        trangThai: "1",
-        tenNha: "X",
+        id: '5',
+        tenPhong: 'X1.03',
+        sucChua: '50',
+        trangThai: '1',
+        tenNha: 'X',
         loaiPhong: {
-            id: "loai1",
-            tenLoai: "Phòng Lý Thuyết",
-            thietBi: [
-
-            ]
-        }
+            id: 'loai1',
+            tenLoai: 'Phòng Lý Thuyết',
+            thietBi: [],
+        },
     },
     {
-        id: "6",
-        tenPhong: "V4.03",
-        sucChua: "50",
-        trangThai: "1",
-        tenNha: "V",
+        id: '6',
+        tenPhong: 'V4.03',
+        sucChua: '50',
+        trangThai: '1',
+        tenNha: 'V',
         loaiPhong: {
-            id: "loai1",
-            tenLoai: "Phòng Lý Thuyết",
-            thietBi: [
-
-            ]
-        }
+            id: 'loai1',
+            tenLoai: 'Phòng Lý Thuyết',
+            thietBi: [],
+        },
     },
     {
-        id: "7",
-        tenPhong: "B1.04",
-        sucChua: "50",
-        trangThai: "1",
-        tenNha: "B",
+        id: '7',
+        tenPhong: 'B1.04',
+        sucChua: '50',
+        trangThai: '1',
+        tenNha: 'B',
         loaiPhong: {
-            id: "loai1",
-            tenLoai: "Phòng Lý Thuyết",
-            thietBi: [
-
-            ]
-        }
+            id: 'loai1',
+            tenLoai: 'Phòng Lý Thuyết',
+            thietBi: [],
+        },
     },
     {
-        id: "8",
-        tenPhong: "H8.03",
-        sucChua: "50",
-        trangThai: "1",
-        tenNha: "H",
+        id: '8',
+        tenPhong: 'H8.03',
+        sucChua: '50',
+        trangThai: '1',
+        tenNha: 'H',
         loaiPhong: {
-            id: "loai1",
-            tenLoai: "Phòng Lý Thuyết",
-            thietBi: [
-
-            ]
-        }
+            id: 'loai1',
+            tenLoai: 'Phòng Lý Thuyết',
+            thietBi: [],
+        },
     },
-
-]
+];
 
 export const SinhVien = {
     ThongTinCaNhan: {
@@ -597,7 +586,6 @@ export const MonHoc = {
                         tenGV: 'Châu Thị Bảo Hà',
                         tietHoc: '1-3',
                     },
-
                 ],
             },
             {
@@ -619,7 +607,6 @@ export const MonHoc = {
                         tenGV: 'Châu Thị Bảo Hà',
                         tietHoc: '1-3',
                     },
-
                 ],
             },
             {
@@ -631,12 +618,7 @@ export const MonHoc = {
                 soBuoiHoc: 20,
                 tenNhomThucHanh: 'Nhóm 1',
                 trangThai: 'Đã mở lớp',
-                thongTinLich: [
-                    {
-
-                    },
-
-                ],
+                thongTinLich: [{}],
             },
             {
                 maLopHocPhan: '19509303',
@@ -647,12 +629,7 @@ export const MonHoc = {
                 soBuoiHoc: 20,
                 tenNhomThucHanh: 'Nhóm 1',
                 trangThai: 'Đã mở lớp',
-                thongTinLich: [
-                    {
-
-                    },
-
-                ],
+                thongTinLich: [{}],
             },
         ],
     },

@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { ToastContainer, toast } from 'react-toastify';
 import { RootState } from '../../app/store';
 import { loginAction } from '../../redux/reducer/login/LoginReducer';
 import Loading from '../../share/loading/Loading';
 import './login.scss';
+import 'react-toastify/dist/ReactToastify.css';
+
 import logo1 from '../../assets/images/tieude4.png';
 import logo2 from '../../assets/images/tieude2.png';
 import logo3 from '../../assets/images/tieude.png';
@@ -12,27 +14,38 @@ import slider1 from '../../assets/images/slide1.png';
 import slider2 from '../../assets/images/slide2.png';
 
 export const Login = () => {
-    const navigate = useNavigate();
-
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
     const dispatch = useAppDispatch();
 
     const isLoading = useAppSelector((state: RootState) => state.loginReducer.isLoading);
     const isLoadingBlock = useAppSelector((state: RootState) => state.loginReducer.isLoadingBlock);
-    const dataLogin = useAppSelector((state: RootState) => state.loginReducer.dataLogin);
-    console.log('hihi', dataLogin);
+    const data: any = useAppSelector((state: RootState) => state.loginReducer.dataLogin);
+    console.log(data);
 
-    const handleSubmit = (e: any) => {
+    const handleSubmit = async (e: any) => {
         setUsername('');
         setPassword('');
         e.preventDefault();
-        dispatch(loginAction.reqGetDataLogin({ username, password }));
+        await dispatch(loginAction.reqGetDataLogin({ username, password }));
     };
+
+    useEffect(() => {
+        if (data.path) {
+            const jsonData: any = JSON.stringify(data);
+            localStorage.setItem('myDataKey', jsonData);
+            window.location.href = data.path;
+        }
+        if (data.status === 'fail') {
+            toast.error(data.message);
+        }
+    }, [data]);
 
     return (
         <React.Fragment>
             <Loading isShow={isLoading} isLoadingBlock={isLoadingBlock} />
+            <ToastContainer />
             <div className="login-component">
                 <div className="header">
                     <div className="logo-left">

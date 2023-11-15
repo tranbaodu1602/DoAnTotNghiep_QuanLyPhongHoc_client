@@ -6,9 +6,3 @@ export const COMMON = {
         METHOD: 'POST',
     },
 };
-export const SAMPLE = {
-    API_GET_DATA_SAMPLE: {
-        URL: '/common/api-get-data-sample',
-        METHOD: 'POST',
-    },
-};
