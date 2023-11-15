@@ -1,15 +1,16 @@
-const User = require('../models/ModalUser');
+const TaiKhoan = require('../models/ModalTaiKhoan');
+const SinhVien = require('../models/ModalSinhVien');
 const bcrypt = require('bcrypt');
 
 const createUser = async (userData) => {
     return new Promise(async (reslove, reject) => {
         try {
-            const checkUser = await User.findOne({
-                username: userData.username,
+            const checkUser = await TaiKhoan.findOne({
+                taikhoan: userData.taikhoan,
             });
 
             if (!checkUser) {
-                const user = new User(userData);
+                const user = new TaiKhoan(userData);
                 await user.save();
                 reslove({
                     status: 'Success',
@@ -33,39 +34,48 @@ const userLogin = async (dataLogin) => {
     return new Promise(async (reslove, reject) => {
         const { username, password } = dataLogin;
         try {
-            const checkUser = await User.findOne({
-                username: username,
+            const checkUser = await TaiKhoan.findOne({
+                taikhoan: username,
             });
-            console.log('user:' + checkUser);
+
             if (checkUser === null) {
                 reslove({
-                    status: 'Fail',
-                    message: 'ten dang nhap khong ton tai',
+                    data: {
+                        status: 'fail',
+                        message: 'Tên đăng nhập không tồn tại',
+                        path: '',
+                    },
                 });
             }
-            const comparePassword = bcrypt.compareSync(password, checkUser.password);
+            const comparePassword = bcrypt.compareSync(password, checkUser.matkhau);
 
             if (!comparePassword) {
                 reslove({
-                    status: 'Fail',
-                    message: 'mat khau khong chinh xac',
+                    data: {
+                        status: 'fail',
+                        message: 'Mật khẩu không chính xác',
+                        path: '',
+                    },
                 });
             } else {
-                if (checkUser.isAdmin === true) {
+                if (checkUser.loaitaikhoan === 'admin') {
                     reslove({
-                        status: 'SUCCESS',
-                        message: 'login success, wellcome admin',
                         data: {
-                            user: checkUser,
+                            status: 'SUCCESS',
+                            message: 'Đăng nhập thành công, wellcome admin',
+                            checkUser,
                             path: '/admin/home',
                         },
                     });
                 } else {
+                    const data = await SinhVien.findOne({ 'ThongTinCaNhan.maSV': username });
+                    console.log('data', data);
                     reslove({
-                        status: 'SUCCESS',
-                        message: 'login success',
                         data: {
+                            status: 'SUCCESS',
+                            message: 'Đăng nhập thành công',
                             checkUser,
+                            data: data,
                             path: '/home',
                         },
                     });

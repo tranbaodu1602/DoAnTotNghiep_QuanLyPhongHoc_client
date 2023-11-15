@@ -4,15 +4,15 @@ const bcrypt = require('bcrypt');
 
 const createUser = async (req, res) => {
     try {
-        const { username, password, createAt, isAdmin } = req.body;
-        const hash = bcrypt.hashSync(password, 10);
+        const { taikhoan, matkhau, ngayTao, loaitaikhoan } = req.body;
+        const hash = bcrypt.hashSync(matkhau, 10);
         const dateCreate = new Date();
         dateCreate.getHours() + 7;
         const newUser = {
-            username,
-            password: hash,
-            createAt: dateCreate,
-            isAdmin,
+            taikhoan,
+            matkhau: hash,
+            ngaytao: dateCreate,
+            loaitaikhoan,
         };
         const user = await userService.createUser(newUser);
         res.status(200).json({

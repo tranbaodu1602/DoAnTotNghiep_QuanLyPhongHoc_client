@@ -1,4 +1,4 @@
 exports.users = {
     db: 'QuanLyPhongHoc',
-    collection: 'users',
+    collection: 'taikhoan',
 };
