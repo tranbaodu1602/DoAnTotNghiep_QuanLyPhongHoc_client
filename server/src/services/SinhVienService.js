@@ -38,7 +38,7 @@ const getSVTheoMaSV = async (data) => {
             } else {
                 reslove({
                     status: 'success',
-                    data: findSV.ThongTinCaNhan,
+                    data: findSV,
                 });
             }
         } catch (error) {
