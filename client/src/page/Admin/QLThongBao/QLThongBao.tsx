@@ -3,16 +3,15 @@ import { Layout } from 'antd';
 import AdminSider from '../AdminSider/AdminSider';
 import AdminNavbar from '../AdminNavbar/AdminNavbar';
 import Footer from '../../../components/Footer/Footer';
-import './QLThongBao.scss'
+import './QLThongBao.scss';
 import FormThongBao from './FormThongBao';
 import { Card, List } from 'antd';
 import '../../Home/ThongBao/thongBao.scss';
-import './QLThongBao.scss'
+import './QLThongBao.scss';
 
 const { Content } = Layout;
 
 const QLThongbao: React.FC = () => {
-
     const data = [
         {
             title: 'Card 1',
@@ -35,10 +34,10 @@ const QLThongbao: React.FC = () => {
             <AdminNavbar />
             <Layout style={{ minHeight: '100vh', marginTop: '2px' }}>
                 <AdminSider />
-                <Layout >
-                    <Content >
-                        <div className='ThongBao_layout'>
-                            <div className='ThongBao_content'>
+                <Layout>
+                    <Content>
+                        <div className="ThongBao_layout">
+                            <div className="ThongBao_content">
                                 <h2>Thông báo</h2>
                                 <div className="notify-list">
                                     <Card className="card" title="THÔNG TIN GIỜ HỌC" style={{ color: '#737373' }}>
@@ -54,7 +53,11 @@ const QLThongbao: React.FC = () => {
                                             )}
                                         />
                                     </Card>
-                                    <Card className="card" title="THÔNG TIN SỰ KIỆN" style={{ color: '#737373', marginTop: 2 + '%' }}>
+                                    <Card
+                                        className="card"
+                                        title="THÔNG TIN SỰ KIỆN"
+                                        style={{ color: '#737373', marginTop: 2 + '%' }}
+                                    >
                                         <List
                                             grid={{ gutter: 16, column: 1 }} // Thiết lập cấu trúc danh sách (3 cột)
                                             dataSource={data} // Danh sách dữ liệu
@@ -69,8 +72,8 @@ const QLThongbao: React.FC = () => {
                                     </Card>
                                 </div>
                             </div>
-                            <div className='ThongBao_form'>
-                                <div className='ThongBao_form_content'>
+                            <div className="ThongBao_form">
+                                <div className="ThongBao_form_content">
                                     <FormThongBao />
                                 </div>
                             </div>
