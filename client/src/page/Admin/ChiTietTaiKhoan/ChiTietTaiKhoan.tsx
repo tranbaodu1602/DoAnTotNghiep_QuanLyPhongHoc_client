@@ -105,7 +105,7 @@ const ChiTietTaiKhoan: React.FC = () => {
                                 ) : (
                                     <div className='TaiKhoan_noidung'>
 
-                                        <h2>{`Danh sách tài khoản ${loaitaikhoan === 'giangvien' ? 'Giảng viên' : 'Khoa'}`}</h2>
+                                        <h2>{`Danh sách tài khoản ${loaitaikhoan === 'giaovien' ? 'Giảng viên' : 'Khoa'}`}</h2>
                                         <div>
                                             <div className='TaiKhoan_table'>
                                                 <div>STT</div>
@@ -153,7 +153,7 @@ const ChiTietTaiKhoan: React.FC = () => {
                                         onChange={handleChange}
                                     >
                                         <option value="sinhvien">Sinh viên</option>
-                                        <option value="giangvien">Giảng viên</option>
+                                        <option value="giaovien">Giảng viên</option>
                                         <option value="khoa">Khoa</option>
                                     </select>
                                 </div>

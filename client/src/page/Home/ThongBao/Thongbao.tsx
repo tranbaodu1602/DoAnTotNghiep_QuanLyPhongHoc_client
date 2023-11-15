@@ -8,17 +8,17 @@ import './thongBao.scss';
 export const Thongbao = () => {
     const data = [
         {
-            title: 'Card 1',
-            description: 'Mô tả cho Card 1',
+            title: 'Thông báo 1',
+            description: 'Mô tả cho Card 1 aaaaaaaaaaaaaaaaaaaaaa',
             time: '20/03/2023',
         },
         {
-            title: 'Card 2',
-            description: 'Mô tả cho Card 2',
+            title: 'Thoogn báo 2',
+            description: 'Mô tả cho Card 2 aaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
             time: '20/03/2023',
         },
         {
-            title: 'Card 3',
+            title: 'Thông báo 3',
             description: 'Mô tả cho Card 3',
             time: '20/03/2023',
         },
@@ -65,9 +65,13 @@ export const Thongbao = () => {
                             dataSource={data} // Danh sách dữ liệu
                             renderItem={(item) => (
                                 <List.Item>
-                                    <Card title={item.title}>
-                                        <p>{item.description}</p>
-                                    </Card>
+                                    <div className='item'>
+                                        <Link to={`/home/thongbao/${item.title}`}>
+                                            <Card title={item.title}>
+                                                <p>{item.description}</p>
+                                            </Card>
+                                        </Link>
+                                    </div>
                                 </List.Item>
                             )}
                         />
@@ -78,9 +82,13 @@ export const Thongbao = () => {
                             dataSource={data} // Danh sách dữ liệu
                             renderItem={(item, key) => (
                                 <List.Item>
-                                    <Card key={key} title={item.title}>
-                                        <p>{item.description}</p>
-                                    </Card>
+                                    <div className='item'>
+                                        <Link to={`/home/thongbao/${item.title}`}>
+                                            <Card key={key} title={item.title}>
+                                                <p>{item.description}</p>
+                                            </Card>
+                                        </Link>
+                                    </div>
                                 </List.Item>
                             )}
                         />

@@ -1,0 +1,36 @@
+.Thongbao_content {
+    margin-top: 70px;
+    display: flex;
+    justify-content: center;
+    min-height: 500px;
+}
+
+.Thongbao_body {
+    //padding: 20px;
+
+    background-color: transparent;
+}
+.Thongbao_title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.Thongbao_name {
+    font-weight: 700;
+    font-size: 30px;
+}
+.Thongbao_time {
+    font-style: italic;
+    font-size: 14px;
+}
+.Thongbao_des {
+    margin-top: 20px;
+    background-color: #ffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    min-height: 500px;
+    width: 1150px;
+}
+.Thongbao_text {
+    padding: 25px 15px;
+}
