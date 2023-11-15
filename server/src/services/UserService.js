@@ -1,5 +1,8 @@
 const TaiKhoan = require('../models/ModalTaiKhoan');
 const SinhVien = require('../models/ModalSinhVien');
+const HocPhan = require('../models/ModalHocPhan');
+const GiaoVien = require('../models/ModalGiaovien');
+
 const bcrypt = require('bcrypt');
 
 const createUser = async (userData) => {
@@ -59,16 +62,40 @@ const userLogin = async (dataLogin) => {
                 });
             } else {
                 if (checkUser.loaitaikhoan === 'admin') {
+                    const DSHP = await HocPhan.find();
+                    if (!DSHP) {
+                        reslove({
+                            status: 'success',
+                            message: 'Đăng nhập thành công, Wellcome admin !!',
+                            DanhSachHocPhan: 'khong tim thay hoc phan',
+                            checkUser,
+                            path: '/admin/home',
+                        });
+                    } else {
+                        reslove({
+                            data: {
+                                status: 'SUCCESS',
+                                message: 'Đăng nhập thành công, wellcome admin !!',
+                                DanhSachHocPhan: DSHP,
+                                checkUser,
+                                path: '/admin/home',
+                            },
+                        });
+                    }
+                } else if (checkUser.loaitaikhoan === 'sinhvien') {
+                    const data = await SinhVien.findOne({ 'ThongTinCaNhan.maSV': username });
+                    console.log('data', data);
                     reslove({
                         data: {
                             status: 'SUCCESS',
-                            message: 'Đăng nhập thành công, wellcome admin',
+                            message: 'Đăng nhập thành công',
                             checkUser,
-                            path: '/admin/home',
+                            data: data,
+                            path: '/home',
                         },
                     });
-                } else {
-                    const data = await SinhVien.findOne({ 'ThongTinCaNhan.maSV': username });
+                } else if (checkUser.loaitaikhoan === 'giaovien') {
+                    const data = await GiaoVien.findOne({ 'ThongTinCaNhan.maGV': username });
                     console.log('data', data);
                     reslove({
                         data: {
