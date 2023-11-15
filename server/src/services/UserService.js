@@ -6,29 +6,75 @@ const GiaoVien = require('../models/ModalGiaovien');
 const bcrypt = require('bcrypt');
 
 const createUser = async (userData) => {
-    return new Promise(async (reslove, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
-            const checkUser = await TaiKhoan.findOne({
+            const existingUser = await TaiKhoan.findOne({
                 taikhoan: userData.taikhoan,
             });
 
-            if (!checkUser) {
+            if (existingUser) {
+                resolve({
+                    status: 'FAIL',
+                    message: 'Người dùng đã tồn tại',
+                });
+            } else {
                 const user = new TaiKhoan(userData);
                 await user.save();
-                reslove({
+                resolve({
                     status: 'Success',
-                    message: 'tao tai khoan thanh cong',
+                    message: 'Tạo tài khoản thành công',
                     data: user,
-                });
-                return user;
-            } else {
-                reslove({
-                    status: 'FAIL',
-                    message: 'nguoi dung da ton tai',
                 });
             }
         } catch (error) {
-            throw error;
+            reject(error);
+        }
+    });
+};
+
+const changePassword = async (data) => {
+    return new Promise(async (resolve, reject) => {
+        const { username, oldPassword, newPassword, confirmNewPassword } = data;
+        try {
+            const checkUser = await TaiKhoan.findOne({
+                taikhoan: username,
+            });
+
+            if (checkUser === null) {
+                resolve({
+                    status: 'fail',
+                    message: 'Tên đăng nhập không tồn tại',
+                });
+                return;
+            }
+            const comparePassword = bcrypt.compareSync(oldPassword, checkUser.matkhau);
+
+            if (!comparePassword) {
+                resolve({
+                    status: 'fail',
+                    message: 'Mật khẩu không chính xác',
+                });
+                return;
+            }
+
+            if (newPassword !== confirmNewPassword) {
+                resolve({
+                    status: 'fail',
+                    message: 'Nhập lại mật khẩu không đúng',
+                });
+                return;
+            }
+
+            const hashedPassword = bcrypt.hashSync(newPassword, 10);
+
+            await TaiKhoan.updateOne({ taikhoan: username }, { $set: { matkhau: hashedPassword } });
+
+            resolve({
+                status: 'success',
+                message: 'Đổi mật khẩu thành công',
+            });
+        } catch (error) {
+            reject(error);
         }
     });
 };
@@ -84,16 +130,42 @@ const userLogin = async (dataLogin) => {
                     }
                 } else if (checkUser.loaitaikhoan === 'sinhvien') {
                     const data = await SinhVien.findOne({ 'ThongTinCaNhan.maSV': username });
-                    console.log('data', data);
-                    reslove({
-                        data: {
-                            status: 'SUCCESS',
-                            message: 'Đăng nhập thành công',
-                            checkUser,
-                            data: data,
-                            path: '/home',
-                        },
-                    });
+                    const lich = [];
+                    await Promise.all(
+                        data.ThongTinHocPhan.data[0].dsHocPhan.map(async (value) => {
+                            const hp = await HocPhan.findOne({ maLopHocPhan: value });
+                            if (!hp) {
+                                console.log('Không tìm thấy lịch của mã học phần là ' + value);
+                            } else {
+                                lich.push(hp);
+                            }
+                        }),
+                    );
+                    if (lich.length === 0) {
+                        reslove({
+                            data: {
+                                status: 'SUCCESS',
+                                message: 'Đăng nhập thành công',
+                                checkUser,
+                                data: data,
+                                lich: 'Không có lịch học trong học kì',
+                                path: '/home',
+                            },
+                        });
+                    } else {
+                        reslove({
+                            data: {
+                                status: 'SUCCESS',
+                                message: 'Đăng nhập thành công',
+                                checkUser,
+                                data: {
+                                    data,
+                                    lich,
+                                },
+                                path: '/home',
+                            },
+                        });
+                    }
                 } else if (checkUser.loaitaikhoan === 'giaovien') {
                     const data = await GiaoVien.findOne({ 'ThongTinCaNhan.maGV': username });
                     console.log('data', data);
@@ -116,5 +188,6 @@ const userLogin = async (dataLogin) => {
 
 module.exports = {
     createUser,
+    changePassword,
     userLogin,
 };
