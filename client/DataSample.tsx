@@ -24,7 +24,7 @@ export const TaiKhoan = [
         id: 4,
         taiKhoan: '19000000',
         matKhau: '19000000',
-        loaiTaiKhoan: 'giangvien',
+        loaiTaiKhoan: 'giaovien',
         khoa: '',
     },
     {

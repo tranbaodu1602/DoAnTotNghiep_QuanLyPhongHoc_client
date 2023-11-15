@@ -4,7 +4,10 @@ import logo from '../../assets/images/tieude4.png';
 import avt from '../../assets/images/avt4.jpg';
 import './navbar.scss';
 
+
+
 const NavBar: React.FC = () => {
+
     const [modalStatus, setModalStatus] = useState(false);
     const navigate = useNavigate();
 
@@ -13,8 +16,18 @@ const NavBar: React.FC = () => {
     };
 
     const handleLogout = () => {
+        const isDataExist = localStorage.getItem('myDataKey') !== null;
+
+        // Nếu dữ liệu tồn tại, hãy xóa nó
+        if (isDataExist) {
+            localStorage.removeItem('myDataKey');
+        }
         navigate('/');
     };
+
+    const storedData: any = localStorage.getItem('myDataKey');
+    const data = JSON.parse(storedData);
+    console.log("a", data);
 
     return (
         <div className="navbar-component">
@@ -43,23 +56,38 @@ const NavBar: React.FC = () => {
                     <Link className="dir" to="/home/lichhoc">
                         <li>
                             <i className="fa-solid fa-calendar-days"></i>
-                            Lịch Học
+                            {data.checkUser.loaitaikhoan === 'sinhvien' ? 'Lịch Học' : 'Lịch Dạy'}
+
                         </li>
                     </Link>
 
+                    {data.checkUser.loaitaikhoan === 'giaovien' ? (<Link className="dir" to="/home/lichhoc">
+                        <li>
+                            <i className="fa-solid fa fa-calendar-times-o"></i>
+                            Yêu Cầu
+                        </li>
+                    </Link>) : (<></>)
+
+                    }
+
                     <li className="infomation">
                         <div className="avt">
-                            <img src={avt} alt="" />
+                            {data.data.ThongTinCaNhan.anhDaiDien != null ?
+                                (<img src={data.data.ThongTinCaNhan.anhDaiDien} />)
+                                : (<img src={avt} alt="" />)}
+
                             <span onClick={handleModal}>
-                                Ngô Hữu Nghị{' '}
+                                {data.data.ThongTinCaNhan.hoTenSV}
                                 <i className={`fa-solid fa-chevron-down ${modalStatus == true ? 'transform' : ''}`}></i>
                             </span>
                         </div>
                         <div className={`modal-logout ${modalStatus == true ? '' : 'disable-div'}`}>
                             <ul>
+
                                 <li>
                                     <span>Thông tin cá nhân</span>
                                 </li>
+
                                 <li>
                                     <span>Đổi mật khẩu</span>
                                 </li>

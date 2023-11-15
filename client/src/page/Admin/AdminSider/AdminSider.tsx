@@ -124,8 +124,8 @@ const AdminSider: React.FC = () => {
                     <Menu.Item key="/admin/quanlitaikhoan/sinhvien" onClick={() => handleSubmenuItemSelect('sinhvien')}>
                         <Link to="/admin/quanlitaikhoan/sinhvien">Sinh viên</Link>
                     </Menu.Item>
-                    <Menu.Item key="/admin/quanlitaikhoan/giangvien" onClick={() => handleSubmenuItemSelect('giangvien')}>
-                        <Link to="/admin/quanlitaikhoan/giangvien">Giảng viên</Link>
+                    <Menu.Item key="/admin/quanlitaikhoan/giaovien" onClick={() => handleSubmenuItemSelect('giaovien')}>
+                        <Link to="/admin/quanlitaikhoan/giaovien">Giảng viên</Link>
                     </Menu.Item>
                     <Menu.Item key="/admin/quanlitaikhoan/khoa" onClick={() => handleSubmenuItemSelect('khoa')}>
                         <Link to="/admin/quanlitaikhoan/khoa">Khoa</Link>

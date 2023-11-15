@@ -11,6 +11,7 @@ import QLThongbao from './page/Admin/QLThongBao/QLThongBao'
 import ChiTietPhongHoc from './page/Admin/ChiTietPhong/ChiTietPhong'
 import ChiTietMonHoc from './page/Admin/ChiTietMonHoc/ChiTietMonHoc'
 import ChiTietTaiKhoan from './page/Admin/ChiTietTaiKhoan/ChiTietTaiKhoan'
+import { ChiThietSinhVien } from './page/Home/ChiTietSinhVien/ChiTietSinhVien'
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path='/' element={<Login />} />
           <Route path='/login' element={<Login />} />
           <Route path='/home' element={<Home />} />
+          <Route path='/home/chitietsinhvien' element={<ChiThietSinhVien />} />
           <Route path="/home/thongbao" element={<Thongbao />} />
           <Route path="/home/lichhoc" element={<LichHoc />} />
           <Route path="/admin/home" element={<AdminHome />} />

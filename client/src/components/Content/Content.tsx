@@ -22,6 +22,8 @@ const Content: React.FC = () => {
             }
         });
     }, [statusScroll]);
+    const storedData: any = localStorage.getItem('myDataKey');
+    const data = JSON.parse(storedData);
     return (
         <div className="content-coponent">
             <div className="my-info">
@@ -30,44 +32,49 @@ const Content: React.FC = () => {
                 </div>
                 <hr />
                 <div className="avt">
-                    <img src={avt} alt="" />
-                    <span>Xem chi tiết</span>
+                    {data.data.ThongTinCaNhan.anhDaiDien != null
+                        ? (<img src={data.data.ThongTinCaNhan.anhDaiDien} alt="" />)
+                        : (<img src={avt} alt="" />)}
+
+                    <Link to="/home/chitietsinhvien">
+                        <span>Xem chi tiết</span>
+                    </Link>
                 </div>
                 <div className="text-info">
                     <ul>
                         <li>
-                            MSSV: <b>{thongTinCaNhan.maSV}</b>
+                            MSSV: <b>{data.data.ThongTinCaNhan.maSV}</b>
                         </li>
                         <li>
-                            Họ tên: <b>{thongTinCaNhan.hoTenSV}</b>
+                            Họ tên: <b>{data.data.ThongTinCaNhan.hoTenSV}</b>
                         </li>
                         <li>
-                            Giới tính: <b>{thongTinCaNhan.gioiTinh}</b>
+                            Giới tính: <b>{data.data.ThongTinCaNhan.gioiTinh}</b>
                         </li>
                         <li>
-                            Ngày sinh: <b>{thongTinCaNhan.ngaySinh}</b>
+                            Ngày sinh: <b>{data.data.ThongTinCaNhan.ngaySinh}</b>
                         </li>
                         <li>
-                            Nơi sinh: <b>{thongTinCaNhan.noiSinh}</b>
+                            Nơi sinh: <b>{data.data.ThongTinCaNhan.noiSinh}</b>
                         </li>
                     </ul>
                 </div>
                 <div className="text-info2">
                     <ul>
                         <li>
-                            Lớp học: <b>{thongTinHocVan.lopDanhNghia}</b>
+                            Lớp học: <b>{data.data.ThongTinHocVan.lopDanhNghia}</b>
                         </li>
                         <li>
-                            Khóa học: <b>{thongTinHocVan.nienKhoa}</b>
+                            Khóa học: <b>{data.data.ThongTinHocVan.nienKhoa}</b>
                         </li>
                         <li>
-                            Bậc đào tạo: <b>{thongTinHocVan.bacDaoTao}</b>
+                            Bậc đào tạo: <b>{data.data.ThongTinHocVan.bacDaoTao}</b>
                         </li>
                         <li>
-                            Loại hình đào tạo: <b>{thongTinHocVan.loaiHinhDaoTao}</b>
+                            Loại hình đào tạo: <b>{data.data.ThongTinHocVan.loaiHinhDaoTao}</b>
                         </li>
                         <li>
-                            Ngành: <b>{thongTinHocVan.chuyenNganh}</b>
+                            Ngành: <b>{data.data.ThongTinHocVan.chuyenNganh}</b>
                         </li>
                     </ul>
                 </div>
