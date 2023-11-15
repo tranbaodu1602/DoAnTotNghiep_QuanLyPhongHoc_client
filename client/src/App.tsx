@@ -12,6 +12,8 @@ import ChiTietPhongHoc from './page/Admin/ChiTietPhong/ChiTietPhong'
 import ChiTietMonHoc from './page/Admin/ChiTietMonHoc/ChiTietMonHoc'
 import ChiTietTaiKhoan from './page/Admin/ChiTietTaiKhoan/ChiTietTaiKhoan'
 import { ChiThietSinhVien } from './page/Home/ChiTietSinhVien/ChiTietSinhVien'
+import FormYeuCau from './page/GiangVien/FormYeuCau/FormYeuCau'
+import ChiTietThongBao from './page/Home/ThongBao/ChiTietThongBao/ChiTietThongBao'
 
 
 function App() {
@@ -26,11 +28,14 @@ function App() {
           <Route path='/home' element={<Home />} />
           <Route path='/home/chitietsinhvien' element={<ChiThietSinhVien />} />
           <Route path="/home/thongbao" element={<Thongbao />} />
+          <Route path="/home/thongbao/:tenThongBao" element={<ChiTietThongBao />} />
           <Route path="/home/lichhoc" element={<LichHoc />} />
           <Route path="/admin/home" element={<AdminHome />} />
           <Route path="/admin/lichhoc" element={<PhongHoc />} />
+          <Route path="/home/yeucau" element={< FormYeuCau />} />
           {/*  */}
           <Route path="/admin/thongbao" element={<QLThongbao />} />
+
           {/*  */}
           <Route path="/admin/phonghoc/:loaiphong" element={<PhongHoc />} ></Route>
           <Route path="/admin/phonghoc/:loaiphong/:toanha" element={<ChiTietPhongHoc />} ></Route>

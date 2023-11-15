@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/tieude4.png';
 import avt from '../../assets/images/avt4.jpg';
 import './navbar.scss';
+import { ChangePassWord } from '../../page/Home/ChangePassword/ChangePassword';
+import { Divider } from 'antd';
 
 
 
@@ -17,7 +19,6 @@ const NavBar: React.FC = () => {
 
     const handleLogout = () => {
         const isDataExist = localStorage.getItem('myDataKey') !== null;
-
         // Nếu dữ liệu tồn tại, hãy xóa nó
         if (isDataExist) {
             localStorage.removeItem('myDataKey');
@@ -25,9 +26,14 @@ const NavBar: React.FC = () => {
         navigate('/');
     };
 
+    const [changePass, setChangePass] = useState(false);
+
+    const handleShowChangePass = () => {
+        setChangePass(!changePass)
+    }
+
     const storedData: any = localStorage.getItem('myDataKey');
     const data = JSON.parse(storedData);
-    console.log("a", data);
 
     return (
         <div className="navbar-component">
@@ -61,7 +67,7 @@ const NavBar: React.FC = () => {
                         </li>
                     </Link>
 
-                    {data.checkUser.loaitaikhoan === 'giaovien' ? (<Link className="dir" to="/home/lichhoc">
+                    {data.checkUser.loaitaikhoan === 'giaovien' ? (<Link className="dir" to="/home/yeucau">
                         <li>
                             <i className="fa-solid fa fa-calendar-times-o"></i>
                             Yêu Cầu
@@ -77,20 +83,23 @@ const NavBar: React.FC = () => {
                                 : (<img src={avt} alt="" />)}
 
                             <span onClick={handleModal}>
-                                {data.data.ThongTinCaNhan.hoTenSV}
+
+                                {data.checkUser.loaitaikhoan === 'sinhvien' ? data.data.ThongTinCaNhan.hoTenSV : data.data.ThongTinCaNhan.hoTenGV}
                                 <i className={`fa-solid fa-chevron-down ${modalStatus == true ? 'transform' : ''}`}></i>
                             </span>
                         </div>
                         <div className={`modal-logout ${modalStatus == true ? '' : 'disable-div'}`}>
                             <ul>
+                                {data.checkUser.loaitaikhoan === 'sinhvien'
+                                    ? (<li>
+                                        <span>Thông tin cá nhân</span>
+                                    </li>)
+                                    : (<></>)}
 
-                                <li>
-                                    <span>Thông tin cá nhân</span>
-                                </li>
-
-                                <li>
+                                <li onClick={handleShowChangePass}>
                                     <span>Đổi mật khẩu</span>
                                 </li>
+
                                 <li onClick={handleLogout}>
                                     <span>Đăng xuất</span>
                                 </li>
@@ -99,6 +108,13 @@ const NavBar: React.FC = () => {
                     </li>
                 </ul>
             </div>
+            {changePass ? (
+                <>
+                    <div className='modalshowChangePassBackground'></div>
+                    <div className='modalshowChangePass'>
+                        <ChangePassWord />
+                    </div>
+                </>) : (<></>)}
         </div>
     );
 };

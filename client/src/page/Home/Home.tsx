@@ -9,12 +9,12 @@ import { Outlet } from 'react-router-dom';
 
 const Home = () => {
     const storedData: any = localStorage.getItem('myDataKey');
-    var data = JSON.parse(storedData);
+    const data = JSON.parse(storedData);
     console.log(data);
 
     return (
         <>
-            <NavBar spropA={data} />
+            <NavBar />
             <Sider />
             <Content />
             <Outlet />

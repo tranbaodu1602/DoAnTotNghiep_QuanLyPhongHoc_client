@@ -99,15 +99,14 @@ export const ChiThietSinhVien = () => {
                                 </ul>
                             </div>
                         </div>
-                        <div className="ChiTietSinhVien_text-info">
+                        <div className="ChiTietSinhVien_text-info-11">
 
-                            <ul>
-                                <li>
-                                    Địa chỉ liên hệ: <b>{data.data.ThongTinCaNhan.hoKhauThuongTru}</b>
-                                </li>
-                                <li>Nơi sinh: <b>{data.data.ThongTinCaNhan.noiSinh}</b></li>
-                                <li>Hộ khẩu thường trú: <b>{data.data.ThongTinCaNhan.hoKhauThuongTru}</b></li>
-                            </ul>
+                            <div className='ChiTietSinhVien_text-info-111'>
+                                Địa chỉ liên hệ: <b>{data.data.ThongTinCaNhan.hoKhauThuongTru}</b>
+                            </div>
+                            <div className='ChiTietSinhVien_text-info-111'>Nơi sinh: <b>{data.data.ThongTinCaNhan.noiSinh}</b></div>
+                            <div className='ChiTietSinhVien_text-info-111'>Hộ khẩu thường trú: <b>{data.data.ThongTinCaNhan.hoKhauThuongTru}</b></div>
+
                         </div>
                     </div>
                 </div>
