@@ -39,7 +39,6 @@ const changePassword = async (data) => {
             const checkUser = await TaiKhoan.findOne({
                 taikhoan: username,
             });
-
             if (checkUser === null) {
                 resolve({
                     status: 'fail',
@@ -167,15 +166,40 @@ const userLogin = async (dataLogin) => {
                 } else if (checkUser.loaitaikhoan === 'giaovien') {
                     const data = await GiaoVien.findOne({ 'ThongTinCaNhan.maGV': username });
                     console.log('data', data);
-                    reslove({
-                        data: {
-                            status: 'SUCCESS',
-                            message: 'Đăng nhập thành công',
-                            checkUser,
-                            data: data,
-                            path: '/home',
-                        },
-                    });
+                    const lich = [];
+                    await Promise.all(
+                        data.ThongTinGiangDay.lichDay.map(async (value) => {
+                            const hp = await HocPhan.findOne({ maLopHocPhan: value });
+                            if (!hp) {
+                                console.log('Không tìm thấy lịch của mã học phần là ' + value);
+                            } else {
+                                lich.push(hp);
+                            }
+                        }),
+                    );
+                    if (lich.length === 0) {
+                        reslove({
+                            data: {
+                                status: 'SUCCESS',
+                                message: 'Đăng nhập thành công',
+                                checkUser,
+                                data: data,
+                                lich: 'Không có lịch dạy trong học kì',
+                                path: '/home',
+                            },
+                        });
+                    } else {
+                        reslove({
+                            data: {
+                                status: 'SUCCESS',
+                                message: 'Đăng nhập thành công',
+                                checkUser,
+                                data: data,
+                                lich: lich,
+                                path: '/home',
+                            },
+                        });
+                    }
                 }
             }
         } catch (e) {
