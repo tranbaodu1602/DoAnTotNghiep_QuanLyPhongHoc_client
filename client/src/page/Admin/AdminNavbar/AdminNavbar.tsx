@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../../assets/images/tieude4.png';
-import avt from '../../../assets/images/avt4.jpg';
 import './AdminNavbar.scss';
 
 const AdminNavbar: React.FC = () => {
+
+    const storedData: any = localStorage.getItem('myDataKey');
+    const thongtin = JSON.parse(storedData);
+
     const [modalStatus, setModalStatus] = useState(false);
     const navigate = useNavigate();
 
@@ -28,9 +31,8 @@ const AdminNavbar: React.FC = () => {
                 <ul className="admin_ul">
                     <li className="admin_infomation">
                         <div className="admin_avt">
-                            <img src={avt} alt="" />
                             <span onClick={handleModal}>
-                                Admin{' '}
+                                {thongtin.checkUser.taikhoan}
                                 <i className={`fa-solid fa-chevron-down ${modalStatus == true ? 'admin_transform' : ''}`}></i>
                             </span>
                         </div>

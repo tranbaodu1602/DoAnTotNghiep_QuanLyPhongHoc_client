@@ -21,8 +21,20 @@ const Content: React.FC = () => {
             }
         });
     }, [statusScroll]);
+
     const storedData: any = localStorage.getItem('myDataKey');
     const data = JSON.parse(storedData);
+
+    const columns = [
+        { title: 'Môn học/học phần', dataIndex: 'tenMonHoc', key: 'tenMonHoc' },
+        { title: 'Số tín chỉ', dataIndex: 'soTinChi', key: 'soTinChi' },
+        { title: 'Số tiết', dataIndex: 'soBuoiHoc', key: 'soBuoiHoc' },
+    ]
+
+    const mangMoi = data.lich.map(({ tenMonHoc, soTinChi, soBuoiHoc, maLopHocPhan }) => (
+        { key: maLopHocPhan, tenMonHoc, soTinChi, soBuoiHoc }));
+
+    console.log("mang moi", mangMoi);
     return (
         <>
             {data.checkUser.loaitaikhoan === 'sinhvien' ? (
@@ -139,7 +151,7 @@ const Content: React.FC = () => {
                                     style={{ color: '#737373', position: 'absolute', bottom: 0 }}
                                 >
                                     <div className="" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                        <h1>{thongTinHocPhan.dataSource.length}</h1>
+                                        <h1>{mangMoi.length}</h1>
                                         <div className="card-icon">
                                             <i className="fa-solid fa-book"></i>
                                         </div>
@@ -151,8 +163,8 @@ const Content: React.FC = () => {
                             <Col className="col2">
                                 <Card className="card2" title="Lớp học phần" style={{ color: '#1da1f2' }}>
                                     <Table
-                                        dataSource={thongTinHocPhan.dataSource}
-                                        columns={thongTinHocPhan.columns}
+                                        dataSource={mangMoi}
+                                        columns={columns}
                                         pagination={{ pageSize: 3 }}
                                     />
                                 </Card>
