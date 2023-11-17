@@ -11,6 +11,7 @@ const FormYeuCau: React.FC = () => {
     const [formData, setFormData] = useState({
         hoTenGV: data.data.ThongTinCaNhan.hoTenGV,
         ngay: '',
+        mon: '',
         tietDay: '',
         lyDo: '',
     });
@@ -63,6 +64,21 @@ const FormYeuCau: React.FC = () => {
                             value={formData.tietDay}
                             onChange={handleChange}
                         />
+                    </label>
+                    <label>
+                        Môn:
+                        <select
+                            name="mon"
+                            value={formData.mon}
+                            onChange={handleChange}
+                        >
+
+                            {data.lich.map(monHoc => (
+                                <option key={monHoc.maLopHocPhan} value={monHoc.tenMonHoc}>
+                                    {monHoc.tenMonHoc}
+                                </option>
+                            ))}
+                        </select>
                     </label>
 
                     <label>

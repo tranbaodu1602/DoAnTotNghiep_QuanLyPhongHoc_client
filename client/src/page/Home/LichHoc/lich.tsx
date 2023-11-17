@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -53,12 +53,44 @@ const CustomTimeTableCell: React.FC<{ startDate: Date }> = ({ startDate }) => {
 };
 
 const LearningCalendar: React.FC = () => {
-    const [data] = useState(MonHoc.data.roomData[0].thongTinLich);
+    //const [data] = useState(MonHoc.data.roomData[0].thongTinLich);
     const [currentViewName, setCurrentViewName] = useState('Week');
 
     const currentViewNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCurrentViewName(e.target.value);
     };
+
+    const storedData = localStorage.getItem('myDataKey');
+    const thongtin = storedData ? JSON.parse(storedData) : [];
+
+    const [data, setNewData] = useState([]);
+
+
+    useEffect(() => {
+        // Tạo mảng mới để lưu trữ tất cả lịch học
+        const updatedData = [];
+
+        thongtin.lich.forEach(monHoc => {
+            monHoc.thongTinLich.forEach(lich => {
+                // Chuyển đổi endDate và startDate sang địa phương không thay đổi giá trị thời gian
+                const localEndDate = new Date(lich.endDate).toLocaleString('en-US', { timeZone: 'UTC' });
+                const localStartDate = new Date(lich.startDate).toLocaleString('en-US', { timeZone: 'UTC' });
+
+
+                updatedData.push({
+                    ...lich,
+                    endDate: localEndDate,
+                    startDate: localStartDate,
+                });
+            });
+        });
+
+        // Cập nhật state bằng mảng mới
+        setNewData(updatedData);
+    }, []);
+
+    console.log("datas", data);
+
 
     const Appointment: React.FC<{
         children: React.ReactNode;
@@ -112,10 +144,10 @@ const LearningCalendar: React.FC = () => {
                 <Scheduler data={data} height={620}>
                     <ViewState defaultCurrentDate="2023-10-24" currentViewName={currentViewName} />
                     <WeekView
-                        startDayHour={6.5} // Giờ bắt đầu buổi sáng
-                        endDayHour={21} // Giờ kết thúc buổi tối
+                        startDayHour={5.5} // Giờ bắt đầu buổi sáng
+                        endDayHour={22} // Giờ kết thúc buổi tối
                         cellDuration={60}
-                        // timeTableCellComponent={CustomTimeTableCell}
+                    // timeTableCellComponent={CustomTimeTableCell}
                     />
                     <MonthView />
                     <Toolbar />
