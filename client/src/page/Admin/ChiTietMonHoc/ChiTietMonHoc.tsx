@@ -22,7 +22,7 @@ import {
     DateNavigator,
     TodayButton,
 } from '@devexpress/dx-react-scheduler-material-ui';
-import { MonHoc } from '../../../../DataSample';
+
 
 const { Content } = Layout;
 
@@ -62,14 +62,34 @@ const ChiTietMonHoc: React.FC = () => {
     const { tenMonHoc } = useParams<ParamType>();
 
     const [data, setData] = useState([]);
+
+    const storedData: any = localStorage.getItem('myDataKey');
+    const danhSach = JSON.parse(storedData);
     useEffect(() => {
         const tenMonHocCanTim = tenMonHoc; // Tên môn học bạn muốn tìm
-        const monHocDaTim = MonHoc.data.roomData.find((item) => item.maLopHocPhan === tenMonHocCanTim);
-        if (monHocDaTim) {
+        const monHocDaTim = danhSach.DanhSachHocPhan.find((item) => item.maLopHocPhan === tenMonHocCanTim);
+
+        const updatedData = [];
+
+        monHocDaTim.thongTinLich.forEach(lich => {
+
+            // Chuyển đổi endDate và startDate sang địa phương không thay đổi giá trị thời gian
+            const localEndDate = new Date(lich.endDate).toLocaleString('en-US', { timeZone: 'UTC' });
+            const localStartDate = new Date(lich.startDate).toLocaleString('en-US', { timeZone: 'UTC' });
+
+            updatedData.push({
+                ...lich,
+                endDate: localEndDate,
+                startDate: localStartDate,
+            });
+        });
+
+        if (updatedData) {
             // Nếu tìm thấy môn học, cập nhật data bằng môn học đó
-            setData(monHocDaTim.thongTinLich);
+            setData(updatedData);
         }
     }, [tenMonHoc]);
+
     const [currentViewName, setCurrentViewName] = useState('Week');
 
     const currentViewNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -165,6 +185,8 @@ const ChiTietMonHoc: React.FC = () => {
     //   };
     //-------------------------------
 
+    const tenMon = danhSach.DanhSachHocPhan.find((item) => item.maLopHocPhan === tenMonHoc);
+
     return (
         <>
             <AdminNavbar />
@@ -174,7 +196,7 @@ const ChiTietMonHoc: React.FC = () => {
 
                     <Content>
                         <div className="ChiTietMonHoc_Content ">
-                            <h2>Lịch theo môn học</h2>
+                            <h2>Lịch theo môn {tenMon.tenMonHoc} </h2>
                             <div className='ChiTietMonHoc_Add' >
                                 <button onClick={toggleModelVisibility}>Thêm lịch</button>
                             </div>

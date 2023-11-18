@@ -42,7 +42,11 @@ const AdminSider: React.FC = () => {
     };
 
     const handleLogout = () => {
-        // Thực hiện đăng xuất và điều hướng đến trang đăng nhập
+        const isDataExist = localStorage.getItem('myDataKey') !== null;
+        // Nếu dữ liệu tồn tại, hãy xóa nó
+        if (isDataExist) {
+            localStorage.removeItem('myDataKey');
+        }
         navigate('/');
     };
 
@@ -67,6 +71,8 @@ const AdminSider: React.FC = () => {
         return str.toLowerCase()
     }
 
+    const storedData: any = localStorage.getItem('myDataKey');
+    const data = JSON.parse(storedData);
 
 
     return (
@@ -103,7 +109,7 @@ const AdminSider: React.FC = () => {
                     style={{ maxHeight: '50px', overflowY: 'auto' }}
 
                 >
-                    {MonHoc.data.roomData.map((item) => (
+                    {data.DanhSachHocPhan.map((item) => (
                         <Menu.Item
 
                             key={`/admin/monhoc/${removeVietnameseTones(item.maLopHocPhan)}`}
@@ -138,9 +144,8 @@ const AdminSider: React.FC = () => {
             </Menu>
 
             <div className='setting'>
-                <div className='admin_item'>Đổi mật khẩu</div>
                 <div className='admin_item' onClick={handleLogout}>
-                    LOG OUT
+                    Đăng xuất
                     <span style={{ color: 'white' }}>
                         <img src={logout} alt="" style={{ height: "10px", width: "10px" }} />
                     </span>

@@ -261,9 +261,9 @@ export const SinhVien = {
             { key: '7', monHoc: 'An toàn thông tin', soTC: '3', soTiet: '45' },
         ],
         columns: [
-            { title: 'Môn học/học phần', dataIndex: 'monHoc', key: 'monHoc' },
-            { title: 'Số tín chỉ', dataIndex: 'soTC', key: 'soTC' },
-            { title: 'Số tiết', dataIndex: 'soTiet', key: 'soTiet' },
+            { title: 'Môn học/học phần', dataIndex: 'tenMonHoc', key: 'tenMonHoc' },
+            { title: 'Số tín chỉ', dataIndex: 'soTinChi', key: 'soTinChi' },
+            { title: 'Số tiết', dataIndex: 'soBuoiHoc', key: 'soBuoiHoc' },
         ],
         appointments: [
             {

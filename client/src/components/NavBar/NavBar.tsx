@@ -3,13 +3,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/tieude4.png';
 import avt from '../../assets/images/avt4.jpg';
 import './navbar.scss';
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 
 const NavBar: React.FC = () => {
+
+    const storedData: any = localStorage.getItem('myDataKey');
+    const data = JSON.parse(storedData);
+
     const [modalStatus, setModalStatus] = useState(false);
     const [changePass, setChangePass] = useState(false);
 
-    const [username, setUsername] = useState('');
+    const [username, setUsername] = useState(data.checkUser.taikhoan);
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
@@ -31,6 +35,7 @@ const NavBar: React.FC = () => {
 
     const handleShowChangePass = () => {
         setChangePass(!changePass);
+        setModalStatus(false);
     };
 
     const handleCloseForm = () => {
@@ -48,18 +53,18 @@ const NavBar: React.FC = () => {
         });
         const data: any = response.json();
         data.then((result: any) => {
-            if (result.response.status === 'fail') {
-                toast.error(result.response.message);
+            if (result.response.status === '200') {
+                toast.error("thành công");
             } else {
-                toast.success(result.response.message);
+                toast.success("thất bại");
             }
         }).catch((error: any) => {
             console.error(error);
         });
+        setChangePass(false);
     };
 
-    const storedData: any = localStorage.getItem('myDataKey');
-    const data = JSON.parse(storedData);
+
 
     return (
         <div className="navbar-component">
@@ -142,6 +147,7 @@ const NavBar: React.FC = () => {
             </div>
             {changePass ? (
                 <>
+                    <ToastContainer />
                     <div className="modalshowChangePass">
                         <div className="container">
                             <div className="row vh-100 justify-content-center align-items-center ">
@@ -169,7 +175,8 @@ const NavBar: React.FC = () => {
                                                         id="username"
                                                         value={username}
                                                         onChange={(e) => setUsername(e.target.value)}
-                                                        required
+                                                        //required
+                                                        readOnly
                                                     />
                                                 </div>
                                                 <div className="form-group">
