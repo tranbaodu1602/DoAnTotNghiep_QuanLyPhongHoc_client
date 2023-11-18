@@ -25,9 +25,9 @@ const createUser = async (req, res) => {
 
 const changePassword = async (req, res) => {
     try {
-        const account = await userService.changePassword(req.body);
+        const response = await userService.changePassword(req.body);
         res.status(200).json({
-            account,
+            response,
         });
     } catch (error) {
         res.status(500).json({ error: error.message });
