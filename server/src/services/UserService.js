@@ -5,6 +5,7 @@ const GiaoVien = require('../models/ModalGiaovien');
 const ThongBao = require('../models/ModalThongBao');
 
 const bcrypt = require('bcrypt');
+const PhongHoc = require('../models/ModalPhongHoc');
 
 const createUser = async (userData) => {
     return new Promise(async (resolve, reject) => {
@@ -110,12 +111,14 @@ const userLogin = async (dataLogin) => {
                 if (checkUser.loaitaikhoan === 'admin') {
                     const DSHP = await HocPhan.find();
                     const DSTB = await ThongBao.find();
-                    if (!DSHP || !DSTB) {
+                    const DSPH = await PhongHoc.find();
+                    if (!DSHP || !DSTB || !DSPH) {
                         reslove({
                             status: 'success',
                             message: 'Đăng nhập thành công, Wellcome admin !!',
                             DanhSachHocPhan: 'khong tim thay hoc phan',
                             DanhSachThongBao: 'khong tim thay thong bao',
+                            DanhSachThongBao: 'khong tim thay phong hoc',
                             checkUser,
                             path: '/admin/home',
                         });
@@ -126,6 +129,7 @@ const userLogin = async (dataLogin) => {
                                 message: 'Đăng nhập thành công, wellcome admin !!',
                                 DanhSachHocPhan: DSHP,
                                 DanhSachThongBao: DSTB,
+                                DanhSachPhongHoc: DSPH,
                                 checkUser,
                                 path: '/admin/home',
                             },
