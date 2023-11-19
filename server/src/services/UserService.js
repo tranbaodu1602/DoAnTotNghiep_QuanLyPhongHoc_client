@@ -2,6 +2,7 @@ const TaiKhoan = require('../models/ModalTaiKhoan');
 const SinhVien = require('../models/ModalSinhVien');
 const HocPhan = require('../models/ModalHocPhan');
 const GiaoVien = require('../models/ModalGiaovien');
+const ThongBao = require('../models/ModalThongBao');
 
 const bcrypt = require('bcrypt');
 
@@ -108,11 +109,13 @@ const userLogin = async (dataLogin) => {
             } else {
                 if (checkUser.loaitaikhoan === 'admin') {
                     const DSHP = await HocPhan.find();
-                    if (!DSHP) {
+                    const DSTB = await ThongBao.find();
+                    if (!DSHP || !DSTB) {
                         reslove({
                             status: 'success',
                             message: 'Đăng nhập thành công, Wellcome admin !!',
                             DanhSachHocPhan: 'khong tim thay hoc phan',
+                            DanhSachThongBao: 'khong tim thay thong bao',
                             checkUser,
                             path: '/admin/home',
                         });
@@ -122,6 +125,7 @@ const userLogin = async (dataLogin) => {
                                 status: 'SUCCESS',
                                 message: 'Đăng nhập thành công, wellcome admin !!',
                                 DanhSachHocPhan: DSHP,
+                                DanhSachThongBao: DSTB,
                                 checkUser,
                                 path: '/admin/home',
                             },
@@ -129,6 +133,8 @@ const userLogin = async (dataLogin) => {
                     }
                 } else if (checkUser.loaitaikhoan === 'sinhvien') {
                     const data = await SinhVien.findOne({ 'ThongTinCaNhan.maSV': username });
+                    const DSTB = await ThongBao.find({ danhCho: 'sinhvien' });
+                    const DSTBALL = await ThongBao.find({ danhCho: 'tatca' });
                     const lich = [];
                     await Promise.all(
                         data.ThongTinHocPhan.data[0].dsHocPhan.map(async (value) => {
@@ -147,6 +153,7 @@ const userLogin = async (dataLogin) => {
                                 message: 'Đăng nhập thành công',
                                 checkUser,
                                 data: data,
+                                DanhSachThongBao: { DSTB, DSTBALL },
                                 lich: 'Không có lịch học trong học kì',
                                 path: '/home',
                             },
@@ -158,6 +165,7 @@ const userLogin = async (dataLogin) => {
                                 message: 'Đăng nhập thành công',
                                 checkUser,
                                 data: data,
+                                DanhSachThongBao: { DSTB, DSTBALL },
                                 lich: lich,
                                 path: '/home',
                             },
@@ -165,6 +173,8 @@ const userLogin = async (dataLogin) => {
                     }
                 } else if (checkUser.loaitaikhoan === 'giaovien') {
                     const data = await GiaoVien.findOne({ 'ThongTinCaNhan.maGV': username });
+                    const DSTB = await ThongBao.find({ danhCho: 'giaovien' });
+                    const DSTBALL = await ThongBao.find({ danhCho: 'tatca' });
                     console.log('data', data);
                     const lich = [];
                     await Promise.all(
@@ -184,6 +194,7 @@ const userLogin = async (dataLogin) => {
                                 message: 'Đăng nhập thành công',
                                 checkUser,
                                 data: data,
+                                DanhSachThongBao: { DSTB, DSTBALL },
                                 lich: 'Không có lịch dạy trong học kì',
                                 path: '/home',
                             },
@@ -195,6 +206,7 @@ const userLogin = async (dataLogin) => {
                                 message: 'Đăng nhập thành công',
                                 checkUser,
                                 data: data,
+                                DanhSachThongBao: { DSTB, DSTBALL },
                                 lich: lich,
                                 path: '/home',
                             },

@@ -19,10 +19,7 @@ const hocPhanSchema = new mongoose.Schema({
 const thongTinCaNhanSchema = new mongoose.Schema({
     hoTenSV: String,
     maSV: String,
-    anhDaiDien: {
-        data: Buffer,
-        contentType: String,
-    },
+    anhDaiDien: String,
     ngaySinh: String,
     gioiTinh: String,
     noiSinh: String,

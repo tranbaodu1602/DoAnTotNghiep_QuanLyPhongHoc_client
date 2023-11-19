@@ -1,7 +1,6 @@
 const express = require('express');
 const routes = express.Router();
-const sinhVienController = require('../controllers/SinhVienController');
-
+const adminController = require('../controllers/AdminController');
 const cloudinary = require('../configs/Cloudunary');
 const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
@@ -16,7 +15,8 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage: storage });
 
-routes.post('/create', upload.fields([{ name: 'anhDaiDien', maxCount: 1 }]), sinhVienController.themSinhVien);
-routes.post('/get-student-by-id', sinhVienController.getSVTheoMaSV);
+routes.post('/add-classroom', adminController.themPhongHoc);
+routes.post('/create-notify', upload.fields([{ name: 'dinhKem', maxCount: 1 }]), adminController.taoThongBao);
+routes.get('/delete-all-notify', adminController.xoaAllThongBao);
 
 module.exports = routes;

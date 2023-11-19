@@ -6,6 +6,9 @@ const bodyParser = require('body-parser');
 const mongoDB = require('./database/MongoDBConnect');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const multer = require('multer');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
 dotenv.config();
 mongoDB.connectDB();
 

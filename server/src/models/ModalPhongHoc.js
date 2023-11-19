@@ -6,21 +6,18 @@ const db = mongoose.createConnection(process.env.MONGO_DB, { dbName: 'QuanLyPhon
 
 const ThietBiSchema = new mongoose.Schema({
     tenThietBi: String,
-    loai: String,
-    ngayMua: Date,
-    nhaCungCap: String,
+    soLuong: Number,
 });
 
 const LoaiPhongSchema = new mongoose.Schema({
-    tenLoai: String,
+    tenLoaiPhong: String,
     thietBi: [ThietBiSchema],
 });
 
 const PhongSchema = new mongoose.Schema({
     maPhong: String,
-    tenPhong: String,
     sucChua: Number,
-    trangThai: String,
+    trangThai: Boolean,
     tenNha: String,
     loaiPhong: LoaiPhongSchema,
 });
