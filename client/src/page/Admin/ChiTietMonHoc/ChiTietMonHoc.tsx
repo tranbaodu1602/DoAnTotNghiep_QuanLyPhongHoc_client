@@ -213,8 +213,8 @@ const ChiTietMonHoc: React.FC = () => {
                                                 currentViewName={currentViewName}
                                             />
                                             <WeekView
-                                                startDayHour={6.5} // Giờ bắt đầu buổi sáng
-                                                endDayHour={22} // Giờ kết thúc buổi tối
+                                                startDayHour={5.5} // Giờ bắt đầu buổi sáng
+                                                endDayHour={21} // Giờ kết thúc buổi tối
                                                 cellDuration={60}
                                             />
                                             <MonthView />

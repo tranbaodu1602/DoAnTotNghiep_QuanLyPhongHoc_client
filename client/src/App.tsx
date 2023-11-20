@@ -35,7 +35,6 @@ function App() {
           <Route path="/home/yeucau" element={< FormYeuCau />} />
           {/*  */}
           <Route path="/admin/thongbao" element={<QLThongbao />} />
-
           {/*  */}
           <Route path="/admin/phonghoc/:loaiphong" element={<PhongHoc />} ></Route>
           <Route path="/admin/phonghoc/:loaiphong/:toanha" element={<ChiTietPhongHoc />} ></Route>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Layout } from 'antd';
 import AdminSider from '../AdminSider/AdminSider';
 import AdminNavbar from '../AdminNavbar/AdminNavbar';
@@ -8,27 +8,39 @@ import FormThongBao from './FormThongBao';
 import { Card, List } from 'antd';
 import '../../Home/ThongBao/thongBao.scss';
 import './QLThongBao.scss';
+import { Link } from 'react-router-dom';
 
 const { Content } = Layout;
 
 const QLThongbao: React.FC = () => {
-    const data = [
-        {
-            title: 'Card 1',
-            description: 'Mô tả cho Card 1',
-            time: '20/03/2023',
-        },
-        {
-            title: 'Card 2',
-            description: 'Mô tả cho Card 2',
-            time: '20/03/2023',
-        },
-        {
-            title: 'Card 3',
-            description: 'Mô tả cho Card 3',
-            time: '20/03/2023',
-        },
-    ];
+
+    const storedData: any = localStorage.getItem('myDataKey');
+    const thongtin = JSON.parse(storedData);
+
+    const sv = thongtin.DanhSachThongBao.filter(thongbao => thongbao.danhCho === 'sinhvien')
+    const gv = thongtin.DanhSachThongBao.filter(thongbao => thongbao.danhCho === 'giaovien')
+    const all = thongtin.DanhSachThongBao.filter(thongbao => thongbao.danhCho === 'tatca')
+
+    const convertData = (mangMoi) => {
+        // Tạo mảng mới để lưu trữ tất cả lịch học
+        const updatedData = [];
+
+        mangMoi.forEach(mang => {
+            // Chuyển đổi endDate và startDate sang địa phương không thay đổi giá trị thời gian
+            const localDate = new Date(mang.ngayTao).toLocaleString('en-US', { timeZone: 'UTC' });
+            updatedData.push({
+                ...mang,
+                ngayTao: localDate,
+            });
+        });
+
+        return updatedData;
+    };
+
+    const thongbaosv = convertData(sv);
+    const thongbaogv = convertData(gv);
+    const thongbaoall = convertData(all);
+
     return (
         <>
             <AdminNavbar />
@@ -40,14 +52,14 @@ const QLThongbao: React.FC = () => {
                             <div className="ThongBao_content">
                                 <h2>Thông báo</h2>
                                 <div className="notify-list">
-                                    <Card className="card" title="THÔNG TIN GIỜ HỌC" style={{ color: '#737373' }}>
+                                    <Card className="card" title="THÔNG TIN SINH VIÊN" style={{ color: '#737373', maxHeight: "450px", overflowY: "auto" }}>
                                         <List
                                             grid={{ gutter: 16, column: 1 }} // Thiết lập cấu trúc danh sách (3 cột)
-                                            dataSource={data} // Danh sách dữ liệu
+                                            dataSource={thongbaosv} // Danh sách dữ liệu
                                             renderItem={(item) => (
                                                 <List.Item>
-                                                    <Card title={item.title}>
-                                                        <p>{item.description}</p>
+                                                    <Card title={item.ngayTao}>
+                                                        <p>{item.tenThongBao}</p>
                                                     </Card>
                                                 </List.Item>
                                             )}
@@ -55,16 +67,30 @@ const QLThongbao: React.FC = () => {
                                     </Card>
                                     <Card
                                         className="card"
-                                        title="THÔNG TIN SỰ KIỆN"
-                                        style={{ color: '#737373', marginTop: 2 + '%' }}
+                                        title="THÔNG TIN GIẢNG VIÊN"
+                                        style={{ color: '#737373', marginTop: 2 + '%', maxHeight: "450px", overflowY: "auto" }}
                                     >
                                         <List
                                             grid={{ gutter: 16, column: 1 }} // Thiết lập cấu trúc danh sách (3 cột)
-                                            dataSource={data} // Danh sách dữ liệu
+                                            dataSource={thongbaogv} // Danh sách dữ liệu
                                             renderItem={(item, key) => (
                                                 <List.Item>
-                                                    <Card key={key} title={item.title}>
-                                                        <p>{item.description}</p>
+                                                    <Card key={key} title={item.ngayTao}>
+                                                        <p>{item.tenThongBao}</p>
+                                                    </Card>
+                                                </List.Item>
+                                            )}
+                                        />
+                                    </Card>
+                                    <Card className="card" title="THÔNG BÁO TẤT CẢ"
+                                        style={{ color: '#737373', marginTop: 2 + '%', maxHeight: "450px", overflowY: "auto" }}>
+                                        <List
+                                            grid={{ gutter: 16, column: 1 }} // Thiết lập cấu trúc danh sách (3 cột)
+                                            dataSource={thongbaoall} // Danh sách dữ liệu
+                                            renderItem={(item) => (
+                                                <List.Item>
+                                                    <Card title={item.ngayTao}>
+                                                        <p>{item.tenThongBao}</p>
                                                     </Card>
                                                 </List.Item>
                                             )}

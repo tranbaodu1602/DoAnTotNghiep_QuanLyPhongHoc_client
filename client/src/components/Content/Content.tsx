@@ -34,7 +34,11 @@ const Content: React.FC = () => {
     const mangMoi = data.lich.map(({ tenMonHoc, soTinChi, soBuoiHoc, maLopHocPhan }) => (
         { key: maLopHocPhan, tenMonHoc, soTinChi, soBuoiHoc }));
 
-    console.log("mang moi", mangMoi);
+
+    const ThongBaoSV = data.DanhSachThongBao.DSTB;
+    const ThongBaoALL = data.DanhSachThongBao.DSTBALL;
+
+    const tb = ThongBaoSV.concat(ThongBaoALL);
     return (
         <>
             {data.checkUser.loaitaikhoan === 'sinhvien' ? (
@@ -138,7 +142,7 @@ const Content: React.FC = () => {
                                     style={{ color: '#737373' }}
                                 >
                                     <div className="" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                        <h1>0</h1>
+                                        <h1>{tb.length}</h1>
                                         <div className="card-icon">
                                             <i className="fa-regular fa-bell"></i>
                                         </div>

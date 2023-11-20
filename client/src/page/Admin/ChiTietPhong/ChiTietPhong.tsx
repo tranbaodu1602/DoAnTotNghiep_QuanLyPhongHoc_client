@@ -6,7 +6,6 @@ import AdminNavbar from '../AdminNavbar/AdminNavbar';
 import Footer from '../../../components/Footer/Footer';
 import { useParams } from 'react-router-dom';
 import './ChiTietPhong.scss'
-import { MonHoc } from '../../../../DataSample';
 import Paper from '@mui/material/Paper';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -63,24 +62,38 @@ const ExternalViewSwitcher = ({
 
 const ChiTietPhongHoc: React.FC = () => {
     const { toanha } = useParams<ParamType>();
+
+    const storedData: any = localStorage.getItem('myDataKey');
+    const danhSach = JSON.parse(storedData);
+
     const [startDate, setStartDate] = useState<moment.Moment | null>(null);
     const [endDate, setEndDate] = useState<moment.Moment | null>(null);
+
     const [data, setData] = useState([]);
     useEffect(() => {
-        // Tạo một mảng mới để lưu các object có phongHoc giống nhau
-        const lichHocGiongPhong = [];
+        const lichHoc = danhSach.DanhSachHocPhan.flatMap(monHoc =>
+            monHoc.thongTinLich.filter(lichHoc => lichHoc.phongHoc === toanha)
+        );
 
-        MonHoc.data.roomData.forEach((monHoc) => {
-            monHoc.thongTinLich.forEach((lich) => {
-                if (lich.phongHoc === toanha) {
-                    lichHocGiongPhong.push(lich);
-                }
+        const updatedData = [];
+
+        lichHoc.forEach(lich => {
+            // Chuyển đổi endDate và startDate sang địa phương không thay đổi giá trị thời gian
+            const localEndDate = new Date(lich.endDate).toLocaleString('en-US', { timeZone: 'UTC' });
+            const localStartDate = new Date(lich.startDate).toLocaleString('en-US', { timeZone: 'UTC' });
+
+            updatedData.push({
+                ...lich,
+                endDate: localEndDate,
+                startDate: localStartDate,
             });
         });
 
-        // Cập nhật data với danh sách các lịch học có phongHoc giống nhau
-        setData(lichHocGiongPhong);
-    }, [toanha]);
+        if (updatedData) {
+            // Nếu tìm thấy môn học, cập nhật data bằng môn học đó
+            setData(updatedData);
+        }
+    }, []);
 
     const handleUpdateClick = () => {
         // Xử lý cập nhật dữ liệu ở đây
@@ -235,8 +248,8 @@ const ChiTietPhongHoc: React.FC = () => {
                                                 <Scheduler data={data} height={620}>
                                                     <ViewState defaultCurrentDate="2023-10-24" currentViewName={currentViewName} />
                                                     <WeekView
-                                                        startDayHour={6.5} // Giờ bắt đầu buổi sáng
-                                                        endDayHour={22} // Giờ kết thúc buổi tối
+                                                        startDayHour={5.5} // Giờ bắt đầu buổi sáng
+                                                        endDayHour={21} // Giờ kết thúc buổi tối
                                                         cellDuration={60}
                                                     // timeTableCellComponent={CustomTimeTableCell}
                                                     />

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-
 import './QLThongBao.scss'
 
 const FormThongBao: React.FC = () => {
     const [tenThongBao, setTenThongBao] = useState('');
     const [chiTiet, setChiTiet] = useState('');
+    const [danhCho, setDanhCho] = useState('sinhvien');
     const [ngayTao, setNgayTao] = useState(new Date().toISOString().slice(0, 10));
-    const [dinhKem, setDinhKem] = useState<FileList | null>(null);
+    const [dinhKem, setDinhKem] = useState<string | null>('');
     const [error, setError] = useState('');
 
     const handleTenThongBaoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,33 +19,39 @@ const FormThongBao: React.FC = () => {
 
     const handleDinhKemChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
-        setDinhKem(files);
-    };
+        if (files && files.length > 0) {
+            setDinhKem(files[0].name);
+        } else {
+            setDinhKem("");
+        }
+    }
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-
         if (!tenThongBao || !chiTiet) {
             setError('Vui lòng điền tên thông báo và chi tiết.');
             return;
         }
+        await fetch('http://localhost:3001/admin/create-notify', {
+            method: 'POST',
+            body: JSON.stringify({ tenThongBao, chiTiet, ngayTao, danhCho, dinhKem }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
 
-        // Kiểm tra regex cho tên và chi tiết ở đây
-        const tenThongBaoPattern = /^[a-zA-Z0-9\s]+$/;
-        const chiTietPattern = /^[\w\s.!?,'"-]+$/;
+        const thongBao = {
+            tenThongBao,
+            chiTiet,
+            danhCho,
+            ngayTao,
+            dinhKem
+        };
 
-        if (!tenThongBao.match(tenThongBaoPattern)) {
-            setError('Tên thông báo không hợp lệ. Chỉ chấp nhận chữ, số và khoảng trắng.');
-            return;
-        }
+        // Log thông báo ra console
+        console.log("thông báo", thongBao);
 
-        if (!chiTiet.match(chiTietPattern)) {
-            setError('Chi tiết không hợp lệ.');
-            return;
-        }
-
-        // Nếu không có lỗi, bạn có thể gửi dữ liệu lên máy chủ ở đây
-        setError('');
+        // setError('');
     };
 
     return (
@@ -61,21 +67,34 @@ const FormThongBao: React.FC = () => {
             </div>
             <div className="form-group">
                 <label htmlFor="ngayTao">Ngày tạo:</label>
-                <input type="date" id="ngayTao" className="form-control" value={ngayTao} onChange={(e) => setNgayTao(e.target.value)} />
+                <input type="date" id="ngayTao" className="form-control"
+                    value={ngayTao} onChange={(e) => setNgayTao(e.target.value)} />
+            </div>
+            <div className="form-group" style={{ marginTop: "6px" }}>
+                <label htmlFor="danhCho">Loại tài khoản:</label>
+                <select
+                    className="form-control"
+                    name="danhCho"
+                    value={danhCho}
+                    onChange={(e) => setDanhCho(e.target.value)}
+                >
+                    <option value="sinhvien">Sinh viên</option>
+                    <option value="giaovien">Giảng viên</option>
+                    <option value="tatca">Tất cả</option>
+                </select>
             </div>
             <div className="form-group" style={{ marginTop: '20px' }}>
-                <label htmlFor="dinhKem">Đính kèm file: </label>
+                <label htmlFor="dinhKem">Ảnh đính kèm : </label>
                 <input type="file" id="dinhKem" onChange={handleDinhKemChange} multiple />
             </div>
             <div style={{ height: "90px", maxHeight: '90px', overflowY: 'auto' }}>
-                {dinhKem && dinhKem.length > 1 && (
+                {/* {dinhKem && dinhKem.length > 1 && (
                     <ul>
                         {Array.from(dinhKem).map((file, index) => (
-
                             <li key={index}>{file.name}</li>
                         ))}
                     </ul>
-                )}
+                )} */}
             </div>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <button type="submit" className="btn btn-primary" style={{ width: "90%" }}>Thêm thông báo</button>

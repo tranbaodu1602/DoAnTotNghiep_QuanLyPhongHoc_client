@@ -45,13 +45,14 @@ const PhongHoc: React.FC = () => {
         Loai = 'Phòng Hội Trường'
     }
 
+    const storedData: any = localStorage.getItem('myDataKey');
+    const data = JSON.parse(storedData);
 
     const danhSachPhongTheoLoai = (danhSachPhong: PhongType[], Loai: string) => {
-        return danhSachPhong.filter((phong) => phong.loaiPhong.tenLoai === Loai);
+        return danhSachPhong.filter((phong) => phong.loaiPhong.tenLoaiPhong === Loai);
     };
 
-    const ketQua = danhSachPhongTheoLoai(Phong, Loai);
-    console.log("data", ketQua);
+    const ketQua = danhSachPhongTheoLoai(data.DanhSachPhongHoc, Loai);
 
     const nhaPhongMap: Record<string, PhongType[]> = {};
     ketQua.forEach((phong) => {
@@ -60,6 +61,7 @@ const PhongHoc: React.FC = () => {
         }
         nhaPhongMap[phong.tenNha].push(phong);
     });
+    console.log("data", ketQua);
 
 
 
@@ -77,8 +79,8 @@ const PhongHoc: React.FC = () => {
                                     <h3>{`Nhà ${tenNha}`}</h3>
                                     <div className='list_phong'>
                                         {nhaPhongMap[tenNha].map((phong) => (
-                                            <Link key={phong.id} to={`/admin/phonghoc/${loaiphong}/${phong.tenPhong}`}>
-                                                <div className='item'>Phòng {phong.tenPhong}</div>
+                                            <Link key={phong.id} to={`/admin/phonghoc/${loaiphong}/${phong.maPhong}`}>
+                                                <div className='item'>Phòng {phong.maPhong}</div>
                                             </Link>
                                         ))}
                                     </div>
