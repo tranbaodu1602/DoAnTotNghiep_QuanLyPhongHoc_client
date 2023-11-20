@@ -35,15 +35,22 @@ const taoThongBao = async (data) => {
         const { tenThongBao, chiTiet, ngayTao, danhCho, dinhKem } = data.body;
         try {
             const convertedStr = slugify(unidecode(tenThongBao), { lower: true });
-            const link = data.files['dinhKem'][0];
-            console.log(link);
+            let link = 'không có file đính kèm';
+            if (
+                data.files &&
+                data.files['dinhKem'] &&
+                Array.isArray(data.files['dinhKem']) &&
+                data.files['dinhKem'].length > 0
+            ) {
+                link = data.files['dinhKem'][0].path;
+            }
             const thongBaoNew = new ThongBao({
                 tenThongBao,
                 slug: convertedStr,
                 chiTiet,
                 ngayTao,
                 danhCho,
-                dinhKem: data.files['dinhKem'][0].path,
+                dinhKem: link,
             });
             await thongBaoNew.save();
 
