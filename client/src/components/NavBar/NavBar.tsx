@@ -42,32 +42,35 @@ const NavBar: React.FC = () => {
         setChangePass(false);
     };
 
-    const handleSubmitChangePass = async (event: any) => {
+    const handleSubmitChangePass = async (event: React.FormEvent) => {
         event.preventDefault();
-        const response = await fetch('http://localhost:3001/auth/change-password', {
-            method: 'POST',
-            body: JSON.stringify({ username, oldPassword, newPassword, confirmNewPassword }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        const data: any = response.json();
-        data.then((result: any) => {
-            if (result.response.status === '200') {
-                toast.error("thành công");
+        try {
+            const response = await fetch('http://localhost:3001/auth/change-password', {
+                method: 'POST',
+                body: JSON.stringify({ username, oldPassword, newPassword, confirmNewPassword }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                toast.success("Đổi mật khẩu thành công")
+                setChangePass(false);
             } else {
-                toast.success("thất bại");
+                toast.error("Đổi mật khẩu thất bại")
             }
-        }).catch((error: any) => {
-            console.error(error);
-        });
-        setChangePass(false);
+        } catch (error) {
+            toast.error("Lỗi kết nối")
+        }
+
+
     };
 
 
 
     return (
         <div className="navbar-component">
+            <ToastContainer />
             <div className="logo">
                 <img src={logo} alt="" />
             </div>
@@ -147,7 +150,7 @@ const NavBar: React.FC = () => {
             </div>
             {changePass ? (
                 <>
-                    <ToastContainer />
+
                     <div className="modalshowChangePass">
                         <div className="container">
                             <div className="row vh-100 justify-content-center align-items-center ">

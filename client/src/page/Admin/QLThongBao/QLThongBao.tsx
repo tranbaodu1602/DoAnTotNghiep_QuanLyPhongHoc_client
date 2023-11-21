@@ -59,7 +59,7 @@ const QLThongbao: React.FC = () => {
                                             renderItem={(item) => (
                                                 <List.Item>
                                                     <Card title={item.ngayTao}>
-                                                        <p>{item.tenThongBao}</p>
+                                                        <p style={{ fontStyle: "italic" }}>{item.tenThongBao}</p>
                                                     </Card>
                                                 </List.Item>
                                             )}
