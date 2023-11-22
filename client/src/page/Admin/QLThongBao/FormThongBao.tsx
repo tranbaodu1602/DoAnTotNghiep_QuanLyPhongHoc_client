@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 
-import './QLThongBao.scss'
+import './QLThongBao.scss';
 
 const FormThongBao: React.FC = () => {
     const [tenThongBao, setTenThongBao] = useState('');
@@ -19,33 +20,31 @@ const FormThongBao: React.FC = () => {
 
     const handleDinhKemChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
+        console.log(files);
         setDinhKem(files);
     };
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
 
         if (!tenThongBao || !chiTiet) {
             setError('Vui lòng điền tên thông báo và chi tiết.');
             return;
         }
-
-        // Kiểm tra regex cho tên và chi tiết ở đây
-        const tenThongBaoPattern = /^[a-zA-Z0-9\s]+$/;
-        const chiTietPattern = /^[\w\s.!?,'"-]+$/;
-
-        if (!tenThongBao.match(tenThongBaoPattern)) {
-            setError('Tên thông báo không hợp lệ. Chỉ chấp nhận chữ, số và khoảng trắng.');
-            return;
-        }
-
-        if (!chiTiet.match(chiTietPattern)) {
-            setError('Chi tiết không hợp lệ.');
-            return;
-        }
-
-        // Nếu không có lỗi, bạn có thể gửi dữ liệu lên máy chủ ở đây
-        setError('');
+        const danhCho = 'tatca';
+        const response = await fetch('http://localhost:3001/admin/create-notify', {
+            method: 'POST',
+            body: JSON.stringify({ tenThongBao, chiTiet, ngayTao, danhCho, dinhKem }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const data: any = response.json();
+        data.then((result: any) => {
+            console.log(result);
+        }).catch((error: any) => {
+            console.error(error);
+        });
     };
 
     return (
@@ -53,32 +52,53 @@ const FormThongBao: React.FC = () => {
             {error && <div className="alert alert-danger">{error}</div>}
             <div className="form-group">
                 <label htmlFor="tenThongBao">Tên thông báo:</label>
-                <input type="text" id="tenThongBao" className="form-control" value={tenThongBao} onChange={handleTenThongBaoChange} required />
+                <input
+                    type="text"
+                    id="tenThongBao"
+                    className="form-control"
+                    value={tenThongBao}
+                    onChange={handleTenThongBaoChange}
+                    required
+                />
             </div>
             <div className="form-group">
                 <label htmlFor="chiTiet">Chi tiết:</label>
-                <textarea id="chiTiet" className="form-control" style={{ height: "250px", maxHeight: '450px', overflowY: 'auto' }} value={chiTiet} onChange={handleChiTietChange} required />
+                <textarea
+                    id="chiTiet"
+                    className="form-control"
+                    style={{ height: '250px', maxHeight: '450px', overflowY: 'auto' }}
+                    value={chiTiet}
+                    onChange={handleChiTietChange}
+                    required
+                />
             </div>
             <div className="form-group">
                 <label htmlFor="ngayTao">Ngày tạo:</label>
-                <input type="date" id="ngayTao" className="form-control" value={ngayTao} onChange={(e) => setNgayTao(e.target.value)} />
+                <input
+                    type="date"
+                    id="ngayTao"
+                    className="form-control"
+                    value={ngayTao}
+                    onChange={(e) => setNgayTao(e.target.value)}
+                />
             </div>
             <div className="form-group" style={{ marginTop: '20px' }}>
                 <label htmlFor="dinhKem">Đính kèm file: </label>
-                <input type="file" id="dinhKem" onChange={handleDinhKemChange} multiple />
+                <input type="file" id="dinhKem" accept="image/*" onChange={handleDinhKemChange} multiple />
             </div>
-            <div style={{ height: "90px", maxHeight: '90px', overflowY: 'auto' }}>
+            <div style={{ height: '90px', maxHeight: '90px', overflowY: 'auto' }}>
                 {dinhKem && dinhKem.length > 1 && (
                     <ul>
                         {Array.from(dinhKem).map((file, index) => (
-
                             <li key={index}>{file.name}</li>
                         ))}
                     </ul>
                 )}
             </div>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <button type="submit" className="btn btn-primary" style={{ width: "90%" }}>Thêm thông báo</button>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <button type="submit" className="btn btn-primary" style={{ width: '90%' }}>
+                    Thêm thông báo
+                </button>
             </div>
         </form>
     );
