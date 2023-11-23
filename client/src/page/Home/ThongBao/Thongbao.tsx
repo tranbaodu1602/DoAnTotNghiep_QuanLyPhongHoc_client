@@ -1,4 +1,4 @@
-// import React from 'react'
+import React, { useEffect, useState } from 'react'
 import NavBar from '../../../components/NavBar/NavBar';
 import { Breadcrumb, Card, List } from 'antd';
 import { Link } from 'react-router-dom';
@@ -6,23 +6,39 @@ import Footer from '../../../components/Footer/Footer';
 import './thongBao.scss';
 
 export const Thongbao = () => {
-    const data = [
-        {
-            title: 'Thông báo 1',
-            description: 'Mô tả cho Card 1 aaaaaaaaaaaaaaaaaaaaaa',
-            time: '20/03/2023',
-        },
-        {
-            title: 'Thoogn báo 2',
-            description: 'Mô tả cho Card 2 aaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-            time: '20/03/2023',
-        },
-        {
-            title: 'Thông báo 3',
-            description: 'Mô tả cho Card 3',
-            time: '20/03/2023',
-        },
-    ];
+
+
+    const storedData: any = localStorage.getItem('myDataKey');
+    const thongtin = JSON.parse(storedData);
+
+    const ThongBaoSV = thongtin.DanhSachThongBao.DSTB;
+    const ThongBaoALL = thongtin.DanhSachThongBao.DSTBALL;
+
+    const mangMoi = ThongBaoSV.concat(ThongBaoALL);
+
+    console.log("tb", mangMoi);
+
+    const [data, setData] = useState([])
+    useEffect(() => {
+        // Tạo mảng mới để lưu trữ tất cả lịch học
+        const updatedData = [];
+
+        mangMoi.forEach(mang => {
+            // Chuyển đổi endDate và startDate sang địa phương không thay đổi giá trị thời gian
+            const localDate = new Date(mang.ngayTao).toLocaleString('en-US', { timeZone: 'UTC' });
+
+
+            updatedData.push({
+                ...mang,
+                ngayTao: localDate,
+            });
+        });
+
+
+        setData(updatedData);
+    }, []);
+    console.log("tb", data);
+
     return (
         <>
             <NavBar />
@@ -59,16 +75,16 @@ export const Thongbao = () => {
                 </div>
 
                 <div className="notify-list">
-                    <Card className="card" title="THÔNG TIN GIỜ HỌC" style={{ color: '#737373' }}>
+                    <Card className="card" title="THÔNG BÁO" style={{ color: '#737373' }}>
                         <List
                             grid={{ gutter: 16, column: 1 }} // Thiết lập cấu trúc danh sách (3 cột)
                             dataSource={data} // Danh sách dữ liệu
                             renderItem={(item) => (
                                 <List.Item>
                                     <div className='item'>
-                                        <Link to={`/home/thongbao/${item.title}`}>
-                                            <Card title={item.title}>
-                                                <p>{item.description}</p>
+                                        <Link to={`/home/thongbao/${item.slug}`}>
+                                            <Card title={item.ngayTao}>
+                                                <p style={{ fontSize: "18px", fontWeight: "bold" }}>{item.tenThongBao}</p>
                                             </Card>
                                         </Link>
                                     </div>
@@ -76,7 +92,7 @@ export const Thongbao = () => {
                             )}
                         />
                     </Card>
-                    <Card className="card" title="THÔNG TIN SỰ KIỆN" style={{ color: '#737373', marginTop: 2 + '%' }}>
+                    {/* <Card className="card" title="THÔNG TIN SỰ KIỆN" style={{ color: '#737373', marginTop: 2 + '%' }}>
                         <List
                             grid={{ gutter: 16, column: 1 }} // Thiết lập cấu trúc danh sách (3 cột)
                             dataSource={data} // Danh sách dữ liệu
@@ -92,7 +108,7 @@ export const Thongbao = () => {
                                 </List.Item>
                             )}
                         />
-                    </Card>
+                    </Card> */}
                 </div>
             </div>
             <Footer />

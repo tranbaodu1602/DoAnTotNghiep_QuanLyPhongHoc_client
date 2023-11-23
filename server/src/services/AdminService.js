@@ -2,6 +2,7 @@ const slugify = require('slugify');
 const unidecode = require('unidecode');
 const PhongHoc = require('../models/ModalPhongHoc');
 const ThongBao = require('../models/ModalThongBao');
+const { getIO } = require('../configs/Socket');
 
 const themPhongHoc = async (data) => {
     return new Promise(async (reslove, reject) => {
@@ -9,7 +10,6 @@ const themPhongHoc = async (data) => {
             const checkExist = await PhongHoc.findOne({
                 maPhong: data.maPhong,
             });
-
             if (!checkExist) {
                 const newPhongHoc = new PhongHoc(data);
                 await newPhongHoc.save();
@@ -53,7 +53,8 @@ const taoThongBao = async (data) => {
                 dinhKem: link,
             });
             await thongBaoNew.save();
-
+            const io = getIO();
+            io.sockets.emit('newNotify', { thongBaoNew });
             reslove({
                 status: 'Success',
                 message: 'Tạo thông báo thành công',
@@ -67,7 +68,7 @@ const taoThongBao = async (data) => {
 
 const xoaAllThongBao = async () => {
     try {
-        await ThongBao.deleteMany();
+        await ThongBao.deleteMany().skip(11);
         return {
             status: 'Success',
             message: 'Đã xóa tất cả thông báo',

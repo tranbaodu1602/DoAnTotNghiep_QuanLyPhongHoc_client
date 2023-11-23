@@ -10,9 +10,6 @@ import './AdminHome.scss';
 const { Content } = Layout;
 
 const AdminHome: React.FC = () => {
-    const storedData: any = localStorage.getItem('myDataKey');
-    const data = JSON.parse(storedData);
-    console.log(data);
     return (
         <div className="admin-home-component">
             <AdminNavbar />
