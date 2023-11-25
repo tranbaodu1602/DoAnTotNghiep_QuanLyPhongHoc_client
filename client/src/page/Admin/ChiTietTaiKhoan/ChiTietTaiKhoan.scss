@@ -24,14 +24,22 @@
     font-size: 15px;
     margin-bottom: 10px;
 }
+
 .TaiKhoan_item,
 .TaiKhoan_table {
     display: grid;
-    grid-template-columns: 20% 40% 40%;
+    justify-content: center;
+    align-items: center;
+    grid-template-columns: 10% 30% 60%;
 }
 .TaiKhoan_item {
     font-style: italic;
     border: 1px solid rgb(213, 210, 210);
+}
+
+.TaiKhoan_item:hover {
+    border: 1px solid blue;
+    cursor: pointer;
 }
 ///form
 .TaiKhoan_form {
@@ -82,11 +90,12 @@
 ///--------------TaiKhoan SinhVien
 ///
 .TaiKhoanSinhVien_content {
-    padding: 20px;
+    margin: 10px;
+    padding-left: 40px;
 }
 .TaiKhoanSinhVien_body {
-    max-height: 550px;
-    overflow-y: auto;
+    // max-height: 550px;
+    // overflow-y: auto;
 }
 .TaiKhoanSinhVien_list {
     padding-top: 40px;
@@ -96,7 +105,7 @@
     display: grid;
     align-items: center;
     justify-items: center;
-    grid-template-columns: 20% 40% 40%;
+    grid-template-columns: 10% 30% 60%;
 }
 .TaiKhoanSinhVien_table {
     font-weight: 700;
@@ -104,7 +113,7 @@
 }
 .TaiKhoanSinhVien_khoa {
     max-height: 300px;
-    overflow-y: auto;
+    // overflow-y: auto;
     font-style: italic;
     border: 1px solid rgb(213, 210, 210);
 }

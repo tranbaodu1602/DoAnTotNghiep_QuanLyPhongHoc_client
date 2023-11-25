@@ -23,6 +23,9 @@ import {
     TodayButton,
 } from '@devexpress/dx-react-scheduler-material-ui';
 
+import { io, Socket } from 'socket.io-client';
+
+const socket: Socket = io('http://localhost:3001');
 
 const { Content } = Layout;
 
@@ -62,17 +65,40 @@ const ChiTietMonHoc: React.FC = () => {
     const { tenMonHoc } = useParams<ParamType>();
 
     const [data, setData] = useState([]);
+    const [isModelVisible, setModelVisible] = useState(false);
 
     const storedData: any = localStorage.getItem('myDataKey');
     const danhSach = JSON.parse(storedData);
+
+    socket.on('cancelSchedule', (data: { monhoc: any }) => {
+        const foundIndex = danhSach.DanhSachHocPhan.findIndex((item: any) => {
+            return item.maLopHocPhan === data.monhoc.maLopHocPhan;
+        });
+
+        if (foundIndex !== -1) {
+            danhSach.DanhSachHocPhan[foundIndex] = data.monhoc; // Cập nhật giá trị tại chỉ mục đã tìm thấy
+            localStorage.setItem('myDataKey', JSON.stringify(danhSach));
+        }
+    });
+
+    socket.on('updateSchedule', (data: { monhoc: any }) => {
+        const foundIndex = danhSach.DanhSachHocPhan.findIndex((item: any) => {
+            return item.maLopHocPhan === data.monhoc.maLopHocPhan;
+        });
+
+        if (foundIndex !== -1) {
+            danhSach.DanhSachHocPhan[foundIndex] = data.monhoc; // Cập nhật giá trị tại chỉ mục đã tìm thấy
+            localStorage.setItem('myDataKey', JSON.stringify(danhSach));
+        }
+    });
+
     useEffect(() => {
         const tenMonHocCanTim = tenMonHoc; // Tên môn học bạn muốn tìm
-        const monHocDaTim = danhSach.DanhSachHocPhan.find((item) => item.maLopHocPhan === tenMonHocCanTim);
+        const monHocDaTim = danhSach.DanhSachHocPhan.find((item: any) => item.maLopHocPhan === tenMonHocCanTim);
 
-        const updatedData = [];
+        const updatedData: any = [];
 
-        monHocDaTim.thongTinLich.forEach(lich => {
-
+        monHocDaTim.thongTinLich.forEach((lich: any) => {
             // Chuyển đổi endDate và startDate sang địa phương không thay đổi giá trị thời gian
             const localEndDate = new Date(lich.endDate).toLocaleString('en-US', { timeZone: 'UTC' });
             const localStartDate = new Date(lich.startDate).toLocaleString('en-US', { timeZone: 'UTC' });
@@ -88,7 +114,7 @@ const ChiTietMonHoc: React.FC = () => {
             // Nếu tìm thấy môn học, cập nhật data bằng môn học đó
             setData(updatedData);
         }
-    }, [tenMonHoc]);
+    }, [tenMonHoc, isModelVisible]);
 
     const [currentViewName, setCurrentViewName] = useState('Week');
 
@@ -148,18 +174,67 @@ const ChiTietMonHoc: React.FC = () => {
 
     const handleAppointmentClick = (data: Object) => {
         setSelectedAppointment(data);
-        console.log('datatest', selectedAppointment);
     };
-
-    const [isModelVisible, setModelVisible] = useState(false);
 
     const toggleModelVisibility = () => {
         setModelVisible(!isModelVisible);
     };
     const toggleClose = () => {
         setModelVisible(false);
-        setSelectedAppointment({})
-    }
+        setSelectedAppointment({});
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setSelectedAppointment((prevAppointment) => ({
+            ...prevAppointment,
+            [name]: value,
+        }));
+    };
+
+    const handleUpdateSchedule = async (event: React.FormEvent) => {
+        event.preventDefault();
+        try {
+            const response = await fetch('http://localhost:3001/admin/update-schedule', {
+                method: 'POST',
+                body: JSON.stringify(selectedAppointment),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                setModelVisible(false);
+                setSelectedAppointment({});
+            } else {
+                console.log('fail');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    const handleCancelSchedule = async (event: React.FormEvent) => {
+        event.preventDefault();
+        try {
+            const response = await fetch('http://localhost:3001/admin/cancel-schedule', {
+                method: 'POST',
+                body: JSON.stringify(selectedAppointment),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                setModelVisible(false);
+                setSelectedAppointment({});
+            } else {
+                console.log('fail');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
     //--------------------------------
     // const initialFormData: FormData = selectedAppointment !=null
     // ?
@@ -185,7 +260,7 @@ const ChiTietMonHoc: React.FC = () => {
     //   };
     //-------------------------------
 
-    const tenMon = danhSach.DanhSachHocPhan.find((item) => item.maLopHocPhan === tenMonHoc);
+    const tenMon = danhSach.DanhSachHocPhan.find((item: any) => item.maLopHocPhan === tenMonHoc);
 
     return (
         <>
@@ -193,11 +268,10 @@ const ChiTietMonHoc: React.FC = () => {
             <Layout style={{ minHeight: '100vh', marginTop: '2px' }}>
                 <AdminSider />
                 <Layout>
-
                     <Content>
                         <div className="ChiTietMonHoc_Content ">
                             <h2>Lịch theo môn {tenMon.tenMonHoc} </h2>
-                            <div className='ChiTietMonHoc_Add' >
+                            <div className="ChiTietMonHoc_Add">
                                 <button onClick={toggleModelVisibility}>Thêm lịch</button>
                             </div>
                             <div className={`ChiTietMonHoc_Lich  ${isModelVisible ? 'faded' : ''}`}>
@@ -236,7 +310,7 @@ const ChiTietMonHoc: React.FC = () => {
                                     </Paper>
                                 </React.Fragment>
                             </div>
-                            <div className="ChiTietMonHoc_Form" >
+                            <div className="ChiTietMonHoc_Form">
                                 {isModelVisible && (
                                     <div className="form-container">
                                         <h2>Thông tin lịch</h2>
@@ -248,8 +322,9 @@ const ChiTietMonHoc: React.FC = () => {
                                             <input
                                                 type="text"
                                                 className="form-input"
-
-                                                value={selectedAppointment ? selectedAppointment.title : ''}
+                                                name="title"
+                                                value={selectedAppointment.title}
+                                                // onChange={handleChange}
                                             />
                                         </div>
                                         <div>
@@ -257,8 +332,9 @@ const ChiTietMonHoc: React.FC = () => {
                                             <input
                                                 type="text"
                                                 className="form-input"
-                                                value={selectedAppointment ? selectedAppointment.tenGV : ''}
-
+                                                name="tenGV"
+                                                value={selectedAppointment.tenGV}
+                                                onChange={handleChange}
                                             />
                                         </div>
                                         <div>
@@ -266,8 +342,9 @@ const ChiTietMonHoc: React.FC = () => {
                                             <input
                                                 type="text"
                                                 className="form-input"
-
-                                                value={selectedAppointment ? selectedAppointment.phongHoc : ''}
+                                                name="phongHoc"
+                                                value={selectedAppointment.phongHoc}
+                                                onChange={handleChange}
                                             />
                                         </div>
                                         <div>
@@ -275,25 +352,30 @@ const ChiTietMonHoc: React.FC = () => {
                                             <input
                                                 type="text"
                                                 className="form-input"
-
-                                                value={selectedAppointment ? selectedAppointment.tietHoc : ''}
+                                                name="tietHoc"
+                                                value={selectedAppointment.tietHoc}
+                                                onChange={handleChange}
                                             />
                                         </div>
                                         <div>
                                             <label className="form-label">Ghi chú: </label>
                                             <textarea
                                                 className="form-textarea"
-                                                value={selectedAppointment ? selectedAppointment.ghiChu : ''}
+                                                name="ghiChu"
+                                                value={selectedAppointment.ghiChu}
+                                                onChange={handleChange}
                                             />
                                         </div>
                                         <div>
-                                            <button className="form-button">Cập nhật</button>
-                                            <button style={{ marginLeft: "5px" }}>tạm hoãn</button>
-
+                                            <button onClick={handleUpdateSchedule} className="form-button">
+                                                Cập nhật
+                                            </button>
+                                            <button onClick={handleCancelSchedule} style={{ marginLeft: '5px' }}>
+                                                Tạm hoãn
+                                            </button>
                                         </div>
                                     </div>
                                 )}
-
                             </div>
                         </div>
                     </Content>

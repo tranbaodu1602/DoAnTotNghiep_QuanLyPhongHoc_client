@@ -5,8 +5,7 @@ import AdminNavbar from '../AdminNavbar/AdminNavbar';
 import Footer from '../../../components/Footer/Footer';
 import { useParams } from 'react-router-dom';
 import ChiTietTaiKhoanSinhVien from './ChiTietTaiKhoanSinhVien';
-import './ChiTietTaiKhoan.scss'
-import { TaiKhoan } from '../../../../DataSample'
+import './ChiTietTaiKhoan.scss';
 
 const { Content } = Layout;
 interface TaiKhoanData {
@@ -21,19 +20,20 @@ type ParamType = {
 };
 
 const ChiTietTaiKhoan: React.FC = () => {
+    const storedData: any = localStorage.getItem('myDataKey');
+    const thongtin = JSON.parse(storedData);
+    const TaiKhoan = thongtin.DanhSachTaiKhoan;
 
     const { loaitaikhoan } = useParams<ParamType>();
 
     const [data, setData] = useState<TaiKhoanData[]>([]);
     useEffect(() => {
-
-        const taikhoan = TaiKhoan.filter((item) => item.loaiTaiKhoan === loaitaikhoan);
+        const taikhoan = TaiKhoan.filter((item: any) => item.loaiTaiKhoan === loaitaikhoan);
         if (taikhoan) {
             // Nếu tìm thấy môn học, cập nhật data bằng môn học đó
             setData(taikhoan);
         }
     }, [loaitaikhoan]);
-
 
     //////------------------------
     const [formData, setFormData] = useState({
@@ -84,39 +84,44 @@ const ChiTietTaiKhoan: React.FC = () => {
         setIsKhoaDisabled(false);
     };
     //////-------------------------
-    const [selectedItem, setSelectedItem] = useState<TaiKhoanData>()
+    const [selectedItem, setSelectedItem] = useState<TaiKhoanData>();
     const selectItem = (item: TaiKhoanData) => {
-        setSelectedItem(item)
-        console.log("item", selectedItem);
-    }
+        setSelectedItem(item);
+    };
+
+    useEffect(() => {
+        console.log('item', selectedItem);
+        console.log(formData);
+    }, [selectedItem, formData]);
     return (
         <>
             <AdminNavbar />
             <Layout style={{ minHeight: '100vh', marginTop: '2px' }}>
                 <AdminSider />
-                <Layout >
+                <Layout>
                     <Content>
-                        <div className='TaiKhoan_content'>
-                            <div className='TaiKhoan_list'>
-                                {loaitaikhoan === "sinhvien" ? (
+                        <div className="TaiKhoan_content">
+                            <div className="TaiKhoan_list">
+                                {loaitaikhoan === 'sinhvien' ? (
                                     <div>
                                         <ChiTietTaiKhoanSinhVien data={data} />
                                     </div>
                                 ) : (
-                                    <div className='TaiKhoan_noidung'>
-
-                                        <h2>{`Danh sách tài khoản ${loaitaikhoan === 'giaovien' ? 'Giảng viên' : 'Khoa'}`}</h2>
+                                    <div className="TaiKhoan_noidung">
+                                        <h2>{`Danh sách tài khoản ${
+                                            loaitaikhoan === 'giaovien' ? 'Giảng viên' : 'Khoa'
+                                        }`}</h2>
                                         <div>
-                                            <div className='TaiKhoan_table'>
+                                            <div className="TaiKhoan_table">
                                                 <div>STT</div>
                                                 <div>Tài khoản</div>
                                                 <div>Mật khẩu</div>
                                             </div>
                                         </div>
 
-                                        <div className='TaiKhoan_danhsach'>
+                                        <div className="TaiKhoan_danhsach">
                                             {data.map((item, i) => (
-                                                <div key={i} className='TaiKhoan_item' onClick={() => selectItem(item)}>
+                                                <div key={i} className="TaiKhoan_item" onClick={() => selectItem(item)}>
                                                     <div>{i + 1}</div>
                                                     <div>{item.taiKhoan}</div>
                                                     <div>{item.matKhau}</div>
@@ -147,14 +152,10 @@ const ChiTietTaiKhoan: React.FC = () => {
                                 </div>
                                 <div>
                                     <label>Loại tài khoản:</label>
-                                    <select
-                                        name="loaiTaiKhoan"
-                                        value={formData.loaiTaiKhoan}
-                                        onChange={handleChange}
-                                    >
+                                    <select name="loaiTaiKhoan" value={formData.loaiTaiKhoan} onChange={handleChange}>
                                         <option value="sinhvien">Sinh viên</option>
                                         <option value="giaovien">Giảng viên</option>
-                                        <option value="khoa">Khoa</option>
+                                        <option value="admin">Khoa</option>
                                     </select>
                                 </div>
                                 <div>
@@ -172,8 +173,6 @@ const ChiTietTaiKhoan: React.FC = () => {
                                 </div>
                             </div>
                         </div>
-
-
                     </Content>
                 </Layout>
             </Layout>

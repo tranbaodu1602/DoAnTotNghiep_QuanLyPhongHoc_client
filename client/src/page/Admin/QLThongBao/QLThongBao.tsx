@@ -130,7 +130,7 @@ const QLThongbao: React.FC = () => {
                                         <List
                                             grid={{ gutter: 16, column: 1 }} // Thiết lập cấu trúc danh sách (3 cột)
                                             dataSource={thongbaosv} // Danh sách dữ liệu
-                                            renderItem={(item) => (
+                                            renderItem={(item: any) => (
                                                 <List.Item>
                                                     <Card title={item.ngayTao}>
                                                         <p style={{ fontStyle: 'italic' }}>{item.tenThongBao}</p>
@@ -152,7 +152,7 @@ const QLThongbao: React.FC = () => {
                                         <List
                                             grid={{ gutter: 16, column: 1 }} // Thiết lập cấu trúc danh sách (3 cột)
                                             dataSource={thongbaogv} // Danh sách dữ liệu
-                                            renderItem={(item, key) => (
+                                            renderItem={(item: any, key) => (
                                                 <List.Item>
                                                     <Card key={key} title={item.ngayTao}>
                                                         <p>{item.tenThongBao}</p>
@@ -174,7 +174,7 @@ const QLThongbao: React.FC = () => {
                                         <List
                                             grid={{ gutter: 16, column: 1 }} // Thiết lập cấu trúc danh sách (3 cột)
                                             dataSource={thongbaoall} // Danh sách dữ liệu
-                                            renderItem={(item) => (
+                                            renderItem={(item: any) => (
                                                 <List.Item>
                                                     <Card title={item.ngayTao}>
                                                         <p>{item.tenThongBao}</p>
