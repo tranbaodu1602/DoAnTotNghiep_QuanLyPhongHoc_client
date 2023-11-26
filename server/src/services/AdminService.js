@@ -2,6 +2,8 @@ const slugify = require('slugify');
 const unidecode = require('unidecode');
 const PhongHoc = require('../models/ModalPhongHoc');
 const ThongBao = require('../models/ModalThongBao');
+const HocPhan = require('../models/ModalHocPhan');
+const mongoose = require('mongoose');
 const { getIO } = require('../configs/Socket');
 
 const themPhongHoc = async (data) => {
@@ -24,6 +26,61 @@ const themPhongHoc = async (data) => {
                     message: 'Đã tồn tại phòng học có mã ' + data.maPhong,
                 });
             }
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+const capNhatLichHoc = async (data) => {
+    return new Promise(async (reslove, reject) => {
+        try {
+            const monhoc = await HocPhan.findOne({ tenMonHoc: data.title });
+            const dataId = data._id.toString();
+            // console.log(dataId);
+            monhoc.thongTinLich.map((value) => {
+                const valueIdString = value._id.toString();
+                if (valueIdString === dataId) {
+                    value.phongHoc = data.phongHoc;
+                    value.ghiChu = data.ghiChu;
+                    value.tenGV = data.tenGV;
+                    value.tietHoc = data.tietHoc;
+                    return value;
+                }
+            });
+            await monhoc.save();
+            // console.log(monhoc);
+            const io = getIO();
+            io.sockets.emit('updateSchedule', { monhoc });
+            reslove({
+                status: 'Success',
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+const tamHoanLichHoc = async (data) => {
+    return new Promise(async (reslove, reject) => {
+        try {
+            const monhoc = await HocPhan.findOne({ tenMonHoc: data.title });
+            const dataId = data._id.toString();
+            console.log(dataId);
+            monhoc.thongTinLich.map((value) => {
+                const valueIdString = value._id.toString();
+                if (valueIdString === dataId) {
+                    value.ghiChu = 'Tạm ngưng';
+                    return value;
+                }
+            });
+            await monhoc.save();
+            console.log(monhoc);
+            const io = getIO();
+            io.sockets.emit('cancelSchedule', { monhoc });
+            reslove({
+                status: 'Success',
+            });
         } catch (error) {
             reject(error);
         }
@@ -80,6 +137,8 @@ const xoaAllThongBao = async () => {
 
 module.exports = {
     themPhongHoc,
+    capNhatLichHoc,
+    tamHoanLichHoc,
     taoThongBao,
     xoaAllThongBao,
 };

@@ -16,6 +16,8 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage: storage });
 
 routes.post('/add-classroom', adminController.themPhongHoc);
+routes.post('/update-schedule', adminController.capNhatLichHoc);
+routes.post('/cancel-schedule', adminController.tamHoanLichHoc);
 routes.post('/create-notify', upload.fields([{ name: 'dinhKem', maxCount: 1 }]), adminController.taoThongBao);
 routes.get('/delete-all-notify', adminController.xoaAllThongBao);
 

@@ -112,6 +112,7 @@ const userLogin = async (dataLogin) => {
                     const DSHP = await HocPhan.find();
                     const DSTB = await ThongBao.find();
                     const DSPH = await PhongHoc.find();
+                    const DSTK = await TaiKhoan.find();
                     if (!DSHP || !DSTB || !DSPH) {
                         reslove({
                             status: 'success',
@@ -123,17 +124,43 @@ const userLogin = async (dataLogin) => {
                             path: '/admin/home',
                         });
                     } else {
-                        reslove({
-                            data: {
-                                status: 'SUCCESS',
-                                message: 'Đăng nhập thành công, wellcome admin !!',
-                                DanhSachHocPhan: DSHP,
-                                DanhSachThongBao: DSTB,
-                                DanhSachPhongHoc: DSPH,
-                                checkUser,
-                                path: '/admin/home',
-                            },
-                        });
+                        if (DSTK) {
+                            const modifiedDSTK = DSTK.map((value, key) => {
+                                if (value.loaitaikhoan !== 'admin') {
+                                    const tk = {
+                                        id: key + 1,
+                                        taiKhoan: value.taikhoan,
+                                        loaiTaiKhoan: value.loaitaikhoan,
+                                        matKhau: value.matkhau,
+                                        ngayTao: value.ngaytao,
+                                        khoa: '15',
+                                    };
+                                    return tk;
+                                } else {
+                                    const tk = {
+                                        id: key + 1,
+                                        taiKhoan: value.taikhoan,
+                                        loaiTaiKhoan: 'khoa',
+                                        matKhau: value.matkhau,
+                                        ngayTao: value.ngaytao,
+                                        khoa: '',
+                                    };
+                                    return tk;
+                                }
+                            });
+                            reslove({
+                                data: {
+                                    status: 'SUCCESS',
+                                    message: 'Đăng nhập thành công, wellcome admin !!',
+                                    DanhSachHocPhan: DSHP,
+                                    DanhSachThongBao: DSTB,
+                                    DanhSachPhongHoc: DSPH,
+                                    DanhSachTaiKhoan: modifiedDSTK,
+                                    checkUser,
+                                    path: '/admin/home',
+                                },
+                            });
+                        }
                     }
                 } else if (checkUser.loaitaikhoan === 'sinhvien') {
                     const data = await SinhVien.findOne({ 'ThongTinCaNhan.maSV': username });

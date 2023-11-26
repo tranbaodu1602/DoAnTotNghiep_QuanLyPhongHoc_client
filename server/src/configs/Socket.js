@@ -11,10 +11,10 @@ const initializeSocket = (httpServer) => {
     });
 
     io.on('connection', (socket) => {
-        console.log('A user connected');
+        // console.log(socket);
 
         socket.on('disconnect', () => {
-            console.log('A user disconnected');
+            // console.log('A user disconnected');
         });
 
         // Các sự kiện Socket.IO khác ở đây

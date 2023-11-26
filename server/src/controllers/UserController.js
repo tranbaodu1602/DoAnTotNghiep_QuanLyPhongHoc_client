@@ -1,5 +1,4 @@
 const userService = require('../services/UserService');
-const JwtService = require('../services/JwtService');
 const bcrypt = require('bcrypt');
 
 const createUser = async (req, res) => {
