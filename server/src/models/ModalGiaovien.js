@@ -4,11 +4,20 @@ dotenv.config();
 
 const db = mongoose.createConnection(process.env.MONGO_DB, { dbName: 'QuanLyPhongHoc' });
 
+const DanhSachYeuCau = new mongoose.Schema({
+    thoigian: Date,
+    monhoc: String,
+    tietday: String,
+    lydo: String,
+    trangthaixacnhan: Boolean,
+});
+
 const GiaoVienSchema = new mongoose.Schema({
     ThongTinCaNhan: {
         maGV: String,
         hoTenGV: String,
         tuoi: Number,
+        anhDaiDien: String,
         gioiTinh: String,
         chucVu: String,
         khoa: String,
@@ -17,6 +26,7 @@ const GiaoVienSchema = new mongoose.Schema({
     },
     ThongTinGiangDay: {
         lichDay: [String],
+        yeuCau: [DanhSachYeuCau],
     },
 });
 

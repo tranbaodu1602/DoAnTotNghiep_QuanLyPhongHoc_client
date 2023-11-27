@@ -5,8 +5,7 @@ const createUser = async (req, res) => {
     try {
         const { taikhoan, matkhau, ngayTao, loaitaikhoan } = req.body;
         const hash = bcrypt.hashSync(matkhau, 10);
-        const dateCreate = new Date();
-        dateCreate.getHours() + 7;
+        const dateCreate = new Date().toLocaleString();
         const newUser = {
             taikhoan,
             matkhau: hash,
