@@ -137,10 +137,27 @@ const AdminSider: React.FC = () => {
                         <Link to="/admin/quanlitaikhoan/khoa">Khoa</Link>
                     </Menu.Item>
                 </SubMenu>
+
+
+                <SubMenu
+                    key="yeucau"
+                    title="Yêu cầu"
+                    onTitleClick={() => handleSubmenuClick('yeucau')}
+                    className='menu'
+
+                //onOpenChange={handleSubmenuClick} // Xử lý khi submenu mở/đóng
+                >
+                    <Menu.Item key="/admin/yeucau/choduyet" onClick={() => handleSubmenuItemSelect('choduyet')}>
+                        <Link to="/admin/yeucau/choduyet">Yêu cầu chờ</Link>
+                    </Menu.Item>
+                    <Menu.Item key="/admin/yeucau/daduyet" onClick={() => handleSubmenuItemSelect('daduyet')}>
+                        <Link to="/admin/yeucau/daduyet">Yêu cầu đã duyệt</Link>
+                    </Menu.Item>
+                </SubMenu>
+
                 <Menu.Item key="/admin/thongbao" >
                     <Link to="/admin/thongbao">Thông báo</Link>
                 </Menu.Item>
-
             </Menu>
 
             <div className='setting'>

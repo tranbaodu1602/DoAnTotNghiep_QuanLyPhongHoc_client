@@ -10,6 +10,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import '../../Home/ThongBao/thongBao.scss';
 import './QLThongBao.scss';
 import { io, Socket } from 'socket.io-client';
+import { Link } from 'react-router-dom';
 
 const socket: Socket = io('http://localhost:3001');
 
@@ -110,6 +111,19 @@ const QLThongbao: React.FC = () => {
             toast.error('Có lỗi xảy ra. Vui lòng thử lại sau!');
         }
     };
+    function truncateText(text, maxLength) {
+        if (text.length > maxLength) {
+            // Tìm vị trí của dấu khoảng cách gần với maxLength
+            const lastSpaceIndex = text.lastIndexOf(' ', maxLength);
+
+            // Nếu tìm thấy dấu khoảng cách, cắt chuỗi từ đầu đến vị trí đó
+            if (lastSpaceIndex !== -1) {
+                return text.slice(0, lastSpaceIndex) + '...';
+            }
+        }
+
+        return text;
+    }
 
     return (
         <>
@@ -124,7 +138,7 @@ const QLThongbao: React.FC = () => {
                                 <div className="notify-list">
                                     <Card
                                         className="card"
-                                        title="THÔNG TIN SINH VIÊN"
+                                        title="THÔNG BÁO SINH VIÊN"
                                         style={{ color: '#737373', maxHeight: '450px', overflowY: 'auto' }}
                                     >
                                         <List
@@ -132,16 +146,31 @@ const QLThongbao: React.FC = () => {
                                             dataSource={thongbaosv} // Danh sách dữ liệu
                                             renderItem={(item: any) => (
                                                 <List.Item>
-                                                    <Card title={item.ngayTao}>
-                                                        <p style={{ fontStyle: 'italic' }}>{item.tenThongBao}</p>
-                                                    </Card>
+                                                    <div className='Thongbao_item'>
+                                                        <Link to={`/admin/thongbao/${item.slug}`}>
+                                                            <Card>
+                                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                                    <div>
+                                                                        <h5>{item.tenThongBao}</h5>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p style={{ fontStyle: 'italic' }}>{item.ngayTao}</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    {truncateText(item.chiTiet, 80)}
+
+                                                                </div>
+                                                            </Card>
+                                                        </Link>
+                                                    </div>
                                                 </List.Item>
                                             )}
                                         />
                                     </Card>
                                     <Card
                                         className="card"
-                                        title="THÔNG TIN GIẢNG VIÊN"
+                                        title="THÔNG BÁO GIẢNG VIÊN"
                                         style={{
                                             color: '#737373',
                                             marginTop: 2 + '%',
@@ -154,9 +183,24 @@ const QLThongbao: React.FC = () => {
                                             dataSource={thongbaogv} // Danh sách dữ liệu
                                             renderItem={(item: any, key) => (
                                                 <List.Item>
-                                                    <Card key={key} title={item.ngayTao}>
-                                                        <p>{item.tenThongBao}</p>
-                                                    </Card>
+                                                    <div className='Thongbao_item'>
+                                                        <Link to={`/admin/thongbao/${item.slug}`}>
+                                                            <Card>
+                                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                                    <div>
+                                                                        <h5>{item.tenThongBao}</h5>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p style={{ fontStyle: 'italic' }}>{item.ngayTao}</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    {truncateText(item.chiTiet, 80)}
+
+                                                                </div>
+                                                            </Card>
+                                                        </Link>
+                                                    </div>
                                                 </List.Item>
                                             )}
                                         />
@@ -176,9 +220,24 @@ const QLThongbao: React.FC = () => {
                                             dataSource={thongbaoall} // Danh sách dữ liệu
                                             renderItem={(item: any) => (
                                                 <List.Item>
-                                                    <Card title={item.ngayTao}>
-                                                        <p>{item.tenThongBao}</p>
-                                                    </Card>
+                                                    <div className='Thongbao_item'>
+                                                        <Link to={`/admin/thongbao/${item.slug}`}>
+                                                            <Card>
+                                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                                    <div>
+                                                                        <h5>{item.tenThongBao}</h5>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p style={{ fontStyle: 'italic' }}>{item.ngayTao}</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div>
+                                                                    {truncateText(item.chiTiet, 80)}
+
+                                                                </div>
+                                                            </Card>
+                                                        </Link>
+                                                    </div>
                                                 </List.Item>
                                             )}
                                         />

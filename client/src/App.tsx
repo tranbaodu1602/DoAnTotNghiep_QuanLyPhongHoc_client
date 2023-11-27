@@ -14,6 +14,8 @@ import ChiTietTaiKhoan from './page/Admin/ChiTietTaiKhoan/ChiTietTaiKhoan'
 import { ChiThietSinhVien } from './page/Home/ChiTietSinhVien/ChiTietSinhVien'
 import FormYeuCau from './page/GiangVien/FormYeuCau/FormYeuCau'
 import ChiTietThongBao from './page/Home/ThongBao/ChiTietThongBao/ChiTietThongBao'
+import AdminChiTietThongBao from './page/Admin/QLThongBao/AdminChiTietThongBao/AdminChiTietThongBao'
+import QuanLyYeuCau from './page/Admin/QLYeuCau/QuanLyYeuCau'
 
 
 function App() {
@@ -35,10 +37,15 @@ function App() {
           <Route path="/home/yeucau" element={< FormYeuCau />} />
           {/*  */}
           <Route path="/admin/thongbao" element={<QLThongbao />} />
+          <Route path="/admin/thongbao/:slug" element={<AdminChiTietThongBao />} />
           {/*  */}
           <Route path="/admin/phonghoc/:loaiphong" element={<PhongHoc />} ></Route>
           <Route path="/admin/phonghoc/:loaiphong/:toanha" element={<ChiTietPhongHoc />} ></Route>
           <Route path="/admin/monhoc/:tenMonHoc" element={<ChiTietMonHoc />} />
+
+          <Route path="/admin/yeucau" element={<QuanLyYeuCau />} />
+          <Route path="/admin/yeucau/:loai" element={<QuanLyYeuCau />} />
+
           {/*  */}
           <Route path="/admin/quanlitaikhoan/:loaitaikhoan" element={<ChiTietTaiKhoan />} />
         </Routes>
