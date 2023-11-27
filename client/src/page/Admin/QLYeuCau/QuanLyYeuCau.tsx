@@ -4,34 +4,43 @@ import AdminSider from '../AdminSider/AdminSider';
 import AdminNavbar from '../AdminNavbar/AdminNavbar';
 import Footer from '../../../components/Footer/Footer';
 import './QuanLyYeuCau.scss'
+import { useParams } from 'react-router-dom';
 
 const { Content } = Layout;
 
-
+type ParamType = {
+    tenMonHoc: string;
+};
 const QuanLyYeuCau: React.FC = () => {
 
-    const ex = [
-        {
-            title: "Yêu cầu hủy lịch",
-            tenGV: "Tôn Long Phước",
-            mon: "Công nghệ mới",
-            lyDo: "có lý do cá nhân",
-            tiet: "1-3",
-            thoiGian: "30-11-2023",
-        },
-        {
-            title: "Yêu cầu dời lịch",
-            tenGV: "Đặng Thị Thu Hà",
-            mon: "Phân tích thiết kế hệ thống",
-            lyDo: "có lý do cá nhân",
-            tiet: "1-3",
-            thoiGian: "30-11-2023",
-        },
-    ]
+
+    const { loai } = useParams<ParamType>();
+    let xacnhan = false;
+    let name = ''
+    if (loai === 'daduyet') {
+        xacnhan = true;
+        name = 'Đã Duyệt'
+    }
+    if (loai === 'choduyet') {
+        xacnhan = false;
+        name = 'Chờ Duyệt'
+    }
 
     const storedData: any = localStorage.getItem('myDataKey');
     const data = JSON.parse(storedData);
 
+    const yeuCauMoi = data.DanhSachGiaoVien.flatMap((giaoVien) =>
+
+        giaoVien.ThongTinGiangDay?.yeuCau?.map((yeucau) => {
+            const localDate = new Date(yeucau.thoigian).toLocaleString('en-US', { timeZone: 'UTC' });
+            return {
+                ...yeucau,
+                TenGV: giaoVien.ThongTinCaNhan.hoTenGV,
+                thoigian: localDate,
+            }
+        }) || []
+    );
+    const yeuCauDaXacNhan = yeuCauMoi.filter((item) => item.trangthaixacnhan == xacnhan);
 
     return (
         <>
@@ -39,19 +48,22 @@ const QuanLyYeuCau: React.FC = () => {
             <Layout className='yeucau__body__content'>
                 <AdminSider />
                 <Layout className='yeucau__content'>
+                    <div style={{ padding: "5px 80px", fontSize: "25px", fontWeight: "700" }}>Yêu cầu {name}</div>
                     <Content >
-                        {ex.map((item, i) => (
+                        {yeuCauDaXacNhan.map((item, i) => (
                             <div key={i} className='list__yeucau'>
-                                <div className='yeucau__card'>
+                                <div className='yeucau__card '>
+                                    <div style={{ padding: "2px 10px" }}>STT: {i + 1}</div>
                                     <div className='yeucau__header'>
-                                        <div className='yeucau__title'> Title: {item.lyDo}</div>
-                                        <div className='yeucau__user'>Gửi từ: <strong>{item.tenGV}</strong></div>
+                                        <div className='yeucau__title'> Title: {item.lydo}</div>
+                                        <div className='yeucau__user'>Gửi từ: <strong>{item.TenGV}</strong></div>
                                     </div>
                                     <div className='yeucau__body'>
-                                        <div className='yeucau__item'><strong>Môn:</strong>  {item.mon}</div>
-                                        <div className='yeucau__item'> <strong>Thời Gian:</strong> {item.thoiGian}</div>
-                                        <div className='yeucau__item'><strong>Tiết: </strong>{item.tiet}</div>
-                                        <div className='yeucau__item'><strong>Lý do: </strong>{item.lyDo}</div>
+                                        <div className='yeucau__item'><strong>Môn:</strong>  {item.monhoc}</div>
+                                        <div className='yeucau__item'> <strong>Thời Gian:</strong> {item.thoigian}</div>
+                                        <div className='yeucau__item'><strong>Tiết: </strong>{item.tietday}</div>
+                                        <div className='yeucau__item'><strong>Lý do: </strong>{item.lydo}</div>
+                                        <div>{item._id}</div>
 
                                     </div>
                                     <div className='yeucau_form'>

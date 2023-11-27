@@ -5,6 +5,8 @@
 }
 .yeucau__content {
     margin-top: 70px;
+    max-height: 700px;
+    overflow-y: auto;
 }
 
 .list__yeucau {
@@ -52,9 +54,9 @@
 .yeucau__phanhoi {
     width: 500px;
     margin-left: 30px;
+    height: 50px;
 }
 .yeucau__phanhoi textarea {
-    height: 90px;
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;

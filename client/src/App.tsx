@@ -44,6 +44,7 @@ function App() {
           <Route path="/admin/monhoc/:tenMonHoc" element={<ChiTietMonHoc />} />
 
           <Route path="/admin/yeucau" element={<QuanLyYeuCau />} />
+          <Route path="/admin/yeucau/:loai" element={<QuanLyYeuCau />} />
 
           {/*  */}
           <Route path="/admin/quanlitaikhoan/:loaitaikhoan" element={<ChiTietTaiKhoan />} />
