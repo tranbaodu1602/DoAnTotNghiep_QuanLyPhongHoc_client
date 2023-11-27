@@ -35,23 +35,24 @@ const themPhongHoc = async (data) => {
 const capNhatLichHoc = async (data) => {
     return new Promise(async (reslove, reject) => {
         try {
-            const monhoc = await HocPhan.findOne({ tenMonHoc: data.title });
-            const dataId = data._id.toString();
-            // console.log(dataId);
-            monhoc.thongTinLich.map((value) => {
-                const valueIdString = value._id.toString();
-                if (valueIdString === dataId) {
-                    value.phongHoc = data.phongHoc;
-                    value.ghiChu = data.ghiChu;
-                    value.tenGV = data.tenGV;
-                    value.tietHoc = data.tietHoc;
-                    return value;
-                }
-            });
-            await monhoc.save();
-            // console.log(monhoc);
-            const io = getIO();
-            io.sockets.emit('updateSchedule', { monhoc });
+            console.log(data);
+            // const monhoc = await HocPhan.findOne({ tenMonHoc: data.title });
+            // const dataId = data._id.toString();
+            // // console.log(dataId);
+            // monhoc.thongTinLich.map((value) => {
+            //     const valueIdString = value._id.toString();
+            //     if (valueIdString === dataId) {
+            //         value.phongHoc = data.phongHoc;
+            //         value.ghiChu = data.ghiChu;
+            //         value.tenGV = data.tenGV;
+            //         value.tietHoc = data.tietHoc;
+            //         return value;
+            //     }
+            // });
+            // await monhoc.save();
+            // // console.log(monhoc);
+            // const io = getIO();
+            // io.sockets.emit('updateSchedule', { monhoc });
             reslove({
                 status: 'Success',
             });
