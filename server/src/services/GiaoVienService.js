@@ -42,7 +42,7 @@ const yeuCauThayDoiLich = async (data) => {
                     trangthaixacnhan: false,
                 });
                 await GV.save();
-                await io.sockets.emit('requestSchedule', { GV });
+                io.sockets.emit('requestSchedule', { GV });
                 reslove({
                     status: 'Success',
                     message: 'Gửi yêu cầu thành công, vui lòng chờ xác nhận',
@@ -50,8 +50,8 @@ const yeuCauThayDoiLich = async (data) => {
                 });
             } else {
                 reslove({
-                    status: 'FAIL',
-                    message: 'Đã tồn tại giáo viên có mã ' + data.ThongTinCaNhan.maGV,
+                    status: 'fail',
+                    message: 'Có lỗi xảy ra',
                 });
             }
         } catch (error) {
