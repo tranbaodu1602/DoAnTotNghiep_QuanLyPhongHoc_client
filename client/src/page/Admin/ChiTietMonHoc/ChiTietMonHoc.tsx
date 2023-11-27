@@ -126,34 +126,40 @@ const ChiTietMonHoc: React.FC = () => {
         children: React.ReactNode;
         style: React.CSSProperties;
         data: AppointmentData;
-    }> = ({ children, style, data, ...restProps }) => (
-        <Appointments.Appointment
-            {...restProps}
-            style={{
-                ...style,
-                /* backgroundColor: '#FFC107', */
-                borderRadius: '8px',
-            }}
-            onClick={() => {
-                handleAppointmentClick(data);
-                toggleModelVisibility();
-            }}
-        >
-            {children}
-            <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
-                GV: <span style={{ color: 'red' }}>{data.tenGV}</span>
-            </div>
-            <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
-                Tiết: <span style={{ color: 'red' }}>{data.tietHoc}</span>
-            </div>
-            <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
-                Phòng: <span style={{ color: 'red' }}>{data.phongHoc}</span>
-            </div>
-            <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
-                Ghi chú: <span style={{ color: 'red' }}>{data.ghiChu}</span>{' '}
-            </div>
-        </Appointments.Appointment>
-    );
+    }> = ({ children, style, data, ...restProps }) => {
+        const dynamicBackgroundColor = data.ghiChu === "Tạm ngưng" ? 'rgb(248, 200, 195)' : '';
+        return (
+            <Appointments.Appointment
+                {...restProps}
+                style={{
+                    ...style,
+                    backgroundColor: dynamicBackgroundColor,
+                    borderRadius: '8px',
+                }}
+                onClick={() => {
+                    handleAppointmentClick(data);
+                    toggleModelVisibility();
+                }}
+            >
+                {children}
+                <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
+                    GV: <span style={{ color: 'red' }}>{data.tenGV}</span>
+                </div>
+                <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
+                    Tiết: <span style={{ color: 'red' }}>{data.tietHoc}</span>
+                </div>
+                <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
+                    Phòng: <span style={{ color: 'red' }}>{data.phongHoc}</span>
+                </div>
+                <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
+
+                    Ghi chú: <span style={{ color: 'red' }}>
+                        {data.ghiChu}
+                    </span>
+
+                </div>
+            </Appointments.Appointment>)
+    }
 
     const customAppointment: React.FC<{
         children: React.ReactNode;
@@ -271,9 +277,7 @@ const ChiTietMonHoc: React.FC = () => {
                     <Content>
                         <div className="ChiTietMonHoc_Content ">
                             <h2>Lịch theo môn {tenMon.tenMonHoc} </h2>
-                            <div className="ChiTietMonHoc_Add">
-                                <button onClick={toggleModelVisibility}>Thêm lịch</button>
-                            </div>
+
                             <div className={`ChiTietMonHoc_Lich  ${isModelVisible ? 'faded' : ''}`}>
                                 <React.Fragment>
                                     <ExternalViewSwitcher
@@ -324,7 +328,7 @@ const ChiTietMonHoc: React.FC = () => {
                                                 className="form-input"
                                                 name="title"
                                                 value={selectedAppointment.title}
-                                                // onChange={handleChange}
+                                            // onChange={handleChange}
                                             />
                                         </div>
                                         <div>

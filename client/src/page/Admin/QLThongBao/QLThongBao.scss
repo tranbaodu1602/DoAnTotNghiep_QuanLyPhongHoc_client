@@ -4,6 +4,7 @@
     grid-template-columns: 3fr 1fr;
     min-height: 700px;
     padding: 5px;
+    position: relative;
 }
 
 .ThongBao_content {
@@ -18,4 +19,14 @@
 }
 .ThongBao_form_content {
     padding: 10px;
+}
+
+.Thongbao_item a {
+    text-decoration: none; /* Loại bỏ gạch chân */
+    color: inherit; /* Màu sắc kế thừa từ phần tử cha */
+}
+
+.Thongbao_item a:hover {
+    text-decoration: none; /* Loại bỏ gạch chân khi hover */
+    color: inherit; /* Màu sắc kế thừa từ phần tử cha khi hover */
 }

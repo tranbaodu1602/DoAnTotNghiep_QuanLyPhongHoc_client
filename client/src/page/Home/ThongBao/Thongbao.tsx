@@ -83,8 +83,15 @@ export const Thongbao = () => {
                                 <List.Item>
                                     <div className='item'>
                                         <Link to={`/home/thongbao/${item.slug}`}>
-                                            <Card title={item.ngayTao}>
-                                                <p style={{ fontSize: "18px", fontWeight: "bold" }}>{item.tenThongBao}</p>
+                                            <Card >
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                    <div>
+                                                        <h5>{item.tenThongBao}</h5>
+                                                    </div>
+                                                    <div>
+                                                        <p style={{ fontStyle: 'italic' }}> Ngày tạo: {item.ngayTao}</p>
+                                                    </div>
+                                                </div>
                                             </Card>
                                         </Link>
                                     </div>
@@ -92,25 +99,9 @@ export const Thongbao = () => {
                             )}
                         />
                     </Card>
-                    {/* <Card className="card" title="THÔNG TIN SỰ KIỆN" style={{ color: '#737373', marginTop: 2 + '%' }}>
-                        <List
-                            grid={{ gutter: 16, column: 1 }} // Thiết lập cấu trúc danh sách (3 cột)
-                            dataSource={data} // Danh sách dữ liệu
-                            renderItem={(item, key) => (
-                                <List.Item>
-                                    <div className='item'>
-                                        <Link to={`/home/thongbao/${item.title}`}>
-                                            <Card key={key} title={item.title}>
-                                                <p>{item.description}</p>
-                                            </Card>
-                                        </Link>
-                                    </div>
-                                </List.Item>
-                            )}
-                        />
-                    </Card> */}
+
                 </div>
-            </div>
+            </div >
             <Footer />
         </>
     );
