@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { Layout } from 'antd';
 import AdminSider from '../AdminSider/AdminSider';
 import AdminNavbar from '../AdminNavbar/AdminNavbar';
 import Footer from '../../../components/Footer/Footer';
 import { useParams } from 'react-router-dom';
-import './ChiTietPhong.scss'
+import './ChiTietPhong.scss';
 import Paper from '@mui/material/Paper';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -24,20 +23,18 @@ import {
 import { DatePicker, Button } from 'antd';
 import moment from 'moment';
 
-
 const { Content } = Layout;
 
 type ParamType = {
     toanha: string;
 };
 interface AppointmentData {
-    startDate: Date,
-    endDate: Date,
-    phongHoc: string,
-    ghiChu: string,
-    tenGV: string,
-    tietHoc: string,
-
+    startDate: Date;
+    endDate: Date;
+    phongHoc: string;
+    ghiChu: string;
+    tenGV: string;
+    tietHoc: string;
 }
 
 const ExternalViewSwitcher = ({
@@ -59,7 +56,6 @@ const ExternalViewSwitcher = ({
     </RadioGroup>
 );
 
-
 const ChiTietPhongHoc: React.FC = () => {
     const { toanha } = useParams<ParamType>();
 
@@ -71,13 +67,13 @@ const ChiTietPhongHoc: React.FC = () => {
 
     const [data, setData] = useState([]);
     useEffect(() => {
-        const lichHoc = danhSach.DanhSachHocPhan.flatMap(monHoc =>
-            monHoc.thongTinLich.filter(lichHoc => lichHoc.phongHoc === toanha)
+        const lichHoc = danhSach.DanhSachHocPhan.flatMap((monHoc) =>
+            monHoc.thongTinLich.filter((lichHoc) => lichHoc.phongHoc === toanha),
         );
 
         const updatedData = [];
 
-        lichHoc.forEach(lich => {
+        lichHoc.forEach((lich) => {
             // Chuyển đổi endDate và startDate sang địa phương không thay đổi giá trị thời gian
             const localEndDate = new Date(lich.endDate).toLocaleString('en-US', { timeZone: 'UTC' });
             const localStartDate = new Date(lich.startDate).toLocaleString('en-US', { timeZone: 'UTC' });
@@ -97,7 +93,6 @@ const ChiTietPhongHoc: React.FC = () => {
 
     const handleUpdateClick = () => {
         // Xử lý cập nhật dữ liệu ở đây
-
     };
     const [currentViewName, setCurrentViewName] = useState('Week');
 
@@ -149,25 +144,32 @@ const ChiTietPhongHoc: React.FC = () => {
             {children}
         </Appointments.Appointment>
     );
-    const [isModelVisible, setModelVisible] = useState(false)
+    const [isModelVisible, setModelVisible] = useState(false);
 
     const toggleModelVisibility = () => {
         setModelVisible(!isModelVisible);
     };
     const toggleClose = () => {
         setModelVisible(false);
-        setSelectedAppointment({})
-    }
+        setSelectedAppointment({});
+    };
     ///-------------
     const [formData, setFormData] = useState({
         title: '',
-        startDate: '',
-        endDate: '',
+        member: [],
         phongHoc: toanha,
         ghiChu: '',
-        tenGV: '',
-        tietHoc: '',
+        startDate: '',
+        endDate: '',
     });
+    // const handleChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setFormData({
+    //         ...formData,
+    //         [name]: value,
+    //     });
+    // };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -176,30 +178,58 @@ const ChiTietPhongHoc: React.FC = () => {
         });
     };
 
-    const handleAdd = () => {
-        const newEvent = {
-            title: formData.title,
-            startDate: new Date(formData.startDate),
-            endDate: new Date(formData.endDate),
-            phongHoc: formData.phongHoc,
-            ghiChu: formData.ghiChu,
-            tenGV: formData.tenGV,
-            tietHoc: formData.tietHoc,
-        };
+    const [statusAddMember, setStatusAddMember] = useState(false);
+    const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
 
-        console.log(newEvent);
+    const handleMemberSelection = (e) => {
+        const memberName = e.target.value;
+        const isChecked = e.target.checked;
+
+        let updatedMembers = [...selectedMembers];
+
+        if (isChecked) {
+            updatedMembers = [...selectedMembers, memberName];
+        } else {
+            updatedMembers = selectedMembers.filter((name) => name !== memberName);
+        }
+
+        setSelectedMembers(updatedMembers);
+
+        // Cập nhật formData
+        setFormData({
+            ...(formData as any),
+            member: updatedMembers,
+        });
+    };
+
+    const handleAddMember = () => {
+        setStatusAddMember(!statusAddMember);
+    };
+
+    const handleAdd = () => {
+        // const newEvent = {
+        //     title: formData.title,
+        //     startDate: new Date(formData.startDate),
+        //     endDate: new Date(formData.endDate),
+        //     phongHoc: formData.phongHoc,
+        //     ghiChu: formData.ghiChu,
+        //     tenGV: formData.tenGV,
+        //     tietHoc: formData.tietHoc,
+        // };
+
+        console.log(formData);
 
         // Đặt lại trạng thái form
-        setFormData({
-            title: '',
-            startDate: '',
-            endDate: '',
-            phongHoc: '',
-            ghiChu: '',
-            tenGV: '',
-            tietHoc: '',
-        });
-    }
+        // setFormData({
+        //     title: '',
+        //     startDate: '',
+        //     endDate: '',
+        //     phongHoc: '',
+        //     ghiChu: '',
+        //     tenGV: '',
+        //     tietHoc: '',
+        // });
+    };
     ///---------------
 
     return (
@@ -207,128 +237,173 @@ const ChiTietPhongHoc: React.FC = () => {
             <AdminNavbar />
             <Layout style={{ minHeight: '100vh', marginTop: '2px' }}>
                 <AdminSider />
-                <Layout >
-                    <Content >
-                        <div className='PhongHoc__content'>
-                            <div className='PhongHoc__lichHoc'>
-                                <div className='PhongHoc__ten'>
+                <Layout>
+                    <Content>
+                        <div className="PhongHoc__content">
+                            <div className="PhongHoc__lichHoc">
+                                <div className="PhongHoc__ten">
                                     <h2>Lịch của phòng {toanha}</h2>
                                 </div>
                                 <div className={`PhongHoc__lich ${isModelVisible ? 'faded' : ''}`}>
-                                    <div className='PhongHoc__button'>
-                                        <div className='PhongHoc__add'>
-                                            <Button type="primary" onClick={toggleModelVisibility}>Thêm</Button>
+                                    <div className="PhongHoc__button">
+                                        <div className="PhongHoc__add">
+                                            <Button type="primary" onClick={toggleModelVisibility}>
+                                                Thêm cuộc họp
+                                            </Button>
                                         </div>
-                                        <div className='PhongHoc__update'>
-
+                                        <div className="PhongHoc__update">
                                             <DatePicker
-                                                className='date'
+                                                className="date"
                                                 placeholder="Ngày bắt đầu"
                                                 value={startDate}
                                                 onChange={(date) => setStartDate(date)}
                                                 format="YYYY-MM-DD"
                                             />
                                             <DatePicker
-                                                className='date'
+                                                className="date"
                                                 placeholder="Ngày kết thúc"
                                                 value={endDate}
                                                 onChange={(date) => setEndDate(date)}
                                                 format="YYYY-MM-DD"
                                             />
-                                            <Button type="primary" onClick={handleUpdateClick} className='update'>
+                                            <Button type="primary" onClick={handleUpdateClick} className="update">
                                                 Cập nhật
                                             </Button>
-
                                         </div>
                                     </div>
-                                    <div className='PhongHoc__danhsach'>
+                                    <div className="PhongHoc__danhsach">
                                         <React.Fragment>
-                                            <ExternalViewSwitcher currentViewName={currentViewName} onChange={currentViewNameChange} />
+                                            <ExternalViewSwitcher
+                                                currentViewName={currentViewName}
+                                                onChange={currentViewNameChange}
+                                            />
                                             <Paper>
                                                 <Scheduler data={data} height={620}>
-                                                    <ViewState defaultCurrentDate="2023-10-24" currentViewName={currentViewName} />
+                                                    <ViewState
+                                                        defaultCurrentDate="2023-10-24"
+                                                        currentViewName={currentViewName}
+                                                    />
                                                     <WeekView
                                                         startDayHour={5.5} // Giờ bắt đầu buổi sáng
                                                         endDayHour={21} // Giờ kết thúc buổi tối
                                                         cellDuration={60}
-                                                    // timeTableCellComponent={CustomTimeTableCell}
+                                                        // timeTableCellComponent={CustomTimeTableCell}
                                                     />
                                                     <MonthView />
                                                     <Toolbar />
                                                     <DateNavigator />
                                                     <TodayButton />
 
-                                                    <Appointments appointmentComponent={currentViewName === 'Week' ? Appointment : customAppointment} />
-                                                    {currentViewName === 'Month' ? <AppointmentTooltip showCloseButton /> : <></>}
+                                                    <Appointments
+                                                        appointmentComponent={
+                                                            currentViewName === 'Week' ? Appointment : customAppointment
+                                                        }
+                                                    />
+                                                    {currentViewName === 'Month' ? (
+                                                        <AppointmentTooltip showCloseButton />
+                                                    ) : (
+                                                        <></>
+                                                    )}
                                                 </Scheduler>
                                             </Paper>
                                         </React.Fragment>
                                     </div>
                                 </div>
                             </div>
-                            <div className='PhongHoc_form'>
+                            <div className="PhongHoc_form">
                                 {isModelVisible && (
                                     <div className="form-container">
-                                        <h2>Thông tin lịch</h2>
+                                        <h2>Thêm cuộc họp</h2>
                                         <div onClick={toggleClose} className="form-button-close">
                                             <div className="form-button-close-x">x</div>
                                         </div>
                                         <div>
-                                            <label className="form-label">Tên môn :</label>
+                                            <label className="form-label">Tiêu đề</label>
                                             <input
                                                 type="text"
                                                 className="form-input"
                                                 name="title"
+                                                value={formData.title}
+                                                onChange={handleChange}
                                             />
                                         </div>
                                         <div>
-                                            <label className="form-label">Tên giảng viên: </label>
-                                            <input
-                                                type="text"
-                                                className="form-input"
-
-                                            />
+                                            <label className="form-label">Thành viên cuộc họp</label>
+                                            <Button
+                                                onClick={handleAddMember}
+                                                style={{ margin: 'auto', paddingTop: 4 + 'px' }}
+                                                type="primary"
+                                            >
+                                                Thêm
+                                                <i
+                                                    style={{ marginLeft: 8 + 'px' }}
+                                                    className="fa-solid fa-circle-plus"
+                                                ></i>
+                                            </Button>
+                                            {statusAddMember === true ? (
+                                                <>
+                                                    {danhSach.DanhSachGiaoVien.map((value: any, key: any) => (
+                                                        <div key={key}>
+                                                            <label>
+                                                                <input
+                                                                    type="checkbox"
+                                                                    value={value.ThongTinCaNhan.hoTenGV}
+                                                                    checked={selectedMembers.includes(
+                                                                        value.ThongTinCaNhan.hoTenGV,
+                                                                    )}
+                                                                    onChange={handleMemberSelection}
+                                                                />
+                                                                {value.ThongTinCaNhan.hoTenGV}
+                                                            </label>
+                                                        </div>
+                                                    ))}
+                                                </>
+                                            ) : (
+                                                <></>
+                                            )}
                                         </div>
                                         <div>
                                             <label className="form-label">Phòng học: </label>
-                                            <input
-                                                type="text"
-                                                value={toanha}
-                                                className="form-input"
-                                                readOnly
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="form-label">Tiết học: </label>
-                                            <input
-                                                type="text"
-                                                className="form-input"
-                                            />
+                                            <input type="text" value={toanha} className="form-input" readOnly />
                                         </div>
                                         <div>
                                             <label className="form-label">Ghi chú: </label>
                                             <textarea
                                                 className="form-textarea"
-
+                                                name="ghiChu"
+                                                value={formData.ghiChu}
+                                                onChange={handleChange}
                                             />
                                         </div>
                                         <div>
                                             <label className="form-label">Giờ bắt đầu: </label>
-                                            <input className="form-input" type="datetime-local" />
+                                            <input
+                                                className="form-input"
+                                                type="datetime-local"
+                                                name="startDate"
+                                                value={formData.startDate}
+                                                onChange={handleChange}
+                                            />
                                         </div>
                                         <div>
                                             <label className="form-label">Giờ kết thúc: </label>
-                                            <input className="form-input" type="datetime-local" />
+                                            <input
+                                                className="form-input"
+                                                type="datetime-local"
+                                                name="endDate"
+                                                value={formData.endDate}
+                                                onChange={handleChange}
+                                            />
                                         </div>
                                         <div>
-                                            <button className="form-button" >Thêm</button>
-
+                                            <button type="submit" onClick={handleAdd} className="form-button">
+                                                Thêm
+                                            </button>
                                         </div>
                                     </div>
                                 )}
                             </div>
                         </div>
-
                     </Content>
                 </Layout>
             </Layout>
