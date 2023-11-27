@@ -1,0 +1,52 @@
+.Admin_content {
+    min-height: 800px;
+    padding-top: -70px;
+}
+.right {
+    margin-top: 20px;
+}
+.Admin_Thongbao_content {
+    padding-top: 8vh;
+    display: flex;
+    justify-content: center;
+    min-height: 500px;
+}
+
+.Admin_Thongbao_body {
+    background-color: transparent;
+}
+.Admin_Thongbao_title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.Admin_Thongbao_name {
+    font-weight: 700;
+    font-size: 30px;
+}
+.Admin_Thongbao_time {
+    font-style: italic;
+    font-size: 14px;
+}
+.Admin_Thongbao_des {
+    margin-top: 20px;
+    background-color: #ffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    min-height: 500px;
+    width: 1150px;
+}
+.Admin_Thongbao_text {
+    padding: 25px 15px;
+}
+.Admin_Thongbao_img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 250px;
+}
+.Admin_Thongbao_img_if {
+    height: 100%px;
+    width: 200px;
+}

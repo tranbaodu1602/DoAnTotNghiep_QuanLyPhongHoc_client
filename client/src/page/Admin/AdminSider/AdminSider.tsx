@@ -140,6 +140,9 @@ const AdminSider: React.FC = () => {
                 <Menu.Item key="/admin/thongbao" >
                     <Link to="/admin/thongbao">Thông báo</Link>
                 </Menu.Item>
+                <Menu.Item key="/admin/yeucau" >
+                    <Link to="/admin/yeucau">Yêu Cầu</Link>
+                </Menu.Item>
 
             </Menu>
 

@@ -16,6 +16,11 @@ const AdminNavbar: React.FC = () => {
     };
 
     const handleLogout = () => {
+        const isDataExist = localStorage.getItem('myDataKey') !== null;
+        // Nếu dữ liệu tồn tại, hãy xóa nó
+        if (isDataExist) {
+            localStorage.removeItem('myDataKey');
+        }
         navigate('/');
     };
 
