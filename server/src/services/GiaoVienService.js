@@ -40,6 +40,7 @@ const yeuCauThayDoiLich = async (data) => {
                     tietday: data.tietday,
                     lydo: data.lydo,
                     trangthaixacnhan: false,
+                    tinnhanphanhoi: '',
                 });
                 await GV.save();
                 io.sockets.emit('requestSchedule', { GV });

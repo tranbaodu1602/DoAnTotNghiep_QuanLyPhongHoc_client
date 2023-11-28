@@ -10,6 +10,7 @@ const DanhSachYeuCau = new mongoose.Schema({
     tietday: String,
     lydo: String,
     trangthaixacnhan: Boolean,
+    tinnhanphanhoi: String,
 });
 
 const GiaoVienSchema = new mongoose.Schema({

@@ -114,6 +114,7 @@ const userLogin = async (dataLogin) => {
                     const DSPH = await PhongHoc.find();
                     const DSTK = await TaiKhoan.find();
                     const DSGV = await GiaoVien.find();
+                    console.log(DSGV);
                     if (!DSHP || !DSTB || !DSPH || !DSTK) {
                         reslove({
                             status: 'success',

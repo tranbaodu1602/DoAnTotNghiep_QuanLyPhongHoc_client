@@ -3,6 +3,7 @@ const unidecode = require('unidecode');
 const PhongHoc = require('../models/ModalPhongHoc');
 const ThongBao = require('../models/ModalThongBao');
 const HocPhan = require('../models/ModalHocPhan');
+const GiaoVien = require('../models/ModalGiaovien');
 const mongoose = require('mongoose');
 const { getIO } = require('../configs/Socket');
 
@@ -127,13 +128,45 @@ const taoThongBao = async (data) => {
 const xoaAllThongBao = async () => {
     try {
         await ThongBao.deleteMany().skip(11);
-        return {
+        reslove({
             status: 'Success',
-            message: 'Đã xóa tất cả thông báo',
-        };
+            message: 'Xóa thông báo thành công',
+        });
     } catch (error) {
         throw new Error('Không thể xóa thông báo: ' + error.message);
     }
+};
+
+const xacNhanYeuCau = async (data) => {
+    return new Promise(async (reslove, reject) => {
+        try {
+            const GV = await GiaoVien.findOne({ 'ThongTinCaNhan.hoTenGV': data.tenGV });
+            const dataId = data._id.toString();
+            if (!data.tinnhanphanhoi) {
+                data.tinnhanphanhoi = 'Không có tin nhắn phản hồi';
+            }
+            GV.ThongTinGiangDay.yeuCau.map((value) => {
+                const valueIdString = value._id.toString();
+                if (valueIdString === dataId) {
+                    value.trangthaixacnhan = true;
+                    value.tinnhanphanhoi = data.tinnhanphanhoi;
+                    return value;
+                }
+            });
+
+            await GV.save();
+            const DS = await GiaoVien.find();
+
+            const io = getIO();
+            io.sockets.emit('confirmRequest', DS);
+            reslove({
+                status: 'Success',
+                message: 'Phản hồi yêu cầu thành công',
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
 };
 
 module.exports = {
@@ -142,4 +175,5 @@ module.exports = {
     tamHoanLichHoc,
     taoThongBao,
     xoaAllThongBao,
+    xacNhanYeuCau,
 };
