@@ -66,7 +66,7 @@ const PhongHoc: React.FC = () => {
             <AdminNavbar />
             <Layout className="body__content">
                 <AdminSider />
-                <Layout className="content">
+                <Layout className="phonghoc_content">
                     <Content>
                         <div className="loaiphong">{Loai}</div>
                         <div className="list__nha">

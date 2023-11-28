@@ -151,7 +151,6 @@ const ChiTietPhongHoc: React.FC = () => {
     };
     const toggleClose = () => {
         setModelVisible(false);
-        setSelectedAppointment({});
     };
     ///-------------
     const [formData, setFormData] = useState({
