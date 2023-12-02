@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Layout } from 'antd';
+import { Layout, Input, Button } from 'antd';
 import AdminSider from '../AdminSider/AdminSider';
 import AdminNavbar from '../AdminNavbar/AdminNavbar';
 import Footer from '../../../components/Footer/Footer';
 import { useParams } from 'react-router-dom';
-import ChiTietTaiKhoanSinhVien from './ChiTietTaiKhoanSinhVien';
 import './ChiTietTaiKhoan.scss';
 
 const { Content } = Layout;
+const { Search } = Input;
 interface TaiKhoanData {
     id: number;
     taiKhoan: string;
@@ -23,14 +23,12 @@ const ChiTietTaiKhoan: React.FC = () => {
     const storedData: any = localStorage.getItem('myDataKey');
     const thongtin = JSON.parse(storedData);
     const TaiKhoan = thongtin.DanhSachTaiKhoan;
-
     const { loaitaikhoan } = useParams<ParamType>();
 
     const [data, setData] = useState<TaiKhoanData[]>([]);
     useEffect(() => {
         const taikhoan = TaiKhoan.filter((item: any) => item.loaiTaiKhoan === loaitaikhoan);
         if (taikhoan) {
-            // Nếu tìm thấy môn học, cập nhật data bằng môn học đó
             setData(taikhoan);
         }
     }, [loaitaikhoan]);
@@ -79,8 +77,6 @@ const ChiTietTaiKhoan: React.FC = () => {
             loaiTaiKhoan: 'sinhvien',
             khoa: '',
         });
-
-        // Vô hiệu hóa trường "khoa" sau khi thêm
         setIsKhoaDisabled(false);
     };
     //////-------------------------
@@ -89,10 +85,38 @@ const ChiTietTaiKhoan: React.FC = () => {
         setSelectedItem(item);
     };
 
-    useEffect(() => {
-        console.log('item', selectedItem);
-        console.log(formData);
-    }, [selectedItem, formData]);
+    const handleEdit = (item) => {
+        const isConfirmed = window.confirm("Bạn có chắc chắn muốn sửa?");
+        if (isConfirmed) {
+            //xử lí
+            alert("đã xủ lĩ")
+        }
+    };
+    const handleDelete = (item) => {
+        const isConfirmed = window.confirm("Bạn có chắc chắn xóa?");
+        if (isConfirmed) {
+            //xử lí
+            console.log(item);
+            alert("đã xủ lí")
+        }
+    };
+
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const [searchResults, setSearchResults] = useState<TaiKhoanData[]>([]);
+    const [isSearching, setIsSearching] = useState<boolean>(false);
+
+    const handleSearch = () => {
+        const results = data.filter(item => item.taiKhoan.includes(searchTerm));
+        setSearchResults(results);
+        setIsSearching(true);
+    };
+
+    const handleClearSearch = () => {
+        setSearchTerm('');
+        setSearchResults([]);
+        setIsSearching(false);
+    };
+
     return (
         <>
             <AdminNavbar />
@@ -102,36 +126,62 @@ const ChiTietTaiKhoan: React.FC = () => {
                     <Content>
                         <div className="TaiKhoan_content">
                             <div className="TaiKhoan_list">
-                                {loaitaikhoan === 'sinhvien' ? (
-                                    <div>
-                                        <ChiTietTaiKhoanSinhVien data={data} />
-                                    </div>
-                                ) : (
-                                    <div className="TaiKhoan_noidung">
-                                        <h2>{`Danh sách tài khoản ${
-                                            loaitaikhoan === 'giaovien' ? 'Giảng viên' : 'Khoa'
-                                        }`}</h2>
-                                        <div>
-                                            <div className="TaiKhoan_table">
-                                                <div>STT</div>
-                                                <div>Tài khoản</div>
-                                                <div>Mật khẩu</div>
-                                            </div>
-                                        </div>
 
-                                        <div className="TaiKhoan_danhsach">
-                                            {data.map((item, i) => (
-                                                <div key={i} className="TaiKhoan_item" onClick={() => selectItem(item)}>
-                                                    <div>{i + 1}</div>
-                                                    <div>{item.taiKhoan}</div>
-                                                    <div>{item.matKhau}</div>
-                                                </div>
-                                            ))}
+                                <div className="TaiKhoan_noidung">
+                                    <h2>{`Danh sách tài khoản ${loaitaikhoan === 'giaovien' ? 'Giảng viên' : loaitaikhoan === 'sinhvien' ? 'Sinh Viên' : 'Khoa'}`}</h2>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <Search
+                                            placeholder="Nhập mã tài khoản cần tìm kiếm"
+                                            value={searchTerm}
+                                            onChange={(e) => setSearchTerm(e.target.value)}
+                                            onSearch={handleSearch}
+                                            style={{ marginRight: '8px', width: "600px", marginBottom: "20px" }} // Khoảng trống giữa input và button
+                                        />
+                                        {searchTerm && (
+                                            <Button onClick={handleClearSearch} type="primary" danger style={{ marginBottom: "20px" }}>
+                                                X
+                                            </Button>
+                                        )}
+                                    </div>
+                                    <div>
+                                        <div className="table-responsive">
+                                            <table className="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>STT</th>
+                                                        <th>Tài khoản</th>
+                                                        <th>Mật khẩu</th>
+                                                        <th>Đặt lại mật khẩu</th>
+                                                        <th>Cập nhật trạng thái</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {(isSearching ? searchResults : data).map((item, i) => (
+                                                        <tr key={i} className="TaiKhoan_item" onClick={() => selectItem(item)}>
+                                                            <td>{i + 1}</td>
+                                                            <td>{item.taiKhoan}</td>
+                                                            <td>{item.matKhau}</td>
+                                                            <td className="d-flex justify-content-center">
+                                                                <button className="btn btn-primary" onClick={() => handleEdit(item)}>
+                                                                    Đặt lại
+                                                                </button>
+                                                            </td>
+                                                            <td>
+                                                                <button className="btn btn-danger" onClick={() => handleDelete(item)}>
+                                                                    Thay đổi trạng thái
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
-                                )}
+                                </div>
+
                             </div>
                             <div className="TaiKhoan_form">
+                                <h5>Thêm tài khoản</h5>
                                 <div>
                                     <label>Tài khoản:</label>
                                     <input

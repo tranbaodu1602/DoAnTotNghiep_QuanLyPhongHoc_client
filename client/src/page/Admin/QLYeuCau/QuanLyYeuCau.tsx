@@ -85,7 +85,7 @@ const QuanLyYeuCau: React.FC = () => {
         }
     };
 
-    useEffect(() => {}, [rerender]);
+    useEffect(() => { }, [rerender]);
 
     return (
         <>
@@ -122,23 +122,33 @@ const QuanLyYeuCau: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="yeucau_form">
-                                        <div className="yeucau__phanhoi">
-                                            <textarea
-                                                placeholder="Tin nhắn phẩn hồi"
-                                                value={textAreaContents[i] || ''}
-                                                onChange={(event) => handleTextAreaChange(i, event)}
-                                            />
-                                        </div>
-                                        <div className="yeucau__footer">
-                                            <div>
-                                                <button
-                                                    onClick={() => handleConfirm(item, textAreaContents[i])}
-                                                    className="yeucau__xacnhan"
-                                                >
-                                                    Gửi phản hồi
-                                                </button>
-                                            </div>
-                                        </div>
+                                        {xacnhan == false ? (
+                                            <>
+                                                <div className="yeucau__phanhoi">
+                                                    <textarea
+                                                        placeholder="Tin nhắn phẩn hồi"
+                                                        value={textAreaContents[i] || ''}
+                                                        onChange={(event) => handleTextAreaChange(i, event)}
+                                                    />
+                                                </div>
+                                                <div className="yeucau__footer">
+                                                    <div>
+                                                        <button
+                                                            onClick={() => handleConfirm(item, textAreaContents[i])}
+                                                            className="yeucau__xacnhan"
+                                                        >
+                                                            Gửi phản hồi
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <div className='yeucau__body'>
+                                                <div className="yeucau__item">
+                                                    <strong>Phản hồi: </strong>{item.tinnhanphanhoi}
+                                                </div>
+                                            </div>)}
+
                                     </div>
                                 </div>
                             </div>
