@@ -25,23 +25,22 @@
     margin-bottom: 10px;
 }
 
-.TaiKhoan_item,
-.TaiKhoan_table {
-    display: grid;
-    justify-content: center;
-    align-items: center;
-    grid-template-columns: 10% 30% 60%;
-}
+// .TaiKhoan_item,
+// .TaiKhoan_table {
+//     display: grid;
+//     justify-content: center;
+//     align-items: center;
+//     grid-template-columns: 10% 30% 60%;
+// }
 .TaiKhoan_item {
     font-style: italic;
     border: 1px solid rgb(213, 210, 210);
 }
 
 .TaiKhoan_item:hover {
-    border: 1px solid blue;
     cursor: pointer;
 }
-///form
+// ///form
 .TaiKhoan_form {
     width: 300px;
     margin: 0 auto;
@@ -49,6 +48,7 @@
     border: 1px solid #ccc;
     border-radius: 8px;
     background-color: #f7f7f7;
+    height: 550px;
 }
 
 .TaiKhoan_form label {
@@ -76,11 +76,13 @@
 .TaiKhoan_form button {
     display: inline-block;
     padding: 10px 20px;
+    margin-top: 10px;
     background-color: #007bff;
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    width: 120px;
 }
 
 .TaiKhoan_form button:hover {
