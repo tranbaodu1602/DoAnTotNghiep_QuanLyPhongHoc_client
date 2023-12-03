@@ -23,6 +23,10 @@ import {
 import { DatePicker, Button } from 'antd';
 import moment from 'moment';
 
+import { io, Socket } from 'socket.io-client';
+
+const socket: Socket = io('http://localhost:3001');
+
 const { Content } = Layout;
 
 type ParamType = {
@@ -58,14 +62,23 @@ const ExternalViewSwitcher = ({
 
 const ChiTietPhongHoc: React.FC = () => {
     const { toanha } = useParams<ParamType>();
+    const [isRerender, setRerender] = useState(false);
 
     const storedData: any = localStorage.getItem('myDataKey');
     const danhSach = JSON.parse(storedData);
+
+    socket.on('createAppointment', (DSHP: any) => {
+        danhSach.DanhSachHocPhan = DSHP;
+        localStorage.setItem('myDataKey', JSON.stringify(danhSach));
+        setRerender(!isRerender);
+    });
 
     const [startDate, setStartDate] = useState<moment.Moment | null>(null);
     const [endDate, setEndDate] = useState<moment.Moment | null>(null);
 
     const [data, setData] = useState([]);
+    const [isModelVisible, setModelVisible] = useState(false);
+
     useEffect(() => {
         const lichHoc = danhSach.DanhSachHocPhan.flatMap((monHoc) =>
             monHoc.thongTinLich.filter((lichHoc) => lichHoc.phongHoc === toanha),
@@ -89,7 +102,7 @@ const ChiTietPhongHoc: React.FC = () => {
             // Nếu tìm thấy môn học, cập nhật data bằng môn học đó
             setData(updatedData);
         }
-    }, []);
+    }, [isRerender]);
 
     const handleUpdateClick = () => {
         // Xử lý cập nhật dữ liệu ở đây
@@ -144,7 +157,6 @@ const ChiTietPhongHoc: React.FC = () => {
             {children}
         </Appointments.Appointment>
     );
-    const [isModelVisible, setModelVisible] = useState(false);
 
     const toggleModelVisibility = () => {
         setModelVisible(!isModelVisible);
@@ -205,18 +217,26 @@ const ChiTietPhongHoc: React.FC = () => {
         setStatusAddMember(!statusAddMember);
     };
 
-    const handleAdd = () => {
-        // const newEvent = {
-        //     title: formData.title,
-        //     startDate: new Date(formData.startDate),
-        //     endDate: new Date(formData.endDate),
-        //     phongHoc: formData.phongHoc,
-        //     ghiChu: formData.ghiChu,
-        //     tenGV: formData.tenGV,
-        //     tietHoc: formData.tietHoc,
-        // };
+    const handleAddAppointment = async (e: any) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://localhost:3001/admin/create-appointment', {
+                method: 'POST',
+                body: JSON.stringify(formData),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
 
-        console.log(formData);
+            if (response.ok) {
+                console.log('oke');
+                setModelVisible(false);
+            } else {
+                console.log('fail');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
 
         // Đặt lại trạng thái form
         // setFormData({
@@ -395,7 +415,11 @@ const ChiTietPhongHoc: React.FC = () => {
                                             />
                                         </div>
                                         <div>
-                                            <button type="submit" onClick={handleAdd} className="form-button">
+                                            <button
+                                                type="submit"
+                                                onClick={handleAddAppointment}
+                                                className="form-button"
+                                            >
                                                 Thêm
                                             </button>
                                         </div>
