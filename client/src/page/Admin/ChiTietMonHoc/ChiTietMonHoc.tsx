@@ -280,7 +280,9 @@ const ChiTietMonHoc: React.FC = () => {
                     <Content>
                         <div className="ChiTietMonHoc_Content ">
                             <h2>Lịch theo môn {tenMon.tenMonHoc} </h2>
-
+                            {/* <div>
+                                <button onClick={toggleModelVisibility}>thêm lịch</button>
+                            </div> */}
                             <div className={`ChiTietMonHoc_Lich  ${isModelVisible ? 'faded' : ''}`}>
                                 <React.Fragment>
                                     <ExternalViewSwitcher
