@@ -10,10 +10,13 @@
     display: flex;
     justify-content: center;
     min-height: 500px;
+    max-height: 700px;
+    overflow-y: auto;
 }
 
 .Admin_Thongbao_body {
     background-color: transparent;
+    padding-bottom: 70px;
 }
 .Admin_Thongbao_title {
     display: flex;
@@ -37,16 +40,29 @@
     width: 1150px;
 }
 .Admin_Thongbao_text {
-    padding: 25px 15px;
+    padding: 35px 55px;
 }
 .Admin_Thongbao_img {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 250px;
+    height: auto;
+    padding-bottom: 20px;
 }
 .Admin_Thongbao_img_if {
-    height: 100%px;
-    width: 200px;
+    height: 500px;
+    width: 400px;
+}
+
+.Admin_Thongbao_text {
+    white-space: pre-line;
+}
+
+.Admin_Thongbao_text p {
+    margin-left: 1rem; /* Thụt đầu dòng 1rem cho các đoạn văn bản trong thẻ p */
+}
+
+.Admin_Thongbao_text p::before {
+    content: '\00a0\00a0'; /* Thêm hai khoảng trắng trước mỗi dòng trong thẻ p */
 }

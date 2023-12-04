@@ -109,7 +109,7 @@ const Content: React.FC = () => {
                                         style={{ color: '#1da1f2', backgroundColor: '#e0fbff' }}
                                     >
                                         <div className="" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                            <h1>0</h1>
+                                            <h1>2</h1>
                                             <div className="card-icon">
                                                 <i className="fa-solid fa-calendar-days"></i>
                                             </div>
@@ -137,19 +137,21 @@ const Content: React.FC = () => {
 
                         <Row className="row2">
                             <Col className="col2">
-                                <Card
-                                    className={`card ${statusScroll === false ? '' : 'animate__jackInTheBox'} `}
-                                    title="Nhắc nhở mới chưa xem"
-                                    style={{ color: '#737373' }}
-                                >
-                                    <div className="" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                        <h1>{tb.length}</h1>
-                                        <div className="card-icon">
-                                            <i className="fa-regular fa-bell"></i>
+                                <Link style={{ textDecoration: 'none' }} to="/home/thongbao">
+                                    <Card
+                                        className={`card ${statusScroll === false ? '' : 'animate__jackInTheBox'} `}
+                                        title="Nhắc nhở mới chưa xem"
+                                        style={{ color: '#737373' }}
+                                    >
+                                        <div className="" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            <h1>{tb.length}</h1>
+                                            <div className="card-icon">
+                                                <i className="fa-regular fa-bell"></i>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <p>Xem chi tiết</p>
-                                </Card>
+                                        <p>Xem chi tiết</p>
+                                    </Card>
+                                </Link>
                                 <Card
                                     className={`card ${statusScroll === false ? '' : 'animate__jackInTheBox'} `}
                                     title="Số môn học trong học kì"

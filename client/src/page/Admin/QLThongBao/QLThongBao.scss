@@ -30,3 +30,23 @@
     text-decoration: none; /* Loại bỏ gạch chân khi hover */
     color: inherit; /* Màu sắc kế thừa từ phần tử cha khi hover */
 }
+
+.delete__button {
+    background-color: #ff5858; /* Màu nền */
+    color: #fff; /* Màu chữ */
+    border: none; /* Loại bỏ viền */
+    padding: 10px 15px; /* Kích thước nút */
+    border-radius: 5px; /* Bo tròn góc */
+    cursor: pointer; /* Con trỏ tay khi di chuột qua */
+    transition: background-color 0.3s ease; /* Hiệu ứng màu nền khi hover */
+
+    /* Tùy chỉnh kiểu chữ */
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Hiệu ứng hover */
+.delete__button:hover {
+    background-color: #d63232; /* Màu nền thay đổi khi hover */
+}
