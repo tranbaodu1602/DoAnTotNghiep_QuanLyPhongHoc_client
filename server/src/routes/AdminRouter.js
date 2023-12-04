@@ -18,8 +18,11 @@ const upload = multer({ storage: storage });
 routes.post('/add-classroom', adminController.themPhongHoc);
 routes.post('/update-schedule', adminController.capNhatLichHoc);
 routes.post('/cancel-schedule', adminController.tamHoanLichHoc);
+routes.post('/create-appointment', adminController.themCuocHop);
 routes.post('/create-notify', upload.fields([{ name: 'dinhKem', maxCount: 1 }]), adminController.taoThongBao);
 routes.get('/delete-all-notify', adminController.xoaAllThongBao);
 routes.post('/confirm-request', adminController.xacNhanYeuCau);
+routes.post('/reset-password', adminController.datLaiMatKhau);
+routes.post('/delete-account', adminController.xoaTaiKhoan);
 
 module.exports = routes;

@@ -35,6 +35,17 @@ const tamHoanLichHoc = async (req, res) => {
     }
 };
 
+const themCuocHop = async (req, res) => {
+    try {
+        const appointment = await Admin.themCuocHop(req.body);
+        res.status(200).json({
+            appointment,
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 const taoThongBao = async (req, res) => {
     try {
         const notify = await Admin.taoThongBao(req);
@@ -67,12 +78,35 @@ const xacNhanYeuCau = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+const datLaiMatKhau = async (req, res) => {
+    try {
+        const reset = await Admin.datLaiMatKhau(req.body);
+        res.status(200).json({
+            reset,
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+const xoaTaiKhoan = async (req, res) => {
+    try {
+        const reset = await Admin.xoaTaiKhoan(req.body);
+        res.status(200).json({
+            reset,
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
 
 module.exports = {
     themPhongHoc,
     capNhatLichHoc,
     tamHoanLichHoc,
+    themCuocHop,
     taoThongBao,
     xoaAllThongBao,
     xacNhanYeuCau,
+    datLaiMatKhau,
+    xoaTaiKhoan,
 };

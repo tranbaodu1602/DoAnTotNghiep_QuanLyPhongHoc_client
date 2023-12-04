@@ -6,24 +6,58 @@ const ThongBao = require('../models/ModalThongBao');
 
 const bcrypt = require('bcrypt');
 const PhongHoc = require('../models/ModalPhongHoc');
+const { getIO } = require('../configs/Socket');
 
 const createUser = async (userData) => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log(userData);
             const existingUser = await TaiKhoan.findOne({
-                taikhoan: userData.taikhoan,
+                taikhoan: userData.taiKhoan,
             });
 
             if (existingUser) {
                 resolve({
-                    status: 'FAIL',
-                    message: 'Người dùng đã tồn tại',
+                    status: 'fail',
+                    message: 'Đã tồn tại người dùng có mã ' + userData.taiKhoan,
                 });
             } else {
-                const user = new TaiKhoan(userData);
+                const hash = bcrypt.hashSync(userData.matKhau, 10);
+                const dateCreate = new Date().toLocaleString();
+                const newUser = {
+                    taikhoan: userData.taiKhoan,
+                    matkhau: hash,
+                    ngaytao: dateCreate,
+                    loaitaikhoan: userData.loaiTaiKhoan,
+                };
+                const user = new TaiKhoan(newUser);
                 await user.save();
+
+                const DSTK = await TaiKhoan.find();
+                const taikhoan = DSTK.map((value) => {
+                    if (value.loaitaikhoan !== 'admin') {
+                        const tk = {
+                            taiKhoan: value.taikhoan,
+                            loaiTaiKhoan: value.loaitaikhoan,
+                            matKhau: value.matkhau,
+                            ngayTao: value.ngaytao,
+                        };
+                        return tk;
+                    } else {
+                        const tk = {
+                            taiKhoan: value.taikhoan,
+                            loaiTaiKhoan: 'khoa',
+                            matKhau: value.matkhau,
+                            ngayTao: value.ngaytao,
+                        };
+                        return tk;
+                    }
+                });
+                const io = getIO();
+                io.sockets.emit('createAccount', taikhoan);
+
                 resolve({
-                    status: 'Success',
+                    status: 'success',
                     message: 'Tạo tài khoản thành công',
                     data: user,
                 });
@@ -130,22 +164,18 @@ const userLogin = async (dataLogin) => {
                             const modifiedDSTK = DSTK.map((value, key) => {
                                 if (value.loaitaikhoan !== 'admin') {
                                     const tk = {
-                                        id: key + 1,
                                         taiKhoan: value.taikhoan,
                                         loaiTaiKhoan: value.loaitaikhoan,
                                         matKhau: value.matkhau,
                                         ngayTao: value.ngaytao,
-                                        khoa: '15',
                                     };
                                     return tk;
                                 } else {
                                     const tk = {
-                                        id: key + 1,
                                         taiKhoan: value.taikhoan,
                                         loaiTaiKhoan: 'khoa',
                                         matKhau: value.matkhau,
                                         ngayTao: value.ngaytao,
-                                        khoa: '',
                                     };
                                     return tk;
                                 }

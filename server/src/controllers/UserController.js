@@ -3,16 +3,7 @@ const bcrypt = require('bcrypt');
 
 const createUser = async (req, res) => {
     try {
-        const { taikhoan, matkhau, ngayTao, loaitaikhoan } = req.body;
-        const hash = bcrypt.hashSync(matkhau, 10);
-        const dateCreate = new Date().toLocaleString();
-        const newUser = {
-            taikhoan,
-            matkhau: hash,
-            ngaytao: dateCreate,
-            loaitaikhoan,
-        };
-        const user = await userService.createUser(newUser);
+        const user = await userService.createUser(req.body);
         res.status(200).json({
             user,
         });
