@@ -117,30 +117,37 @@ const ChiTietPhongHoc: React.FC = () => {
         children: React.ReactNode;
         style: React.CSSProperties;
         data: AppointmentData;
-    }> = ({ children, style, data, ...restProps }) => (
-        <Appointments.Appointment
-            {...restProps}
-            style={{
-                ...style,
-                /* backgroundColor: '#FFC107', */
-                borderRadius: '8px',
-            }}
-        >
-            {children}
-            <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
-                GV: <span style={{ color: 'red' }}>{data.tenGV}</span>
-            </div>
-            <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
-                Tiết: <span style={{ color: 'red' }}>{data.tietHoc}</span>
-            </div>
-            <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
-                Phòng: <span style={{ color: 'red' }}>{data.phongHoc}</span>
-            </div>
-            <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
-                Ghi chú: <span style={{ color: 'red' }}>{data.ghiChu}</span>{' '}
-            </div>
-        </Appointments.Appointment>
-    );
+    }> = ({ children, style, data, ...restProps }) => {
+        const dynamicBackgroundColor = data.ghiChu === "Tạm ngưng" ? 'rgb(248, 200, 195)' : '';
+        return (
+            <Appointments.Appointment
+                {...restProps}
+                style={{
+                    ...style,
+                    backgroundColor: dynamicBackgroundColor,
+                    borderRadius: '8px',
+                }}
+            >
+                {children}
+                <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
+                    GV: <span style={{ color: 'red' }}>{data.tenGV}</span>
+                </div>
+                <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
+                    Tiết: <span style={{ color: 'red' }}>{data.tietHoc}</span>
+                </div>
+                <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
+                    Phòng: <span style={{ color: 'red' }}>{data.phongHoc}</span>
+                </div>
+                <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
+
+                    Ghi chú: <span style={{ color: 'red' }}>
+                        {data.ghiChu}
+                    </span>
+
+                </div>
+            </Appointments.Appointment>
+        )
+    }
 
     const customAppointment: React.FC<{
         children: React.ReactNode;
