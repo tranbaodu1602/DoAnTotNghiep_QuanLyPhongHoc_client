@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Table } from 'antd';
 
 import './content.scss';
-import { SinhVien } from '../../../DataSample';
 import avt from '../../assets/images/avt4.jpg';
 import { Link } from 'react-router-dom';
 import HomeGiangVien from '../../page/GiangVien/HomeGiangVien';
 
 const Content: React.FC = () => {
-    const thongTinHocPhan = SinhVien.ThongTinHocPhan;
     const [statusScroll, setStatusScroll] = useState(false);
 
     useEffect(() => {
@@ -29,11 +27,14 @@ const Content: React.FC = () => {
         { title: 'Môn học/học phần', dataIndex: 'tenMonHoc', key: 'tenMonHoc' },
         { title: 'Số tín chỉ', dataIndex: 'soTinChi', key: 'soTinChi' },
         { title: 'Số tiết', dataIndex: 'soBuoiHoc', key: 'soBuoiHoc' },
-    ]
+    ];
 
-    const mangMoi = data.lich.map(({ tenMonHoc, soTinChi, soBuoiHoc, maLopHocPhan }) => (
-        { key: maLopHocPhan, tenMonHoc, soTinChi, soBuoiHoc }));
-
+    const mangMoi = data.lich.map(({ tenMonHoc, soTinChi, soBuoiHoc, maLopHocPhan }) => ({
+        key: maLopHocPhan,
+        tenMonHoc,
+        soTinChi,
+        soBuoiHoc,
+    }));
 
     const ThongBaoSV = data.DanhSachThongBao.DSTB;
     const ThongBaoALL = data.DanhSachThongBao.DSTBALL;
@@ -108,7 +109,7 @@ const Content: React.FC = () => {
                                         style={{ color: '#1da1f2', backgroundColor: '#e0fbff' }}
                                     >
                                         <div className="" style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                            <h1>{thongTinHocPhan.appointments.length}</h1>
+                                            <h1>0</h1>
                                             <div className="card-icon">
                                                 <i className="fa-solid fa-calendar-days"></i>
                                             </div>
@@ -166,11 +167,7 @@ const Content: React.FC = () => {
 
                             <Col className="col2">
                                 <Card className="card2" title="Lớp học phần" style={{ color: '#1da1f2' }}>
-                                    <Table
-                                        dataSource={mangMoi}
-                                        columns={columns}
-                                        pagination={{ pageSize: 3 }}
-                                    />
+                                    <Table dataSource={mangMoi} columns={columns} pagination={{ pageSize: 3 }} />
                                 </Card>
                             </Col>
                         </Row>

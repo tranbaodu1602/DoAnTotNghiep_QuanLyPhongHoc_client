@@ -127,7 +127,7 @@ const ChiTietMonHoc: React.FC = () => {
         style: React.CSSProperties;
         data: AppointmentData;
     }> = ({ children, style, data, ...restProps }) => {
-        const dynamicBackgroundColor = data.ghiChu === "Tạm ngưng" ? 'rgb(248, 200, 195)' : '';
+        const dynamicBackgroundColor = data.ghiChu === 'Tạm ngưng' ? 'rgb(248, 200, 195)' : '';
         return (
             <Appointments.Appointment
                 {...restProps}
@@ -152,14 +152,11 @@ const ChiTietMonHoc: React.FC = () => {
                     Phòng: <span style={{ color: 'red' }}>{data.phongHoc}</span>
                 </div>
                 <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
-
-                    Ghi chú: <span style={{ color: 'red' }}>
-                        {data.ghiChu}
-                    </span>
-
+                    Ghi chú: <span style={{ color: 'red' }}>{data.ghiChu}</span>
                 </div>
-            </Appointments.Appointment>)
-    }
+            </Appointments.Appointment>
+        );
+    };
 
     const customAppointment: React.FC<{
         children: React.ReactNode;
@@ -190,57 +187,6 @@ const ChiTietMonHoc: React.FC = () => {
         setSelectedAppointment({});
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setSelectedAppointment((prevAppointment) => ({
-            ...prevAppointment,
-            [name]: value,
-        }));
-    };
-
-    const handleUpdateSchedule = async (event: React.FormEvent) => {
-        event.preventDefault();
-        try {
-            const response = await fetch('http://localhost:3001/admin/update-schedule', {
-                method: 'POST',
-                body: JSON.stringify(selectedAppointment),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (response.ok) {
-                setModelVisible(false);
-                setSelectedAppointment({});
-            } else {
-                console.log('fail');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
-
-    const handleCancelSchedule = async (event: React.FormEvent) => {
-        event.preventDefault();
-        try {
-            const response = await fetch('http://localhost:3001/admin/cancel-schedule', {
-                method: 'POST',
-                body: JSON.stringify(selectedAppointment),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (response.ok) {
-                setModelVisible(false);
-                setSelectedAppointment({});
-            } else {
-                console.log('fail');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
     //--------------------------------
     // const initialFormData: FormData = selectedAppointment !=null
     // ?
@@ -267,6 +213,63 @@ const ChiTietMonHoc: React.FC = () => {
     //-------------------------------
 
     const tenMon = danhSach.DanhSachHocPhan.find((item: any) => item.maLopHocPhan === tenMonHoc);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setSelectedAppointment((prevAppointment) => ({
+            ...prevAppointment,
+            [name]: value,
+        }));
+    };
+
+    const handleUpdateSchedule = async (event: React.FormEvent) => {
+        event.preventDefault();
+        if (tenMon) {
+            selectedAppointment.maMonHoc = tenMon.maLopHocPhan;
+        }
+        try {
+            const response = await fetch('http://localhost:3001/admin/update-schedule', {
+                method: 'POST',
+                body: JSON.stringify(selectedAppointment),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                setModelVisible(false);
+                setSelectedAppointment({});
+            } else {
+                console.log('fail');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    const handleCancelSchedule = async (event: React.FormEvent) => {
+        event.preventDefault();
+        if (tenMon) {
+            selectedAppointment.maMonHoc = tenMon.maLopHocPhan;
+        }
+        try {
+            const response = await fetch('http://localhost:3001/admin/cancel-schedule', {
+                method: 'POST',
+                body: JSON.stringify(selectedAppointment),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                setModelVisible(false);
+                setSelectedAppointment({});
+            } else {
+                console.log('fail');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
 
     return (
         <>
@@ -328,7 +331,7 @@ const ChiTietMonHoc: React.FC = () => {
                                                 className="form-input"
                                                 name="title"
                                                 value={selectedAppointment.title}
-                                            // onChange={handleChange}
+                                                // onChange={handleChange}
                                             />
                                         </div>
                                         <div>

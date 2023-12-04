@@ -16,7 +16,10 @@ import {
     DateNavigator,
     TodayButton,
 } from '@devexpress/dx-react-scheduler-material-ui';
-import { MonHoc } from '../../../../DataSample';
+
+// import { io, Socket } from 'socket.io-client';
+
+// const socket: Socket = io('http://localhost:3001');
 
 const ExternalViewSwitcher = ({
     currentViewName,
@@ -63,19 +66,39 @@ const LearningCalendar: React.FC = () => {
     const storedData = localStorage.getItem('myDataKey');
     const thongtin = storedData ? JSON.parse(storedData) : [];
 
-    const [data, setNewData] = useState([]);
+    // socket.on('cancelSchedule', (data: { monhoc: any }) => {
+    //     const foundIndex = thongtin.DanhSachHocPhan.findIndex((item: any) => {
+    //         return item.maLopHocPhan === data.monhoc.maLopHocPhan;
+    //     });
 
+    //     if (foundIndex !== -1) {
+    //         thongtin.DanhSachHocPhan[foundIndex] = data.monhoc; // Cập nhật giá trị tại chỉ mục đã tìm thấy
+    //         localStorage.setItem('myDataKey', JSON.stringify(thongtin));
+    //     }
+    // });
+
+    // socket.on('updateSchedule', (data: { monhoc: any }) => {
+    //     const foundIndex = thongtin.DanhSachHocPhan.findIndex((item: any) => {
+    //         return item.maLopHocPhan === data.monhoc.maLopHocPhan;
+    //     });
+
+    //     if (foundIndex !== -1) {
+    //         thongtin.DanhSachHocPhan[foundIndex] = data.monhoc; // Cập nhật giá trị tại chỉ mục đã tìm thấy
+    //         localStorage.setItem('myDataKey', JSON.stringify(thongtin));
+    //     }
+    // });
+
+    const [data, setNewData] = useState([]);
 
     useEffect(() => {
         // Tạo mảng mới để lưu trữ tất cả lịch học
         const updatedData = [];
 
-        thongtin.lich.forEach(monHoc => {
-            monHoc.thongTinLich.forEach(lich => {
+        thongtin.lich.forEach((monHoc) => {
+            monHoc.thongTinLich.forEach((lich) => {
                 // Chuyển đổi endDate và startDate sang địa phương không thay đổi giá trị thời gian
                 const localEndDate = new Date(lich.endDate).toLocaleString('en-US', { timeZone: 'UTC' });
                 const localStartDate = new Date(lich.startDate).toLocaleString('en-US', { timeZone: 'UTC' });
-
 
                 updatedData.push({
                     ...lich,
@@ -89,15 +112,14 @@ const LearningCalendar: React.FC = () => {
         setNewData(updatedData);
     }, []);
 
-    console.log("datas", data);
-
+    console.log('datas', data);
 
     const Appointment: React.FC<{
         children: React.ReactNode;
         style: React.CSSProperties;
         data: any;
     }> = ({ children, style, data, ...restProps }) => {
-        const dynamicBackgroundColor = data.ghiChu === "Tạm ngưng" ? 'rgb(248, 200, 195)' : '';
+        const dynamicBackgroundColor = data.ghiChu === 'Tạm ngưng' ? 'rgb(248, 200, 195)' : '';
         return (
             <Appointments.Appointment
                 {...restProps}
@@ -121,7 +143,7 @@ const LearningCalendar: React.FC = () => {
                     Ghi chú: <span style={{ color: 'red' }}>{data.ghiChu}</span>{' '}
                 </div>
             </Appointments.Appointment>
-        )
+        );
     };
 
     const customAppointment: React.FC<{
@@ -150,7 +172,7 @@ const LearningCalendar: React.FC = () => {
                         startDayHour={5.5} // Giờ bắt đầu buổi sáng
                         endDayHour={22} // Giờ kết thúc buổi tối
                         cellDuration={60}
-                    // timeTableCellComponent={CustomTimeTableCell}
+                        // timeTableCellComponent={CustomTimeTableCell}
                     />
                     <MonthView />
                     <Toolbar />
