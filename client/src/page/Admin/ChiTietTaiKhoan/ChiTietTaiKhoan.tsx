@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Input, Button } from 'antd';
+import Modal from 'react-bootstrap/Modal';
+import ButtonB from 'react-bootstrap/Button';
 import AdminSider from '../AdminSider/AdminSider';
 import AdminNavbar from '../AdminNavbar/AdminNavbar';
 import Footer from '../../../components/Footer/Footer';
+import { ToastContainer, toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import './ChiTietTaiKhoan.scss';
+
+import { io, Socket } from 'socket.io-client';
+
+const socket: Socket = io('http://localhost:3001');
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -20,18 +27,38 @@ type ParamType = {
 };
 
 const ChiTietTaiKhoan: React.FC = () => {
+    const [isRerender, setIsRerender] = useState(false);
     const storedData: any = localStorage.getItem('myDataKey');
     const thongtin = JSON.parse(storedData);
+    socket.on('resetPassword', (DSTK: any) => {
+        thongtin.DanhSachTaiKhoan = DSTK;
+        localStorage.setItem('myDataKey', JSON.stringify(thongtin));
+        setIsRerender(!isRerender);
+    });
+    socket.on('deleteAccount', (taikhoan: any) => {
+        thongtin.DanhSachTaiKhoan = taikhoan;
+        localStorage.setItem('myDataKey', JSON.stringify(thongtin));
+        setIsRerender(!isRerender);
+    });
+    socket.on('createAccount', (taikhoan: any) => {
+        thongtin.DanhSachTaiKhoan = taikhoan;
+        localStorage.setItem('myDataKey', JSON.stringify(thongtin));
+        setIsRerender(!isRerender);
+    });
     const TaiKhoan = thongtin.DanhSachTaiKhoan;
     const { loaitaikhoan } = useParams<ParamType>();
 
     const [data, setData] = useState<TaiKhoanData[]>([]);
+
     useEffect(() => {
         const taikhoan = TaiKhoan.filter((item: any) => item.loaiTaiKhoan === loaitaikhoan);
         if (taikhoan) {
             setData(taikhoan);
         }
-    }, [loaitaikhoan]);
+    }, [loaitaikhoan, isRerender]);
+
+    const [showModal, setShowModal] = useState(false);
+    const [actionType, setActionType] = useState<string | null>(null);
 
     //////------------------------
     const [formData, setFormData] = useState({
@@ -59,24 +86,46 @@ const ChiTietTaiKhoan: React.FC = () => {
         }
     };
 
-    const handleAdd = () => {
+    const createAccount = async () => {
         const newAccount = {
-            id: 2,
             taiKhoan: formData.taiKhoan,
             matKhau: formData.matKhau,
             loaiTaiKhoan: formData.loaiTaiKhoan,
             khoa: formData.khoa,
         };
 
-        console.log(newAccount);
+        try {
+            const response = await fetch('http://localhost:3001/auth/create', {
+                method: 'POST',
+                body: JSON.stringify(newAccount),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (response.ok) {
+                const data = response.json();
+                data.then((result) => {
+                    if (result.user.status === 'fail') {
+                        toast.error(result.user.message);
+                    } else {
+                        toast.success(result.user.message);
+                        setFormData({
+                            taiKhoan: '',
+                            matKhau: '',
+                            loaiTaiKhoan: 'sinhvien',
+                            khoa: '',
+                        });
+                    }
+                });
+            } else {
+                toast.error('Đã xảy ra vấn đề');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
 
         // Đặt lại trạng thái form
-        setFormData({
-            taiKhoan: '',
-            matKhau: '',
-            loaiTaiKhoan: 'sinhvien',
-            khoa: '',
-        });
+
         setIsKhoaDisabled(false);
     };
     //////-------------------------
@@ -85,28 +134,81 @@ const ChiTietTaiKhoan: React.FC = () => {
         setSelectedItem(item);
     };
 
-    const handleEdit = (item) => {
-        const isConfirmed = window.confirm("Bạn có chắc chắn muốn sửa?");
-        if (isConfirmed) {
-            //xử lí
-            alert("đã xủ lĩ")
-        }
+    const handleReset = (item: any) => {
+        setShowModal(true);
+        setActionType('reset');
+        setSelectedItem(item);
     };
-    const handleDelete = (item) => {
-        const isConfirmed = window.confirm("Bạn có chắc chắn xóa?");
-        if (isConfirmed) {
-            //xử lí
-            console.log(item);
-            alert("đã xủ lí")
-        }
+    const handleDelete = (item: any) => {
+        setShowModal(true);
+        setActionType('delete');
+        setSelectedItem(item);
     };
+
+    const confirmAction = async () => {
+        if (actionType === 'delete') {
+            console.log(selectedItem);
+            try {
+                const response = await fetch('http://localhost:3001/admin/delete-account', {
+                    method: 'POST',
+                    body: JSON.stringify(selectedItem),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (response.ok) {
+                    toast.success('Xóa tài khoản thành công');
+                } else {
+                    toast.error('Đã xảy ra vấn đề');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        } else if (actionType === 'reset') {
+            console.log(selectedItem);
+            try {
+                const response = await fetch('http://localhost:3001/admin/reset-password', {
+                    method: 'POST',
+                    body: JSON.stringify(selectedItem),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    toast.success('Đặt lại mật khẩu thành công');
+                } else {
+                    toast.error('Đã xảy ra vấn đề');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // Đóng modal sau khi xử lí xóa hoặc đặt lại
+        setShowModal(false);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+    };
+
+    let modalTitle, modalBody;
+
+    if (actionType === 'delete') {
+        modalTitle = 'Xác nhận xóa ?';
+        modalBody = 'Bạn có chắc chắn muốn xóa tài khoản này không ?';
+    } else if (actionType === 'reset') {
+        modalTitle = 'Xác nhận đặt lại mật khẩu ?';
+        modalBody = 'Mật khẩu khi được đặt lại sẽ trùng với tên tài khoản hiện tại! Bạn có chắc chắn muốn đặt lại ?';
+    }
 
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [searchResults, setSearchResults] = useState<TaiKhoanData[]>([]);
     const [isSearching, setIsSearching] = useState<boolean>(false);
 
     const handleSearch = () => {
-        const results = data.filter(item => item.taiKhoan.includes(searchTerm));
+        const results = data.filter((item) => item.taiKhoan.includes(searchTerm));
         setSearchResults(results);
         setIsSearching(true);
     };
@@ -120,25 +222,36 @@ const ChiTietTaiKhoan: React.FC = () => {
     return (
         <>
             <AdminNavbar />
+            <ToastContainer />
             <Layout style={{ minHeight: '100vh', marginTop: '2px' }}>
                 <AdminSider />
                 <Layout>
                     <Content>
                         <div className="TaiKhoan_content">
                             <div className="TaiKhoan_list">
-
                                 <div className="TaiKhoan_noidung">
-                                    <h2>{`Danh sách tài khoản ${loaitaikhoan === 'giaovien' ? 'Giảng viên' : loaitaikhoan === 'sinhvien' ? 'Sinh Viên' : 'Khoa'}`}</h2>
+                                    <h2>{`Danh sách tài khoản ${
+                                        loaitaikhoan === 'giaovien'
+                                            ? 'Giảng viên'
+                                            : loaitaikhoan === 'sinhvien'
+                                            ? 'Sinh Viên'
+                                            : 'Khoa'
+                                    }`}</h2>
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
                                         <Search
                                             placeholder="Nhập mã tài khoản cần tìm kiếm"
                                             value={searchTerm}
                                             onChange={(e) => setSearchTerm(e.target.value)}
                                             onSearch={handleSearch}
-                                            style={{ marginRight: '8px', width: "600px", marginBottom: "20px" }} // Khoảng trống giữa input và button
+                                            style={{ marginRight: '8px', width: '600px', marginBottom: '20px' }} // Khoảng trống giữa input và button
                                         />
                                         {searchTerm && (
-                                            <Button onClick={handleClearSearch} type="primary" danger style={{ marginBottom: "20px" }}>
+                                            <Button
+                                                onClick={handleClearSearch}
+                                                type="primary"
+                                                danger
+                                                style={{ marginBottom: '20px' }}
+                                            >
                                                 X
                                             </Button>
                                         )}
@@ -152,33 +265,59 @@ const ChiTietTaiKhoan: React.FC = () => {
                                                         <th>Tài khoản</th>
                                                         <th>Mật khẩu</th>
                                                         <th>Đặt lại mật khẩu</th>
-                                                        <th>Cập nhật trạng thái</th>
+                                                        <th>Xóa tài khoản</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {(isSearching ? searchResults : data).map((item, i) => (
-                                                        <tr key={i} className="TaiKhoan_item" onClick={() => selectItem(item)}>
+                                                        <tr
+                                                            key={i}
+                                                            className="TaiKhoan_item"
+                                                            onClick={() => selectItem(item)}
+                                                        >
                                                             <td>{i + 1}</td>
                                                             <td>{item.taiKhoan}</td>
                                                             <td>{item.matKhau}</td>
                                                             <td className="d-flex justify-content-center">
-                                                                <button className="btn btn-primary" onClick={() => handleEdit(item)}>
+                                                                <button
+                                                                    className="btn btn-primary"
+                                                                    onClick={() => handleReset(item)}
+                                                                >
                                                                     Đặt lại
                                                                 </button>
                                                             </td>
                                                             <td>
-                                                                <button className="btn btn-danger" onClick={() => handleDelete(item)}>
-                                                                    Thay đổi trạng thái
+                                                                <button
+                                                                    className="btn btn-danger"
+                                                                    onClick={() => handleDelete(item)}
+                                                                >
+                                                                    Xóa
                                                                 </button>
                                                             </td>
                                                         </tr>
                                                     ))}
                                                 </tbody>
+                                                <Modal show={showModal} onHide={closeModal}>
+                                                    <Modal.Header closeButton>
+                                                        <Modal.Title>{modalTitle}</Modal.Title>
+                                                    </Modal.Header>
+                                                    <Modal.Body>{modalBody}</Modal.Body>
+                                                    <Modal.Footer>
+                                                        <ButtonB variant="secondary" onClick={closeModal}>
+                                                            Hủy
+                                                        </ButtonB>
+                                                        <ButtonB
+                                                            variant={actionType === 'delete' ? 'danger' : 'primary'}
+                                                            onClick={confirmAction}
+                                                        >
+                                                            {actionType === 'delete' ? 'Xóa' : 'Đặt lại'}
+                                                        </ButtonB>
+                                                    </Modal.Footer>
+                                                </Modal>
                                             </table>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                             <div className="TaiKhoan_form">
                                 <h5>Thêm tài khoản</h5>
@@ -219,7 +358,7 @@ const ChiTietTaiKhoan: React.FC = () => {
                                     />
                                 </div>
                                 <div>
-                                    <button onClick={handleAdd}>Thêm</button>
+                                    <button onClick={createAccount}>Thêm</button>
                                 </div>
                             </div>
                         </div>

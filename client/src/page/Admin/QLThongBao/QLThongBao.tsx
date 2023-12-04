@@ -21,7 +21,7 @@ const QLThongbao: React.FC = () => {
     const [chiTiet, setChiTiet] = useState('');
     const [danhCho, setDanhCho] = useState('sinhvien');
     const [ngayTao, setNgayTao] = useState(new Date().toISOString().slice(0, 10));
-    const [dinhKem, setDinhKem] = useState<string | null>('');
+    const [dinhKem, setDinhKem] = useState<File | null>();
     const [error, setError] = useState('');
 
     const storedData: any = localStorage.getItem('myDataKey');
@@ -64,11 +64,9 @@ const QLThongbao: React.FC = () => {
     };
 
     const handleDinhKemChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const files = event.target.files;
-        if (files && files.length > 0) {
-            setDinhKem(files[0].name);
-        } else {
-            setDinhKem('');
+        if (event.target.files && event.target.files[0]) {
+            const selectedFile = event.target.files[0];
+            setDinhKem(selectedFile);
         }
     };
 
@@ -78,13 +76,20 @@ const QLThongbao: React.FC = () => {
             setError('Vui lòng điền tên thông báo và chi tiết.');
             return;
         }
+
+        const formData = new FormData();
+        formData.append('tenThongBao', tenThongBao);
+        formData.append('chiTiet', chiTiet);
+        formData.append('ngayTao', ngayTao);
+        formData.append('danhCho', danhCho);
+
+        if (dinhKem) {
+            formData.append('dinhKem', dinhKem);
+        }
         try {
             const response = await fetch('http://localhost:3001/admin/create-notify', {
                 method: 'POST',
-                body: JSON.stringify({ tenThongBao, chiTiet, ngayTao, danhCho, dinhKem }),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                body: formData,
             });
 
             if (response.ok) {
@@ -146,21 +151,26 @@ const QLThongbao: React.FC = () => {
                                             dataSource={thongbaosv} // Danh sách dữ liệu
                                             renderItem={(item: any) => (
                                                 <List.Item>
-                                                    <div className='Thongbao_item'>
+                                                    <div className="Thongbao_item">
                                                         <Link to={`/admin/thongbao/${item.slug}`}>
                                                             <Card>
-                                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                                <div
+                                                                    style={{
+                                                                        display: 'flex',
+                                                                        justifyContent: 'space-between',
+                                                                        alignItems: 'center',
+                                                                    }}
+                                                                >
                                                                     <div>
                                                                         <h5>{item.tenThongBao}</h5>
                                                                     </div>
                                                                     <div>
-                                                                        <p style={{ fontStyle: 'italic' }}>{item.ngayTao}</p>
+                                                                        <p style={{ fontStyle: 'italic' }}>
+                                                                            {item.ngayTao}
+                                                                        </p>
                                                                     </div>
                                                                 </div>
-                                                                <div>
-                                                                    {truncateText(item.chiTiet, 80)}
-
-                                                                </div>
+                                                                <div>{truncateText(item.chiTiet, 80)}</div>
                                                             </Card>
                                                         </Link>
                                                     </div>
@@ -183,21 +193,26 @@ const QLThongbao: React.FC = () => {
                                             dataSource={thongbaogv} // Danh sách dữ liệu
                                             renderItem={(item: any, key) => (
                                                 <List.Item>
-                                                    <div className='Thongbao_item'>
+                                                    <div className="Thongbao_item">
                                                         <Link to={`/admin/thongbao/${item.slug}`}>
                                                             <Card>
-                                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                                <div
+                                                                    style={{
+                                                                        display: 'flex',
+                                                                        justifyContent: 'space-between',
+                                                                        alignItems: 'center',
+                                                                    }}
+                                                                >
                                                                     <div>
                                                                         <h5>{item.tenThongBao}</h5>
                                                                     </div>
                                                                     <div>
-                                                                        <p style={{ fontStyle: 'italic' }}>{item.ngayTao}</p>
+                                                                        <p style={{ fontStyle: 'italic' }}>
+                                                                            {item.ngayTao}
+                                                                        </p>
                                                                     </div>
                                                                 </div>
-                                                                <div>
-                                                                    {truncateText(item.chiTiet, 80)}
-
-                                                                </div>
+                                                                <div>{truncateText(item.chiTiet, 80)}</div>
                                                             </Card>
                                                         </Link>
                                                     </div>
@@ -220,21 +235,26 @@ const QLThongbao: React.FC = () => {
                                             dataSource={thongbaoall} // Danh sách dữ liệu
                                             renderItem={(item: any) => (
                                                 <List.Item>
-                                                    <div className='Thongbao_item'>
+                                                    <div className="Thongbao_item">
                                                         <Link to={`/admin/thongbao/${item.slug}`}>
                                                             <Card>
-                                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                                <div
+                                                                    style={{
+                                                                        display: 'flex',
+                                                                        justifyContent: 'space-between',
+                                                                        alignItems: 'center',
+                                                                    }}
+                                                                >
                                                                     <div>
                                                                         <h5>{item.tenThongBao}</h5>
                                                                     </div>
                                                                     <div>
-                                                                        <p style={{ fontStyle: 'italic' }}>{item.ngayTao}</p>
+                                                                        <p style={{ fontStyle: 'italic' }}>
+                                                                            {item.ngayTao}
+                                                                        </p>
                                                                     </div>
                                                                 </div>
-                                                                <div>
-                                                                    {truncateText(item.chiTiet, 80)}
-
-                                                                </div>
+                                                                <div>{truncateText(item.chiTiet, 80)}</div>
                                                             </Card>
                                                         </Link>
                                                     </div>
