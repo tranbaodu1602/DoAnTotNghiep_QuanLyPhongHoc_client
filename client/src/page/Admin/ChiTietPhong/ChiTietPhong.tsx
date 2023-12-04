@@ -217,6 +217,20 @@ const ChiTietPhongHoc: React.FC = () => {
         setStatusAddMember(!statusAddMember);
     };
 
+    const [des, setDes] = useState(false);
+    const handleShowDes = () => {
+        setDes(true);
+    }
+    const handleLoserDes = () => {
+        setDes(false)
+    }
+
+    const chitiet = danhSach.DanhSachPhongHoc.find((phong) => {
+        return phong.maPhong === toanha;
+    });
+    console.log(chitiet);
+
+
     const handleAddAppointment = async (e: any) => {
         e.preventDefault();
         try {
@@ -269,6 +283,10 @@ const ChiTietPhongHoc: React.FC = () => {
                                             <Button type="primary" onClick={toggleModelVisibility}>
                                                 Thêm cuộc họp
                                             </Button>
+
+                                            <Button type="primary" style={{ marginLeft: "25px" }} onClick={handleShowDes}>
+                                                Chi tiết phòng
+                                            </Button>
                                         </div>
                                         <div className="PhongHoc__update">
                                             <DatePicker
@@ -306,7 +324,7 @@ const ChiTietPhongHoc: React.FC = () => {
                                                         startDayHour={5.5} // Giờ bắt đầu buổi sáng
                                                         endDayHour={21} // Giờ kết thúc buổi tối
                                                         cellDuration={60}
-                                                        // timeTableCellComponent={CustomTimeTableCell}
+                                                    // timeTableCellComponent={CustomTimeTableCell}
                                                     />
                                                     <MonthView />
                                                     <Toolbar />
@@ -330,6 +348,32 @@ const ChiTietPhongHoc: React.FC = () => {
                                 </div>
                             </div>
                             <div className="PhongHoc_form">
+                                {des ? (<div>
+                                    <div className="form-container">
+                                        <h2>Chi tiết phòng</h2>
+                                        <div onClick={handleLoserDes} className="form-button-close" style={{ cursor: "pointer" }}>
+                                            <div className="form-button-close-x">x</div>
+                                        </div>
+                                        <div>
+                                            <div style={{ borderBottom: "1px solid gray", width: "95%", padding: "5px 2px 25px" }}>
+                                                <div>Tên Phòng: <strong> {chitiet.maPhong}</strong></div>
+                                                <div>Tòa nhà: <strong>{chitiet.tenNha}</strong></div>
+                                                <div>Sức chứa của phòng: <strong>{chitiet.sucChua}</strong></div>
+                                                <div>Loại phòng: <strong>{chitiet.loaiPhong.tenLoaiPhong}</strong></div>
+                                            </div>
+                                            <div style={{ padding: "8px" }}>
+                                                <h5 style={{ margin: "10px 0px 20px" }}>Thiết bị của phòng</h5>
+                                                {chitiet.loaiPhong.thietBi.map((tb, i) => (
+                                                    <div key={i} style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginBottom: "10px" }}>
+                                                        <div>Tên thiết bị: <strong>{tb.tenThietBi}</strong></div>
+                                                        <div>Số lượng: <strong>{tb.soLuong}</strong></div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>) : (<></>)}
+
                                 {isModelVisible && (
                                     <div className="form-container">
                                         <h2>Thêm cuộc họp</h2>

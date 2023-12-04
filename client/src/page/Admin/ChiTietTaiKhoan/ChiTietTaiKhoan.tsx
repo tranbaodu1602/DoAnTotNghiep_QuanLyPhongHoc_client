@@ -230,13 +230,12 @@ const ChiTietTaiKhoan: React.FC = () => {
                         <div className="TaiKhoan_content">
                             <div className="TaiKhoan_list">
                                 <div className="TaiKhoan_noidung">
-                                    <h2>{`Danh sách tài khoản ${
-                                        loaitaikhoan === 'giaovien'
+                                    <h2>{`Danh sách tài khoản ${loaitaikhoan === 'giaovien'
                                             ? 'Giảng viên'
                                             : loaitaikhoan === 'sinhvien'
-                                            ? 'Sinh Viên'
-                                            : 'Khoa'
-                                    }`}</h2>
+                                                ? 'Sinh Viên'
+                                                : 'Khoa'
+                                        }`}</h2>
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
                                         <Search
                                             placeholder="Nhập mã tài khoản cần tìm kiếm"
@@ -347,7 +346,7 @@ const ChiTietTaiKhoan: React.FC = () => {
                                         <option value="admin">Khoa</option>
                                     </select>
                                 </div>
-                                <div>
+                                {/* <div>
                                     <label>Khoa:</label>
                                     <input
                                         type="text"
@@ -356,7 +355,7 @@ const ChiTietTaiKhoan: React.FC = () => {
                                         onChange={handleChange}
                                         disabled={isKhoaDisabled}
                                     />
-                                </div>
+                                </div> */}
                                 <div>
                                     <button onClick={createAccount}>Thêm</button>
                                 </div>

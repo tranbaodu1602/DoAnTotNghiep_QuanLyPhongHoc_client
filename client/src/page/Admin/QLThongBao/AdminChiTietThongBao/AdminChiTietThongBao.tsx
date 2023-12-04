@@ -47,9 +47,10 @@ const AdminChiTietThongBao: React.FC = () => {
                                     <div className='Admin_Thongbao_text'>
                                         {data.chiTiet}
                                     </div>
-                                    <div className='Admin_Thongbao_img'>
+                                    {data.dinhKem === "không có file đính kèm" ? (<></>) : (<div className='Admin_Thongbao_img'>
                                         <img src={data.dinhKem} alt="" className='Admin_Thongbao_img_if' />
-                                    </div>
+                                    </div>)}
+
 
                                 </div>
                             </div>

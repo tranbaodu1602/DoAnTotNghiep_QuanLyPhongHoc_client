@@ -62,9 +62,9 @@ const ChiTietThongBao: React.FC = () => {
                         <div className='Thongbao_text'>
                             {thongBao.chiTiet}
                         </div>
-                        <div className='Thongbao_img'>
+                        {thongBao.dinhKem === "không có file đính kèm" ? (<></>) : (<div className='Thongbao_img'>
                             <img src={thongBao.dinhKem} alt="" className='Thongbao_img_if' />
-                        </div>
+                        </div>)}
 
                     </div>
                 </div>

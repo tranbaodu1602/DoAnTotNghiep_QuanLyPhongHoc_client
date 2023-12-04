@@ -55,6 +55,8 @@ const QLThongbao: React.FC = () => {
     const thongbaogv = convertData(gv);
     const thongbaoall = convertData(all);
 
+    console.log(thongbaosv);
+
     const handleTenThongBaoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTenThongBao(event.target.value);
     };
@@ -130,6 +132,11 @@ const QLThongbao: React.FC = () => {
         return text;
     }
 
+    const handleDelete = (item) => {
+        // Xử lý
+        console.log("Đã xóa", item);
+    };
+
     return (
         <>
             <AdminNavbar />
@@ -152,27 +159,38 @@ const QLThongbao: React.FC = () => {
                                             renderItem={(item: any) => (
                                                 <List.Item>
                                                     <div className="Thongbao_item">
-                                                        <Link to={`/admin/thongbao/${item.slug}`}>
-                                                            <Card>
-                                                                <div
-                                                                    style={{
-                                                                        display: 'flex',
-                                                                        justifyContent: 'space-between',
-                                                                        alignItems: 'center',
-                                                                    }}
-                                                                >
-                                                                    <div>
-                                                                        <h5>{item.tenThongBao}</h5>
+                                                        <Card>
+                                                            <div style={{ display: "flex" }}>
+                                                                <Link to={`/admin/thongbao/${item.slug}`}>
+                                                                    <div style={{ flex: "6" }}>
+                                                                        <div
+                                                                            style={{
+                                                                                display: 'flex',
+                                                                                justifyContent: 'space-between',
+                                                                                alignItems: 'center',
+                                                                            }}
+                                                                        >
+                                                                            <div style={{ width: "550px" }}>
+                                                                                <h5>{item.tenThongBao}</h5>
+                                                                            </div>
+                                                                            <div>
+                                                                                <p style={{ fontStyle: 'italic' }}>
+                                                                                    {item.ngayTao}
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div>{truncateText(item.chiTiet, 80)}</div>
                                                                     </div>
-                                                                    <div>
-                                                                        <p style={{ fontStyle: 'italic' }}>
-                                                                            {item.ngayTao}
-                                                                        </p>
+
+                                                                </Link>
+                                                                <div style={{ flex: "1" }}>
+                                                                    <div style={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
+                                                                        <button className='delete__button' onClick={() => handleDelete(item)}>Xóa</button>
                                                                     </div>
                                                                 </div>
-                                                                <div>{truncateText(item.chiTiet, 80)}</div>
-                                                            </Card>
-                                                        </Link>
+                                                            </div>
+                                                        </Card>
+
                                                     </div>
                                                 </List.Item>
                                             )}
@@ -194,27 +212,40 @@ const QLThongbao: React.FC = () => {
                                             renderItem={(item: any, key) => (
                                                 <List.Item>
                                                     <div className="Thongbao_item">
-                                                        <Link to={`/admin/thongbao/${item.slug}`}>
-                                                            <Card>
-                                                                <div
-                                                                    style={{
-                                                                        display: 'flex',
-                                                                        justifyContent: 'space-between',
-                                                                        alignItems: 'center',
-                                                                    }}
-                                                                >
-                                                                    <div>
-                                                                        <h5>{item.tenThongBao}</h5>
+
+                                                        <Card>
+                                                            <div style={{ display: "flex" }}>
+                                                                <Link to={`/admin/thongbao/${item.slug}`}>
+                                                                    <div style={{ flex: "6" }}>
+                                                                        <div
+                                                                            style={{
+                                                                                display: 'flex',
+                                                                                justifyContent: 'space-between',
+                                                                                alignItems: 'center',
+                                                                            }}
+                                                                        >
+                                                                            <div style={{ width: "550px" }}>
+                                                                                <h5>{item.tenThongBao}</h5>
+                                                                            </div>
+                                                                            <div>
+                                                                                <p style={{ fontStyle: 'italic' }}>
+                                                                                    {item.ngayTao}
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div>{truncateText(item.chiTiet, 80)}</div>
                                                                     </div>
-                                                                    <div>
-                                                                        <p style={{ fontStyle: 'italic' }}>
-                                                                            {item.ngayTao}
-                                                                        </p>
+
+                                                                </Link>
+                                                                <div style={{ flex: "1" }}>
+                                                                    <div style={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
+                                                                        <button className='delete__button' onClick={() => handleDelete(item)}>Xóa</button>
                                                                     </div>
                                                                 </div>
-                                                                <div>{truncateText(item.chiTiet, 80)}</div>
-                                                            </Card>
-                                                        </Link>
+                                                            </div>
+
+                                                        </Card>
+
                                                     </div>
                                                 </List.Item>
                                             )}
@@ -236,27 +267,39 @@ const QLThongbao: React.FC = () => {
                                             renderItem={(item: any) => (
                                                 <List.Item>
                                                     <div className="Thongbao_item">
-                                                        <Link to={`/admin/thongbao/${item.slug}`}>
-                                                            <Card>
-                                                                <div
-                                                                    style={{
-                                                                        display: 'flex',
-                                                                        justifyContent: 'space-between',
-                                                                        alignItems: 'center',
-                                                                    }}
-                                                                >
-                                                                    <div>
-                                                                        <h5>{item.tenThongBao}</h5>
+
+                                                        <Card>
+                                                            <div style={{ display: "flex" }}>
+                                                                <Link to={`/admin/thongbao/${item.slug}`}>
+                                                                    <div style={{ flex: "6" }}>
+                                                                        <div
+                                                                            style={{
+                                                                                display: 'flex',
+                                                                                justifyContent: 'space-between',
+                                                                                alignItems: 'center',
+                                                                            }}
+                                                                        >
+                                                                            <div style={{ width: "550px" }}>
+                                                                                <h5>{item.tenThongBao}</h5>
+                                                                            </div>
+                                                                            <div>
+                                                                                <p style={{ fontStyle: 'italic' }}>
+                                                                                    {item.ngayTao}
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div>{truncateText(item.chiTiet, 80)}</div>
                                                                     </div>
-                                                                    <div>
-                                                                        <p style={{ fontStyle: 'italic' }}>
-                                                                            {item.ngayTao}
-                                                                        </p>
+
+                                                                </Link>
+                                                                <div style={{ flex: "1" }}>
+                                                                    <div style={{ display: "flex", justifyContent: "end", alignItems: "center" }}>
+                                                                        <button className='delete__button' onClick={() => handleDelete(item)}>Xóa</button>
                                                                     </div>
                                                                 </div>
-                                                                <div>{truncateText(item.chiTiet, 80)}</div>
-                                                            </Card>
-                                                        </Link>
+                                                            </div>
+                                                        </Card>
+
                                                     </div>
                                                 </List.Item>
                                             )}
