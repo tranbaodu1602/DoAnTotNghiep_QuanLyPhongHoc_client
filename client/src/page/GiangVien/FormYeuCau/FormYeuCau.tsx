@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NavBar from '../../../components/NavBar/NavBar';
 import './FormYeuCau.scss';
-
+import { ToastContainer, toast } from 'react-toastify';
 import { io, Socket } from 'socket.io-client';
 
 const socket: Socket = io('http://localhost:3001');
 
 const FormYeuCau: React.FC = () => {
+    const [isRerender, setIsRerender] = useState(false);
     const storedData: any = localStorage.getItem('myDataKey');
     const data = JSON.parse(storedData);
 
-    socket.on('requestSchedule', (data: { GV: any }) => {
-        console.log(data.GV);
+    socket.on('requestSchedule', (GV: any) => {
+        data.data = GV;
+        localStorage.setItem('myDataKey', JSON.stringify(data));
+        setIsRerender(!isRerender);
     });
 
     const [formData, setFormData] = useState({
@@ -53,34 +56,36 @@ const FormYeuCau: React.FC = () => {
             });
 
             if (response.ok) {
-                console.log('Gửi yêu cầu thành công, vui lòng đợi xác nhận');
+                toast.success('Gửi yêu cầu thành công, vui lòng đợi xác nhận');
             } else {
-                console.log('fail');
+                toast.error('Có lỗi xảy ra');
             }
         } catch (error) {
             console.error('Error:', error);
         }
     };
 
-    const yeuCauArray = data.data.ThongTinGiangDay.yeuCau.map((yeucau) => {
-        const localDate = new Date(yeucau.thoigian).toLocaleString('en-US', { timeZone: 'UTC' });
-        return {
-            ...yeucau,
-            thoigian: localDate,
-        }
-    }) || []
+    const yeuCauArray =
+        data.data.ThongTinGiangDay.yeuCau.map((yeucau) => {
+            const localDate = new Date(yeucau.thoigian).toLocaleString('en-US', { timeZone: 'UTC' });
+            return {
+                ...yeucau,
+                thoigian: localDate,
+            };
+        }) || [];
 
-    const daduyets = yeuCauArray.filter(item => item.trangthaixacnhan == true);
-    const choduyets = yeuCauArray.filter(item => item.trangthaixacnhan == false);
+    const daduyets = yeuCauArray.filter((item) => item.trangthaixacnhan == true);
+    const choduyets = yeuCauArray.filter((item) => item.trangthaixacnhan == false);
 
-    console.log("d", daduyets);
-    console.log("c", choduyets);
+    useEffect(() => {}, [isRerender]);
 
     return (
         <>
             <NavBar />
-            <div className='formyeucau__container'>
+            <ToastContainer />
+            <div className="formyeucau__container">
                 <div className="your-form-container">
+                    <h2 style={{ textAlign: 'center' }}>Yêu Cầu Đến Khoa</h2>
                     <form onSubmit={handleSubmit}>
                         <label>
                             Tên:
@@ -117,37 +122,51 @@ const FormYeuCau: React.FC = () => {
                         </button>
                     </form>
                 </div>
-                <div className='formyeucau__list'>
-                    <div className='formyeucau__cho'>
+                <div className="formyeucau__list">
+                    <div className="formyeucau__cho">
                         <h5>Yêu cầu chờ</h5>
                         {choduyets.map((item, i) => (
-                            <div key={i} className='formyeucau__card'>
-                                <div className='formyeucau__header'>
-                                    <div><strong>Môn:</strong> {item.monhoc}</div>
-                                    <div><strong>Ngày dạy:</strong> {item.thoigian}</div>
-                                    <div><strong>Tiết dạy:</strong> {item.tietday}</div>
+                            <div key={i} className="formyeucau__card">
+                                <div className="formyeucau__header">
+                                    <div>
+                                        <strong>Môn:</strong> {item.monhoc}
+                                    </div>
+                                    <div>
+                                        <strong>Ngày dạy:</strong> {item.thoigian}
+                                    </div>
+                                    <div>
+                                        <strong>Tiết dạy:</strong> {item.tietday}
+                                    </div>
                                 </div>
                                 <div>
-                                    <strong>Lý do:</strong>{item.lydo}
+                                    <strong>Lý do:</strong>
+                                    {item.lydo}
                                 </div>
                             </div>
                         ))}
-
                     </div>
-                    <div className='formyeucau__daduyet'>
+                    <div className="formyeucau__daduyet">
                         <h5>Yêu cầu đã duyệt</h5>
                         {daduyets.map((item, i) => (
-                            <div key={i} className='formyeucau__card_2'>
-                                <div className='formyeucau__header_2'>
-                                    <div><strong>Môn:</strong> {item.monhoc}</div>
-                                    <div><strong>Ngày dạy:</strong> {item.thoigian}</div>
-                                    <div><strong>Tiết dạy:</strong> {item.tietday}</div>
+                            <div key={i} className="formyeucau__card_2">
+                                <div className="formyeucau__header_2">
+                                    <div>
+                                        <strong>Môn:</strong> {item.monhoc}
+                                    </div>
+                                    <div>
+                                        <strong>Ngày dạy:</strong> {item.thoigian}
+                                    </div>
+                                    <div>
+                                        <strong>Tiết dạy:</strong> {item.tietday}
+                                    </div>
                                 </div>
                                 <div>
-                                    <strong>Lý do:</strong>{item.lydo}
+                                    <strong>Lý do:</strong>
+                                    {item.lydo}
                                 </div>
                                 <div>
-                                    <strong>Phản hồi:</strong>{item.tinnhanphanhoi}
+                                    <strong>Phản hồi:</strong>
+                                    {item.tinnhanphanhoi}
                                 </div>
                             </div>
                         ))}

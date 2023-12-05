@@ -64,7 +64,7 @@ const PhongHoc: React.FC = () => {
     return (
         <>
             <AdminNavbar />
-            <Layout className="body__content">
+            <Layout className="body__content" style={{ minHeight: 100 + 'vh' }}>
                 <AdminSider />
                 <Layout className="phonghoc_content">
                     <Content>
