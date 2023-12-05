@@ -43,7 +43,7 @@ const yeuCauThayDoiLich = async (data) => {
                     tinnhanphanhoi: '',
                 });
                 await GV.save();
-                io.sockets.emit('requestSchedule', { GV });
+                io.sockets.emit('requestSchedule', GV);
                 reslove({
                     status: 'Success',
                     message: 'Gửi yêu cầu thành công, vui lòng chờ xác nhận',

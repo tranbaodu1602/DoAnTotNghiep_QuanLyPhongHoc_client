@@ -16,10 +16,13 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage: storage });
 
 routes.post('/add-classroom', adminController.themPhongHoc);
+routes.post('/maintaince-classroom', adminController.baoTriPhongHoc);
+routes.post('/add-schedule', adminController.themLichHoc);
 routes.post('/update-schedule', adminController.capNhatLichHoc);
 routes.post('/cancel-schedule', adminController.tamHoanLichHoc);
 routes.post('/create-appointment', adminController.themCuocHop);
 routes.post('/create-notify', upload.fields([{ name: 'dinhKem', maxCount: 1 }]), adminController.taoThongBao);
+routes.post('/delete-notify', adminController.xoaThongBao);
 routes.get('/delete-all-notify', adminController.xoaAllThongBao);
 routes.post('/confirm-request', adminController.xacNhanYeuCau);
 routes.post('/reset-password', adminController.datLaiMatKhau);

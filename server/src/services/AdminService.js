@@ -36,11 +36,65 @@ const themPhongHoc = async (data) => {
     });
 };
 
-const capNhatLichHoc = async (data) => {
+const baoTriPhongHoc = async (data) => {
+    return new Promise(async (reslove, reject) => {
+        try {
+            const updatedData = await Promise.all(
+                data.map(async (item) => {
+                    const hocPhan = await HocPhan.findOne({ tenMonHoc: item.title });
+                    if (!hocPhan) {
+                        throw new Error('Học phần không tồn tại');
+                    }
+                    // const convertedStartDate = new Date(item.startDate);
+                    // const convertedEndDate = new Date(item.endDate);
+                    // Sửa ghi chú của thông tin lịch học
+                    hocPhan.thongTinLich.forEach((lichHoc, key) => {
+                        // const itemStartDate = new Date(lichHoc.startDate);
+                        // const itemEndDate = new Date(lichHoc.endDate);
+                        // if (itemStartDate >= convertedStartDate && itemEndDate <= convertedEndDate) {
+                        //     lichHoc.ghiChu = 'hehehe'; // Thay đổi ghi chú thành ghi chú mới
+                        // }
+                        const lichid = lichHoc._id.toString();
+                        if (lichid === item._id) {
+                            lichHoc.ghiChu = 'Tạm ngưng';
+                        }
+                    });
+                    return hocPhan.save();
+                }),
+            );
+
+            const DSHP = await HocPhan.find();
+
+            const io = getIO();
+            io.sockets.emit('maintanceClassroom', DSHP);
+
+            reslove({
+                status: 'FAIL',
+                message: 'oke',
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+const themLichHoc = async (data) => {
     return new Promise(async (reslove, reject) => {
         try {
             console.log(data);
-            const monhoc = await HocPhan.findOne({ tenMonHoc: data.title });
+            reslove({
+                status: 'Success',
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+const capNhatLichHoc = async (data) => {
+    return new Promise(async (reslove, reject) => {
+        try {
+            const monhoc = await HocPhan.findOne({ maLopHocPhan: data.maMonHoc });
             const dataId = data._id.toString();
             monhoc.thongTinLich.map((value) => {
                 const valueIdString = value._id.toString();
@@ -67,7 +121,7 @@ const capNhatLichHoc = async (data) => {
 const tamHoanLichHoc = async (data) => {
     return new Promise(async (reslove, reject) => {
         try {
-            const monhoc = await HocPhan.findOne({ tenMonHoc: data.title });
+            const monhoc = await HocPhan.findOne({ maLopHocPhan: data.maMonHoc });
             const dataId = data._id.toString();
             monhoc.thongTinLich.map((value) => {
                 const valueIdString = value._id.toString();
@@ -196,6 +250,25 @@ const taoThongBao = async (data) => {
                 message: 'Tạo thông báo thành công',
                 thongBaoNew,
             });
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+const xoaThongBao = async (data) => {
+    return new Promise(async (reslove, reject) => {
+        try {
+            const rs = await ThongBao.findOneAndDelete({ slug: data.slug });
+            if (rs) {
+                const DSTB = await ThongBao.find();
+                const io = getIO();
+                io.sockets.emit('deleteNotify', DSTB);
+                reslove({
+                    status: 'Success',
+                    message: 'Xóa thông báo thành công',
+                });
+            }
         } catch (error) {
             reject(error);
         }
@@ -333,10 +406,13 @@ const xoaTaiKhoan = async (data) => {
 
 module.exports = {
     themPhongHoc,
+    baoTriPhongHoc,
+    themLichHoc,
     capNhatLichHoc,
     tamHoanLichHoc,
     themCuocHop,
     taoThongBao,
+    xoaThongBao,
     xoaAllThongBao,
     xacNhanYeuCau,
     datLaiMatKhau,

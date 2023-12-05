@@ -11,6 +11,29 @@ const themPhongHoc = async (req, res) => {
     }
 };
 
+const baoTriPhongHoc = async (req, res) => {
+    try {
+        const classroom = await Admin.baoTriPhongHoc(req.body);
+        res.status(200).json({
+            classroom,
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+const themLichHoc = async (req, res) => {
+    try {
+        const update = await Admin.themLichHoc(req.body);
+        res.status(200).json({
+            message: 'Cập nhật thành công',
+            update,
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 const capNhatLichHoc = async (req, res) => {
     try {
         const update = await Admin.capNhatLichHoc(req.body);
@@ -49,6 +72,17 @@ const themCuocHop = async (req, res) => {
 const taoThongBao = async (req, res) => {
     try {
         const notify = await Admin.taoThongBao(req);
+        res.status(200).json({
+            notify,
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+const xoaThongBao = async (req, res) => {
+    try {
+        const notify = await Admin.xoaThongBao(req.body);
         res.status(200).json({
             notify,
         });
@@ -101,10 +135,13 @@ const xoaTaiKhoan = async (req, res) => {
 
 module.exports = {
     themPhongHoc,
+    baoTriPhongHoc,
+    themLichHoc,
     capNhatLichHoc,
     tamHoanLichHoc,
     themCuocHop,
     taoThongBao,
+    xoaThongBao,
     xoaAllThongBao,
     xacNhanYeuCau,
     datLaiMatKhau,
