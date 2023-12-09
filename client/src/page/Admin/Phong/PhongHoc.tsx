@@ -1,11 +1,13 @@
-import React from 'react';
-import { Layout } from 'antd';
+import React, { useState } from 'react';
+import { Layout, Button } from 'antd';
 import AdminSider from '../AdminSider/AdminSider';
 import AdminNavbar from '../AdminNavbar/AdminNavbar';
 import Footer from '../../../components/Footer/Footer';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+
 import './PhongHoc.scss';
+import ThietBiInput from './ThietBiInput';
 
 const { Content } = Layout;
 
@@ -59,7 +61,73 @@ const PhongHoc: React.FC = () => {
         }
         nhaPhongMap[phong.tenNha].push(phong);
     });
-    console.log('data', ketQua);
+    ///
+    const [showForm, setShowForm] = useState(false)
+    const [phong, setPhong] = useState({
+        maPhong: '',
+        sucChua: '',
+        trangThai: '1',
+        tenNha: '',
+        loaiPhong: {
+            tenLoaiPhong: Loai,
+            thietBi: [
+                { soLuong: "", tenThietBi: "" }
+            ],
+        },
+    });
+
+    // Xử lí change input
+    const handleInputChange = (field, value) => {
+        setPhong({ ...phong, [field]: value });
+    };
+
+    // Xử lý + add input thiết bị 
+    const handleAddButtonClick = () => {
+        setPhong({
+            ...phong,
+            loaiPhong: {
+                ...phong.loaiPhong,
+                thietBi: [...phong.loaiPhong.thietBi, { tenThietBi: '', soLuong: '' }],
+            },
+        });
+    };
+
+    // Xử lý  ô input "Tên thiết bị" và "Số lượng" thay đổi
+    const handleThietBiInputChange = (index, field, value) => {
+        const updatedThietBi = [...phong.loaiPhong.thietBi];
+        updatedThietBi[index][field] = value;
+        setPhong({
+            ...phong,
+            loaiPhong: {
+                ...phong.loaiPhong,
+                thietBi: updatedThietBi,
+            },
+        });
+    };
+
+    // Xử lý sự kiện khi form được submit
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        setShowForm(false)
+        console.log(phong);
+    };
+
+    const handleShow = () => {
+        setShowForm(!showForm);
+        setPhong({
+            maPhong: '',
+            sucChua: '',
+            trangThai: '1',
+            tenNha: '',
+            loaiPhong: {
+                tenLoaiPhong: Loai,
+                thietBi: [
+
+                ],
+            },
+        })
+    }
+
 
     return (
         <>
@@ -69,6 +137,11 @@ const PhongHoc: React.FC = () => {
                 <Layout className="phonghoc_content">
                     <Content>
                         <div className="loaiphong">{Loai}</div>
+                        <div>
+                            <Button onClick={handleShow} type="primary" style={{ marginLeft: "30px" }}>
+                                Thêm phòng
+                            </Button>
+                        </div>
                         <div className="list__nha">
                             {Object.keys(nhaPhongMap).map((tenNha, key) => (
                                 <div key={key} className="phong">
@@ -83,6 +156,92 @@ const PhongHoc: React.FC = () => {
                                 </div>
                             ))}
                         </div>
+
+                        {showForm ? (
+                            <div className='Phong_container_bg'>
+                                <div className="Phong_container">
+                                    <div className="Phong_button" >
+                                        <div className="Phong_close-button" onClick={handleShow}>x</div>
+                                    </div>
+                                    <form>
+                                        <div className="form-input">
+                                            <label htmlFor="">Tên Phòng:</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Tên phòng"
+                                                value={phong.maPhong}
+                                                onChange={(e) => handleInputChange('maPhong', e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="form-input">
+                                            <label htmlFor="">Sức Chứa:</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Sức Chứa"
+                                                value={phong.sucChua}
+                                                onChange={(e) => handleInputChange('sucChua', e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="form-input">
+                                            <label htmlFor="">Tên Nhà:</label>
+                                            <input
+                                                type="text"
+                                                placeholder="Tên Nhà"
+                                                value={phong.tenNha}
+                                                onChange={(e) => handleInputChange('tenNha', e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="form-input">
+                                            <label htmlFor="">Loại Phòng:</label>
+                                            <select
+
+                                                value={phong.loaiPhong.tenLoaiPhong}
+                                                onChange={(e) => handleInputChange('tenLoaiPhong', e.target.value)}
+                                            >
+                                                <option value={Loai}>{Loai}</option>
+                                            </select>
+                                        </div>
+
+                                        <div className="form-input">
+                                            <label htmlFor="">Thêm thiết bị:</label>
+                                            <Button type="primary" onClick={handleAddButtonClick} className='Phong_themThietBi'>
+                                                +
+                                            </Button>
+                                        </div>
+
+                                        {phong.loaiPhong.thietBi.map((thietBi, index) => (
+                                            <div key={index} className='input_ThietBi'>
+                                                <div className="input_ThietBi_form">
+                                                    <label className=''>Tên thiết bị</label>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Tên thiết bị"
+                                                        value={thietBi.tenThietBi}
+                                                        onChange={(e) => handleThietBiInputChange(index, 'tenThietBi', e.target.value)}
+                                                    />
+                                                </div>
+                                                <div className="input_ThietBi_form" style={{ marginLeft: "30px" }}>
+                                                    <label htmlFor="" style={{ marginTop: "7px" }}>Số Lượng</label>
+                                                    <input
+                                                        className='soluong'
+                                                        type="text"
+                                                        placeholder="Số lượng"
+                                                        value={thietBi.soLuong}
+                                                        onChange={(e) => handleThietBiInputChange(index, 'soLuong', e.target.value)}
+                                                    />
+                                                </div>
+                                            </div>
+                                        ))}
+
+                                        <Button type='primary' onClick={handleFormSubmit} style={{ margin: "15px", width: "150px", height: "35px" }}>
+                                            Thêm
+                                        </Button>
+                                    </form>
+                                </div>
+                            </div>
+                        ) : (<></>)
+
+                        }
                     </Content>
                 </Layout>
             </Layout>

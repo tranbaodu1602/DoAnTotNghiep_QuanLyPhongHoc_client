@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Layout } from 'antd';
 import AdminSider from '../AdminSider/AdminSider';
 import AdminNavbar from '../AdminNavbar/AdminNavbar';
 import Footer from '../../../components/Footer/Footer';
@@ -20,8 +19,9 @@ import {
     DateNavigator,
     TodayButton,
 } from '@devexpress/dx-react-scheduler-material-ui';
-import { DatePicker, Button } from 'antd';
+import { DatePicker, Button, Layout } from 'antd';
 import moment from 'moment';
+import { appointments, Phong } from './data'
 
 import { io, Socket } from 'socket.io-client';
 
@@ -119,7 +119,7 @@ const ChiTietPhongHoc: React.FC = () => {
             const itemEndDate = new Date(item.endDate);
             return itemStartDate >= convertedStartDate && itemEndDate <= convertedEndDate;
         });
-
+        console.log("data", filteredData);
         try {
             const response = await fetch('http://localhost:3001/admin/maintaince-classroom', {
                 method: 'POST',
@@ -137,6 +137,7 @@ const ChiTietPhongHoc: React.FC = () => {
         } catch (error) {
             console.error('Error:', error);
         }
+        setMaintenance(false)
     };
     const [currentViewName, setCurrentViewName] = useState('Week');
 
@@ -288,18 +289,87 @@ const ChiTietPhongHoc: React.FC = () => {
             console.error('Error:', error);
         }
 
-        // Đặt lại trạng thái form
-        // setFormData({
-        //     title: '',
-        //     startDate: '',
-        //     endDate: '',
-        //     phongHoc: '',
-        //     ghiChu: '',
-        //     tenGV: '',
-        //     tietHoc: '',
-        // });
+
     };
     ///---------------
+    const [phong, setPhong] = useState({
+        maPhong: chitiet.maPhong,
+        sucChua: chitiet.sucChua,
+        trangThai: chitiet.trangThai,
+        tenNha: chitiet.tenNha,
+        loaiPhong: {
+            tenLoaiPhong: chitiet.loaiPhong.tenLoaiPhong,
+            thietBi: chitiet.loaiPhong.thietBi.map((item) => ({
+                tenThietBi: item.tenThietBi,
+                soLuong: item.soLuong,
+            })),
+        },
+    });
+
+    // Xử lí change input
+    const handleInputChange = (field, value) => {
+        setPhong({ ...phong, [field]: value });
+    };
+    const handleInputChange2 = (field, value) => {
+        setPhong((prevPhong) => ({
+            ...prevPhong,
+            loaiPhong: {
+                ...prevPhong.loaiPhong,
+                [field]: value,
+            },
+        }));
+    };
+    // Xử lý + add input thiết bị 
+    const handleAddButtonClick = () => {
+        setPhong({
+            ...phong,
+            loaiPhong: {
+                ...phong.loaiPhong,
+                thietBi: [...phong.loaiPhong.thietBi, { tenThietBi: '', soLuong: '' }],
+            },
+        });
+    };
+
+    // Xử lý  ô input "Tên thiết bị" và "Số lượng" thay đổi
+    const handleThietBiInputChange = (index, field, value) => {
+        const updatedThietBi = [...phong.loaiPhong.thietBi];
+        updatedThietBi[index][field] = value;
+
+        setPhong({
+            ...phong,
+            loaiPhong: {
+                ...phong.loaiPhong,
+                thietBi: updatedThietBi,
+            },
+        });
+    };
+
+    ///--------------------------xử lí Update ở đây
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        setDes(false)
+        console.log(phong);
+    };
+    ///---------------
+    const [maintenance, setMaintenance] = useState(false)
+
+    const handleShowMain = () => {
+        setMaintenance(!maintenance)
+    }
+
+    const [doiLich, setDoiLich] = useState(false)
+
+    const handleShowDoiLich = () => {
+        setDoiLich(!doiLich)
+        setMaintenance(false)
+    }
+    //---lấy phòng
+    const [selectedItem, setSelectedItem] = useState(null);
+
+    const handleClick = (i) => {
+        setSelectedItem(i)
+    };
+
 
     return (
         <>
@@ -343,7 +413,7 @@ const ChiTietPhongHoc: React.FC = () => {
                                                 onChange={(date) => setEndDate(date)}
                                                 format="YYYY-MM-DD"
                                             />
-                                            <Button type="primary" onClick={handleMaintance} className="update">
+                                            <Button type="primary" onClick={handleShowMain} className="update">
                                                 Bảo Trì
                                             </Button>
                                         </div>
@@ -364,7 +434,7 @@ const ChiTietPhongHoc: React.FC = () => {
                                                         startDayHour={5.5} // Giờ bắt đầu buổi sáng
                                                         endDayHour={21} // Giờ kết thúc buổi tối
                                                         cellDuration={60}
-                                                        // timeTableCellComponent={CustomTimeTableCell}
+                                                    // timeTableCellComponent={CustomTimeTableCell}
                                                     />
                                                     <MonthView />
                                                     <Toolbar />
@@ -387,61 +457,159 @@ const ChiTietPhongHoc: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
+
+
+                            {/* form đổi lịch----------------------------- */}
+                            {doiLich ? (
+                                <div className='PhongHoc_doiLich'>
+                                    <div onClick={handleShowDoiLich} style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+                                        <div className='PhongHoc_doiLich_close'>x</div>
+                                    </div>
+                                    <div className='PhongHoc_doiLich_dslich'>
+                                        <h4 style={{ textAlign: "center" }}>Các lịch trong phòng cần đổi</h4>
+                                        <div className='card-grid'>
+                                            {appointments.map((appointment, index) => (
+                                                <div className='card' key={index} style={{ backgroundColor: "#9fcaf8" }}>
+                                                    <h6>{appointment.title}</h6>
+                                                    <p>
+                                                        <strong>Ngày:</strong> {appointment.startDate.toLocaleDateString()}
+                                                    </p>
+                                                    <p>
+                                                        <strong>Thời gian:</strong> {`${appointment.startDate.getHours()}:${appointment.startDate.getMinutes()} - ${appointment.endDate.getHours()}:${appointment.endDate.getMinutes()}`}
+                                                    </p>
+                                                    <p><strong>Phòng học:</strong> {appointment.phongHoc}</p>
+                                                    <p><strong>Giáo viên:</strong> {appointment.tenGV}</p>
+                                                    <p><strong>Ghi chú:</strong> {appointment.ghiChu}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className='PhongHoc_doiLich_dsphong'>
+                                        <h5 style={{ textAlign: "center" }}>Danh sách phòng phù hợp</h5>
+                                        <div className='PhongDoiLichGrid'>
+                                            {Phong.map((phong, i) => (
+                                                <div className={`PhongDoiLichItem${i === selectedItem ? ' clicked' : ''}`}
+
+                                                    key={i}
+                                                    onClick={() => handleClick(i)}>
+                                                    <h6>{phong.tenPhong}</h6>
+                                                    <p><strong>Sức chứa:</strong> {phong.sucChua}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                    </div>
+                                    <div className='PhongHoc_doiLich_btn'>
+                                        <Button type='primary'>Đổi Phòng</Button>
+                                    </div>
+                                </div>
+                            ) : (<></>)}
+
+
+
                             <div className="PhongHoc_form">
+                                {/* form xác nhận tạm ngưng hay đổi lịch ----------------------*/}
+                                {maintenance ? (<div>
+                                    <div className='PhongHoc_formMaintance' >
+                                        <div className='PhongHoc_formMaintance_button'>
+                                            <div onClick={handleShowMain} className='PhongHoc_formMaintance_close'>x</div>
+                                        </div>
+                                        <div style={{ display: 'flex', justifyContent: "center" }}>
+                                            <h6 style={{ fontWeight: "bold" }}>Bạn muốn tạm ngưng lịch hay đổi phòng?</h6>
+                                        </div>
+                                        <div style={{ marginTop: "30px", display: 'flex', justifyContent: "center" }}>
+                                            <Button type='primary' onClick={handleMaintance} style={{ marginRight: "70px" }} >Tạm ngưng</Button>
+                                            <Button type='primary' onClick={handleShowDoiLich}
+                                                style={{ backgroundColor: 'rgba(255, 0, 0, 0.5)', borderColor: 'red', color: 'white' }}>
+                                                Đổi phòng</Button>
+                                        </div>
+
+                                    </div>
+                                </div>) : (<></>)}
+
+
                                 {des ? (
-                                    <div>
-                                        <div className="form-container">
-                                            <h2>Chi tiết phòng</h2>
-                                            <div
-                                                onClick={handleLoserDes}
-                                                className="form-button-close"
-                                                style={{ cursor: 'pointer' }}
-                                            >
-                                                <div className="form-button-close-x">x</div>
+                                    <div className='Phong_container_bg'>
+                                        <div className="Phong_container">
+                                            <div className="Phong_button" >
+                                                <div className="Phong_close-button" onClick={handleLoserDes}>x</div>
                                             </div>
-                                            <div>
-                                                <div
-                                                    style={{
-                                                        borderBottom: '1px solid gray',
-                                                        width: '95%',
-                                                        padding: '5px 2px 25px',
-                                                    }}
-                                                >
-                                                    <div>
-                                                        Tên Phòng: <strong> {chitiet.maPhong}</strong>
-                                                    </div>
-                                                    <div>
-                                                        Tòa nhà: <strong>{chitiet.tenNha}</strong>
-                                                    </div>
-                                                    <div>
-                                                        Sức chứa của phòng: <strong>{chitiet.sucChua}</strong>
-                                                    </div>
-                                                    <div>
-                                                        Loại phòng: <strong>{chitiet.loaiPhong.tenLoaiPhong}</strong>
-                                                    </div>
+                                            <form>
+                                                <div className="form-input">
+                                                    <label htmlFor="">Tên Phòng:</label>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Tên phòng"
+                                                        value={phong.maPhong}
+                                                        onChange={(e) => handleInputChange('maPhong', e.target.value)}
+                                                    />
                                                 </div>
-                                                <div style={{ padding: '8px' }}>
-                                                    <h5 style={{ margin: '10px 0px 20px' }}>Thiết bị của phòng</h5>
-                                                    {chitiet.loaiPhong.thietBi.map((tb, i) => (
-                                                        <div
-                                                            key={i}
-                                                            style={{
-                                                                display: 'flex',
-                                                                flexDirection: 'row',
-                                                                justifyContent: 'space-between',
-                                                                marginBottom: '10px',
-                                                            }}
-                                                        >
-                                                            <div>
-                                                                Tên thiết bị: <strong>{tb.tenThietBi}</strong>
-                                                            </div>
-                                                            <div>
-                                                                Số lượng: <strong>{tb.soLuong}</strong>
-                                                            </div>
+                                                <div className="form-input">
+                                                    <label htmlFor="">Sức Chứa:</label>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Sức Chứa"
+                                                        value={phong.sucChua}
+                                                        onChange={(e) => handleInputChange('sucChua', e.target.value)}
+                                                    />
+                                                </div>
+                                                <div className="form-input">
+                                                    <label htmlFor="">Tên Nhà:</label>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Tên Nhà"
+                                                        value={phong.tenNha}
+                                                        //onChange={(e) => handleInputChange('tenNha', e.target.value)}
+                                                        readOnly
+                                                    />
+                                                </div>
+                                                <div className="form-input">
+                                                    <label htmlFor="">Loại Phòng:</label>
+                                                    <select
+
+                                                        value={phong.loaiPhong.tenLoaiPhong}
+                                                        onChange={(e) => handleInputChange2('tenLoaiPhong', e.target.value)}
+                                                    >
+                                                        <option value="Phòng Thực Hành">Phòng Thực Hành</option>
+                                                        <option value="Phòng Lý Thuyết">Phòng Lý Thuyết</option>
+                                                    </select>
+                                                </div>
+
+                                                <div className="form-input">
+                                                    <label htmlFor="">Thêm thiết bị:</label>
+                                                    <Button type="primary" onClick={handleAddButtonClick} className='Phong_themThietBi'>
+                                                        +
+                                                    </Button>
+                                                </div>
+
+                                                {phong.loaiPhong.thietBi.map((thietBi, index) => (
+                                                    <div key={index} className='input_ThietBi'>
+                                                        <div className="input_ThietBi_form">
+                                                            <label className=''>Tên thiết bị</label>
+                                                            <input
+                                                                type="text"
+                                                                placeholder="Tên thiết bị"
+                                                                value={thietBi.tenThietBi}
+                                                                onChange={(e) => handleThietBiInputChange(index, 'tenThietBi', e.target.value)}
+                                                            />
                                                         </div>
-                                                    ))}
-                                                </div>
-                                            </div>
+                                                        <div className="input_ThietBi_form" style={{ marginLeft: "30px" }}>
+                                                            <label htmlFor="" style={{ marginTop: "7px" }}>Số Lượng</label>
+                                                            <input
+                                                                className='soluong'
+                                                                type="text"
+                                                                placeholder="Số lượng"
+                                                                value={thietBi.soLuong}
+                                                                onChange={(e) => handleThietBiInputChange(index, 'soLuong', e.target.value)}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                ))}
+
+                                                <Button type='primary' onClick={handleFormSubmit} style={{ margin: "15px", width: "150px", height: "35px" }}>
+                                                    Cập nhất
+                                                </Button>
+                                            </form>
                                         </div>
                                     </div>
                                 ) : (
