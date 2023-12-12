@@ -9,6 +9,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { ViewState } from '@devexpress/dx-react-scheduler';
+import { ToastContainer, toast } from 'react-toastify';
 import {
     Scheduler,
     WeekView,
@@ -21,7 +22,7 @@ import {
 } from '@devexpress/dx-react-scheduler-material-ui';
 import { DatePicker, Button, Layout } from 'antd';
 import moment from 'moment';
-import { appointments, Phong } from './data'
+// import { Phong } from './data';
 
 import { io, Socket } from 'socket.io-client';
 
@@ -63,6 +64,8 @@ const ExternalViewSwitcher = ({
 const ChiTietPhongHoc: React.FC = () => {
     const { toanha } = useParams<ParamType>();
     const [isRerender, setRerender] = useState(false);
+    const [appointments, setAppointments] = useState([]);
+    const [phongDapUng, setPhongDapUng] = useState([]);
 
     const storedData: any = localStorage.getItem('myDataKey');
     const danhSach = JSON.parse(storedData);
@@ -79,6 +82,12 @@ const ChiTietPhongHoc: React.FC = () => {
         setRerender(!isRerender);
     });
 
+    socket.on('updateClassroom', (DSPH: any) => {
+        danhSach.DanhSachPhongHoc = DSPH;
+        localStorage.setItem('myDataKey', JSON.stringify(danhSach));
+        setRerender(!isRerender);
+    });
+
     const [startDate, setStartDate] = useState<moment.Moment | null>(null);
     const [endDate, setEndDate] = useState<moment.Moment | null>(null);
 
@@ -86,13 +95,13 @@ const ChiTietPhongHoc: React.FC = () => {
     const [isModelVisible, setModelVisible] = useState(false);
 
     useEffect(() => {
-        const lichHoc = danhSach.DanhSachHocPhan.flatMap((monHoc) =>
-            monHoc.thongTinLich.filter((lichHoc) => lichHoc.phongHoc === toanha),
+        const lichHoc = danhSach.DanhSachHocPhan.flatMap((monHoc: any) =>
+            monHoc.thongTinLich.filter((lichHoc: any) => lichHoc.phongHoc === toanha),
         );
 
         const updatedData = [];
 
-        lichHoc.forEach((lich) => {
+        lichHoc.forEach((lich: any) => {
             // Chuyển đổi endDate và startDate sang địa phương không thay đổi giá trị thời gian
             const localEndDate = new Date(lich.endDate).toLocaleString('en-US', { timeZone: 'UTC' });
             const localStartDate = new Date(lich.startDate).toLocaleString('en-US', { timeZone: 'UTC' });
@@ -110,35 +119,6 @@ const ChiTietPhongHoc: React.FC = () => {
         }
     }, [isRerender]);
 
-    const handleMaintance = async () => {
-        const convertedStartDate = new Date(startDate);
-        const convertedEndDate = new Date(endDate);
-
-        const filteredData = data.filter((item) => {
-            const itemStartDate = new Date(item.startDate);
-            const itemEndDate = new Date(item.endDate);
-            return itemStartDate >= convertedStartDate && itemEndDate <= convertedEndDate;
-        });
-        console.log("data", filteredData);
-        try {
-            const response = await fetch('http://localhost:3001/admin/maintaince-classroom', {
-                method: 'POST',
-                body: JSON.stringify(filteredData),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (response.ok) {
-                console.log('oke');
-            } else {
-                console.log('fail');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-        setMaintenance(false)
-    };
     const [currentViewName, setCurrentViewName] = useState('Week');
 
     const currentViewNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -150,7 +130,7 @@ const ChiTietPhongHoc: React.FC = () => {
         style: React.CSSProperties;
         data: AppointmentData;
     }> = ({ children, style, data, ...restProps }) => {
-        const dynamicBackgroundColor = data.ghiChu === "Tạm ngưng" ? 'rgb(248, 200, 195)' : '';
+        const dynamicBackgroundColor = data.ghiChu === 'Tạm ngưng' ? 'rgb(248, 200, 195)' : '';
         return (
             <Appointments.Appointment
                 {...restProps}
@@ -171,15 +151,11 @@ const ChiTietPhongHoc: React.FC = () => {
                     Phòng: <span style={{ color: 'red' }}>{data.phongHoc}</span>
                 </div>
                 <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
-
-                    Ghi chú: <span style={{ color: 'red' }}>
-                        {data.ghiChu}
-                    </span>
-
+                    Ghi chú: <span style={{ color: 'red' }}>{data.ghiChu}</span>
                 </div>
             </Appointments.Appointment>
-        )
-    }
+        );
+    };
 
     const customAppointment: React.FC<{
         children: React.ReactNode;
@@ -220,7 +196,7 @@ const ChiTietPhongHoc: React.FC = () => {
     //     });
     // };
 
-    const handleChange = (e) => {
+    const handleChange = (e: any) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
@@ -231,7 +207,7 @@ const ChiTietPhongHoc: React.FC = () => {
     const [statusAddMember, setStatusAddMember] = useState(false);
     const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
 
-    const handleMemberSelection = (e) => {
+    const handleMemberSelection = (e: any) => {
         const memberName = e.target.value;
         const isChecked = e.target.checked;
 
@@ -257,14 +233,8 @@ const ChiTietPhongHoc: React.FC = () => {
     };
 
     const [des, setDes] = useState(false);
-    const handleShowDes = () => {
-        setDes(true);
-    };
-    const handleLoserDes = () => {
-        setDes(false);
-    };
 
-    const chitiet = danhSach.DanhSachPhongHoc.find((phong) => {
+    const chitiet = danhSach.DanhSachPhongHoc.find((phong: any) => {
         return phong.maPhong === toanha;
     });
 
@@ -288,8 +258,6 @@ const ChiTietPhongHoc: React.FC = () => {
         } catch (error) {
             console.error('Error:', error);
         }
-
-
     };
     ///---------------
     const [phong, setPhong] = useState({
@@ -299,18 +267,57 @@ const ChiTietPhongHoc: React.FC = () => {
         tenNha: chitiet.tenNha,
         loaiPhong: {
             tenLoaiPhong: chitiet.loaiPhong.tenLoaiPhong,
-            thietBi: chitiet.loaiPhong.thietBi.map((item) => ({
+            thietBi: chitiet.loaiPhong.thietBi.map((item: any) => ({
                 tenThietBi: item.tenThietBi,
                 soLuong: item.soLuong,
             })),
         },
     });
 
+    const handleShowDes = () => {
+        setPhong({
+            maPhong: chitiet.maPhong,
+            sucChua: chitiet.sucChua,
+            trangThai: chitiet.trangThai,
+            tenNha: chitiet.tenNha,
+            loaiPhong: {
+                tenLoaiPhong: chitiet.loaiPhong.tenLoaiPhong,
+                thietBi: chitiet.loaiPhong.thietBi.map((item: any) => ({
+                    tenThietBi: item.tenThietBi,
+                    soLuong: item.soLuong,
+                })),
+            },
+        });
+        setDes(true);
+    };
+    const handleLoserDes = () => {
+        setDes(false);
+        setPhong({
+            maPhong: chitiet.maPhong,
+            sucChua: chitiet.sucChua,
+            trangThai: chitiet.trangThai,
+            tenNha: chitiet.tenNha,
+            loaiPhong: {
+                tenLoaiPhong: chitiet.loaiPhong.tenLoaiPhong,
+                thietBi: chitiet.loaiPhong.thietBi.map((item: any) => ({
+                    tenThietBi: item.tenThietBi,
+                    soLuong: item.soLuong,
+                })),
+            },
+        });
+    };
+
     // Xử lí change input
-    const handleInputChange = (field, value) => {
+    const handleInputChange = (field: any, value: any) => {
+        if (field === 'sucChua') {
+            // Kiểm tra giá trị nhập của sức chứa có phải là số không
+            if (!/^\d+$/.test(value) && value !== '') {
+                return phong.sucChua;
+            }
+        }
         setPhong({ ...phong, [field]: value });
     };
-    const handleInputChange2 = (field, value) => {
+    const handleInputChange2 = (field: any, value: any) => {
         setPhong((prevPhong) => ({
             ...prevPhong,
             loaiPhong: {
@@ -319,7 +326,7 @@ const ChiTietPhongHoc: React.FC = () => {
             },
         }));
     };
-    // Xử lý + add input thiết bị 
+    // Xử lý + add input thiết bị
     const handleAddButtonClick = () => {
         setPhong({
             ...phong,
@@ -331,7 +338,7 @@ const ChiTietPhongHoc: React.FC = () => {
     };
 
     // Xử lý  ô input "Tên thiết bị" và "Số lượng" thay đổi
-    const handleThietBiInputChange = (index, field, value) => {
+    const handleThietBiInputChange = (index: any, field: any, value: any) => {
         const updatedThietBi = [...phong.loaiPhong.thietBi];
         updatedThietBi[index][field] = value;
 
@@ -345,35 +352,202 @@ const ChiTietPhongHoc: React.FC = () => {
     };
 
     ///--------------------------xử lí Update ở đây
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = async (e: any) => {
         e.preventDefault();
-        setDes(false)
         console.log(phong);
+
+        try {
+            const response = await fetch('http://localhost:3001/admin/update-classroom', {
+                method: 'POST',
+                body: JSON.stringify(phong),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const data = response.json();
+                data.then((result) => {
+                    if (result.classroom.status === 'fail') {
+                        toast.error(result.classroom.message);
+                    } else {
+                        toast.success(result.classroom.message);
+                        setPhong({
+                            maPhong: chitiet.maPhong,
+                            sucChua: chitiet.sucChua,
+                            trangThai: chitiet.trangThai,
+                            tenNha: chitiet.tenNha,
+                            loaiPhong: {
+                                tenLoaiPhong: chitiet.loaiPhong.tenLoaiPhong,
+                                thietBi: chitiet.loaiPhong.thietBi.map((item: any) => ({
+                                    tenThietBi: item.tenThietBi,
+                                    soLuong: item.soLuong,
+                                })),
+                            },
+                        });
+                        setDes(false);
+                    }
+                });
+            } else {
+                console.log('fail');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
     ///---------------
-    const [maintenance, setMaintenance] = useState(false)
-
-    const handleShowMain = () => {
-        setMaintenance(!maintenance)
-    }
-
-    const [doiLich, setDoiLich] = useState(false)
-
-    const handleShowDoiLich = () => {
-        setDoiLich(!doiLich)
-        setMaintenance(false)
-    }
-    //---lấy phòng
-    const [selectedItem, setSelectedItem] = useState(null);
-
-    const handleClick = (i) => {
-        setSelectedItem(i)
+    const [maintenance, setMaintenance] = useState(false);
+    const setDateTimeToStartOfDay = (date: any) => {
+        const d = new Date(date);
+        d.setHours(0, 0, 0, 0);
+        return d;
     };
 
+    const setDateTimeToEndOfDay = (date: any) => {
+        const d = new Date(date);
+        d.setHours(23, 59, 59, 999);
+        return d;
+    };
+
+    const handleShowMain = () => {
+        const convertedStartDate = new Date(startDate);
+        const convertedEndDate = new Date(endDate);
+
+        const convertedStartDate2 = setDateTimeToStartOfDay(startDate);
+        const convertedEndDate2 = setDateTimeToEndOfDay(endDate);
+
+        const filteredData = data.filter((item: any) => {
+            const itemStartDate = new Date(item.startDate);
+            const itemEndDate = new Date(item.endDate);
+            if (itemStartDate >= convertedStartDate2 && itemEndDate <= convertedEndDate2) {
+                return item;
+            }
+        });
+
+        if (!startDate) {
+            toast.error('Bạn chưa điền đầy ngày bắt đầu');
+        } else if (!endDate) {
+            toast.error('Bạn chưa điền đầy ngày kết thúc');
+        } else if (convertedStartDate >= convertedEndDate) {
+            toast.error('Ngày bắt đầu bảo trì phải nhỏ hơn hoặc bằng ngày kết thúc');
+        } else if (filteredData.length == 0) {
+            toast.success('Không phát hiện lịch học trùng, tiến hành bảo trì');
+        } else {
+            setAppointments(filteredData);
+            setMaintenance(!maintenance);
+        }
+    };
+
+    const handleMaintance = async () => {
+        const convertedStartDate = new Date(startDate).toLocaleString();
+        const convertedEndDate = new Date(endDate).toLocaleString();
+
+        const filteredData = data.filter((item: any) => {
+            const itemStartDate = new Date(item.startDate).toLocaleString();
+            const itemEndDate = new Date(item.endDate).toLocaleString();
+            return itemStartDate >= convertedStartDate && itemEndDate <= convertedEndDate;
+        });
+
+        try {
+            const response = await fetch('http://localhost:3001/admin/maintaince-classroom', {
+                method: 'POST',
+                body: JSON.stringify(filteredData),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                console.log('oke');
+            } else {
+                console.log('fail');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+        setMaintenance(false);
+    };
+
+    //---lấy phòng
+    const [selectedRoom, setSelectedRoom] = useState(null);
+    const [room, setRoom] = useState(null);
+
+    const handleClick = (i: any, phong: any) => {
+        setSelectedRoom(i);
+        setRoom(phong);
+    };
+
+    const [doiLich, setDoiLich] = useState(false);
+
+    const handleShowDoiLich = async () => {
+        setDoiLich(!doiLich);
+        setMaintenance(false);
+        try {
+            const response = await fetch('http://localhost:3001/admin/get-match-schedule', {
+                method: 'POST',
+                body: JSON.stringify(appointments),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const data = response.json();
+                data.then((result: any) => {
+                    if (result.move.status === 'fail') {
+                        toast.error(result.move.message);
+                    } else {
+                        setPhongDapUng(result.move.data);
+                    }
+                });
+            } else {
+                console.log('fail');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+    const handleCloseDoiLich = () => {
+        setDoiLich(!doiLich);
+        setAppointments([]);
+        setSelectedRoom(null);
+        setRoom(null);
+    };
+    const handleMoveRoom = async () => {
+        try {
+            const response = await fetch('http://localhost:3001/admin/move-schedule', {
+                method: 'POST',
+                body: JSON.stringify({ room, appointments }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const data = response.json();
+                data.then((result: any) => {
+                    if (result.status === 'fail') {
+                        toast.error(result.message);
+                    } else {
+                        toast.success(result.message);
+                        danhSach.DanhSachHocPhan = result.data;
+                        localStorage.setItem('myDataKey', JSON.stringify(danhSach));
+                        setDoiLich(!doiLich);
+                        setRerender(!isRerender);
+                    }
+                });
+            } else {
+                toast.error('Xảy ra vấn đề khi gọi API');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
 
     return (
         <>
             <AdminNavbar />
+            <ToastContainer />
             <Layout style={{ minHeight: '100vh', marginTop: '2px' }}>
                 <AdminSider />
                 <Layout>
@@ -434,7 +608,7 @@ const ChiTietPhongHoc: React.FC = () => {
                                                         startDayHour={5.5} // Giờ bắt đầu buổi sáng
                                                         endDayHour={21} // Giờ kết thúc buổi tối
                                                         cellDuration={60}
-                                                    // timeTableCellComponent={CustomTimeTableCell}
+                                                        // timeTableCellComponent={CustomTimeTableCell}
                                                     />
                                                     <MonthView />
                                                     <Toolbar />
@@ -458,81 +632,133 @@ const ChiTietPhongHoc: React.FC = () => {
                                 </div>
                             </div>
 
-
                             {/* form đổi lịch----------------------------- */}
                             {doiLich ? (
-                                <div className='PhongHoc_doiLich'>
-                                    <div onClick={handleShowDoiLich} style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
-                                        <div className='PhongHoc_doiLich_close'>x</div>
+                                <div className="PhongHoc_doiLich">
+                                    <div
+                                        onClick={handleCloseDoiLich}
+                                        style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}
+                                    >
+                                        <div className="PhongHoc_doiLich_close">x</div>
                                     </div>
-                                    <div className='PhongHoc_doiLich_dslich'>
-                                        <h4 style={{ textAlign: "center" }}>Các lịch trong phòng cần đổi</h4>
-                                        <div className='card-grid'>
-                                            {appointments.map((appointment, index) => (
-                                                <div className='card' key={index} style={{ backgroundColor: "#9fcaf8" }}>
+                                    <div className="PhongHoc_doiLich_dslich">
+                                        <h4 style={{ textAlign: 'center' }}>Các lịch trong phòng cần đổi</h4>
+                                        <div className="card-grid">
+                                            {appointments.map((appointment: any, index) => (
+                                                <div
+                                                    className="card"
+                                                    key={index}
+                                                    style={{ backgroundColor: '#9fcaf8' }}
+                                                >
                                                     <h6>{appointment.title}</h6>
                                                     <p>
-                                                        <strong>Ngày:</strong> {appointment.startDate.toLocaleDateString()}
+                                                        <strong>Ngày:</strong> {appointment.startDate}
                                                     </p>
                                                     <p>
-                                                        <strong>Thời gian:</strong> {`${appointment.startDate.getHours()}:${appointment.startDate.getMinutes()} - ${appointment.endDate.getHours()}:${appointment.endDate.getMinutes()}`}
+                                                        <strong>Thời gian:</strong>{' '}
+                                                        {`${new Date(
+                                                            appointment.startDate,
+                                                        ).toLocaleTimeString()} - ${new Date(
+                                                            appointment.endDate,
+                                                        ).toLocaleTimeString()}`}
                                                     </p>
-                                                    <p><strong>Phòng học:</strong> {appointment.phongHoc}</p>
-                                                    <p><strong>Giáo viên:</strong> {appointment.tenGV}</p>
-                                                    <p><strong>Ghi chú:</strong> {appointment.ghiChu}</p>
+                                                    <p>
+                                                        <strong>Phòng học:</strong> {appointment.phongHoc}
+                                                    </p>
+                                                    <p>
+                                                        <strong>Giáo viên:</strong> {appointment.tenGV}
+                                                    </p>
+                                                    <p>
+                                                        <strong>Ghi chú:</strong> {appointment.ghiChu}
+                                                    </p>
                                                 </div>
                                             ))}
                                         </div>
                                     </div>
-                                    <div className='PhongHoc_doiLich_dsphong'>
-                                        <h5 style={{ textAlign: "center" }}>Danh sách phòng phù hợp</h5>
-                                        <div className='PhongDoiLichGrid'>
-                                            {Phong.map((phong, i) => (
-                                                <div className={`PhongDoiLichItem${i === selectedItem ? ' clicked' : ''}`}
-
+                                    <div className="PhongHoc_doiLich_dsphong">
+                                        <h5 style={{ textAlign: 'center' }}>Danh sách phòng phù hợp</h5>
+                                        <div className="PhongDoiLichGrid">
+                                            {phongDapUng.map((phong: any, i) => (
+                                                <div
+                                                    className={`PhongDoiLichItem${
+                                                        i === selectedRoom ? ' clicked' : ''
+                                                    }`}
                                                     key={i}
-                                                    onClick={() => handleClick(i)}>
-                                                    <h6>{phong.tenPhong}</h6>
-                                                    <p><strong>Sức chứa:</strong> {phong.sucChua}</p>
+                                                    onClick={() => handleClick(i, phong)}
+                                                >
+                                                    <h6>Tên phòng: {phong.maPhong}</h6>
+                                                    <p>
+                                                        <strong>Sức chứa:</strong> {phong.sucChua}
+                                                        <br />
+                                                        <strong>Tên nhà:</strong> {phong.tenNha}
+                                                        <br />
+                                                        <strong>Loại phòng:</strong> {phong.loaiPhong.tenLoaiPhong}
+                                                    </p>
                                                 </div>
                                             ))}
                                         </div>
-
                                     </div>
-                                    <div className='PhongHoc_doiLich_btn'>
-                                        <Button type='primary'>Đổi Phòng</Button>
+                                    <div className="PhongHoc_doiLich_btn">
+                                        <Button onClick={handleMoveRoom} type="primary">
+                                            Đổi Phòng
+                                        </Button>
                                     </div>
                                 </div>
-                            ) : (<></>)}
-
-
+                            ) : (
+                                <></>
+                            )}
 
                             <div className="PhongHoc_form">
                                 {/* form xác nhận tạm ngưng hay đổi lịch ----------------------*/}
-                                {maintenance ? (<div>
-                                    <div className='PhongHoc_formMaintance' >
-                                        <div className='PhongHoc_formMaintance_button'>
-                                            <div onClick={handleShowMain} className='PhongHoc_formMaintance_close'>x</div>
+                                {maintenance ? (
+                                    <div>
+                                        <div className="PhongHoc_formMaintance">
+                                            <div className="PhongHoc_formMaintance_button">
+                                                <div onClick={handleShowMain} className="PhongHoc_formMaintance_close">
+                                                    x
+                                                </div>
+                                            </div>
+                                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                                <h6 style={{ fontWeight: 'bold' }}>
+                                                    Phát hiện có lịch trùng với ngày bảo trì, để xác nhận bảo trì, bạn
+                                                    muốn tạm ngưng lịch hay đổi phòng?
+                                                </h6>
+                                            </div>
+                                            <div
+                                                style={{ marginTop: '30px', display: 'flex', justifyContent: 'center' }}
+                                            >
+                                                <Button
+                                                    type="primary"
+                                                    onClick={handleMaintance}
+                                                    style={{ marginRight: '70px' }}
+                                                >
+                                                    Tạm ngưng
+                                                </Button>
+                                                <Button
+                                                    type="primary"
+                                                    onClick={handleShowDoiLich}
+                                                    style={{
+                                                        backgroundColor: 'rgba(255, 0, 0, 0.5)',
+                                                        borderColor: 'red',
+                                                        color: 'white',
+                                                    }}
+                                                >
+                                                    Đổi phòng
+                                                </Button>
+                                            </div>
                                         </div>
-                                        <div style={{ display: 'flex', justifyContent: "center" }}>
-                                            <h6 style={{ fontWeight: "bold" }}>Bạn muốn tạm ngưng lịch hay đổi phòng?</h6>
-                                        </div>
-                                        <div style={{ marginTop: "30px", display: 'flex', justifyContent: "center" }}>
-                                            <Button type='primary' onClick={handleMaintance} style={{ marginRight: "70px" }} >Tạm ngưng</Button>
-                                            <Button type='primary' onClick={handleShowDoiLich}
-                                                style={{ backgroundColor: 'rgba(255, 0, 0, 0.5)', borderColor: 'red', color: 'white' }}>
-                                                Đổi phòng</Button>
-                                        </div>
-
                                     </div>
-                                </div>) : (<></>)}
-
+                                ) : (
+                                    <></>
+                                )}
 
                                 {des ? (
-                                    <div className='Phong_container_bg'>
+                                    <div className="Phong_container_bg">
                                         <div className="Phong_container">
-                                            <div className="Phong_button" >
-                                                <div className="Phong_close-button" onClick={handleLoserDes}>x</div>
+                                            <div className="Phong_button">
+                                                <div className="Phong_close-button" onClick={handleLoserDes}>
+                                                    x
+                                                </div>
                                             </div>
                                             <form>
                                                 <div className="form-input">
@@ -541,7 +767,8 @@ const ChiTietPhongHoc: React.FC = () => {
                                                         type="text"
                                                         placeholder="Tên phòng"
                                                         value={phong.maPhong}
-                                                        onChange={(e) => handleInputChange('maPhong', e.target.value)}
+
+                                                        // onChange={(e) => handleInputChange('maPhong', e.target.value)}
                                                     />
                                                 </div>
                                                 <div className="form-input">
@@ -566,9 +793,10 @@ const ChiTietPhongHoc: React.FC = () => {
                                                 <div className="form-input">
                                                     <label htmlFor="">Loại Phòng:</label>
                                                     <select
-
                                                         value={phong.loaiPhong.tenLoaiPhong}
-                                                        onChange={(e) => handleInputChange2('tenLoaiPhong', e.target.value)}
+                                                        onChange={(e) =>
+                                                            handleInputChange2('tenLoaiPhong', e.target.value)
+                                                        }
                                                     >
                                                         <option value="Phòng Thực Hành">Phòng Thực Hành</option>
                                                         <option value="Phòng Lý Thuyết">Phòng Lý Thuyết</option>
@@ -577,36 +805,61 @@ const ChiTietPhongHoc: React.FC = () => {
 
                                                 <div className="form-input">
                                                     <label htmlFor="">Thêm thiết bị:</label>
-                                                    <Button type="primary" onClick={handleAddButtonClick} className='Phong_themThietBi'>
+                                                    <Button
+                                                        type="primary"
+                                                        onClick={handleAddButtonClick}
+                                                        className="Phong_themThietBi"
+                                                    >
                                                         +
                                                     </Button>
                                                 </div>
 
-                                                {phong.loaiPhong.thietBi.map((thietBi, index) => (
-                                                    <div key={index} className='input_ThietBi'>
+                                                {phong.loaiPhong.thietBi.map((thietBi: any, index: any) => (
+                                                    <div key={index} className="input_ThietBi">
                                                         <div className="input_ThietBi_form">
-                                                            <label className=''>Tên thiết bị</label>
+                                                            <label className="">Tên thiết bị</label>
                                                             <input
                                                                 type="text"
                                                                 placeholder="Tên thiết bị"
                                                                 value={thietBi.tenThietBi}
-                                                                onChange={(e) => handleThietBiInputChange(index, 'tenThietBi', e.target.value)}
+                                                                onChange={(e) =>
+                                                                    handleThietBiInputChange(
+                                                                        index,
+                                                                        'tenThietBi',
+                                                                        e.target.value,
+                                                                    )
+                                                                }
                                                             />
                                                         </div>
-                                                        <div className="input_ThietBi_form" style={{ marginLeft: "30px" }}>
-                                                            <label htmlFor="" style={{ marginTop: "7px" }}>Số Lượng</label>
+                                                        <div
+                                                            className="input_ThietBi_form"
+                                                            style={{ marginLeft: '30px' }}
+                                                        >
+                                                            <label htmlFor="" style={{ marginTop: '7px' }}>
+                                                                Số Lượng
+                                                            </label>
                                                             <input
-                                                                className='soluong'
+                                                                className="soluong"
                                                                 type="text"
                                                                 placeholder="Số lượng"
                                                                 value={thietBi.soLuong}
-                                                                onChange={(e) => handleThietBiInputChange(index, 'soLuong', e.target.value)}
+                                                                onChange={(e) =>
+                                                                    handleThietBiInputChange(
+                                                                        index,
+                                                                        'soLuong',
+                                                                        e.target.value,
+                                                                    )
+                                                                }
                                                             />
                                                         </div>
                                                     </div>
                                                 ))}
 
-                                                <Button type='primary' onClick={handleFormSubmit} style={{ margin: "15px", width: "150px", height: "35px" }}>
+                                                <Button
+                                                    type="primary"
+                                                    onClick={handleFormSubmit}
+                                                    style={{ margin: '15px', width: '150px', height: '35px' }}
+                                                >
                                                     Cập nhất
                                                 </Button>
                                             </form>
