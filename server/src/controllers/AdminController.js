@@ -11,12 +11,44 @@ const themPhongHoc = async (req, res) => {
     }
 };
 
+const capNhatPhongHoc = async (req, res) => {
+    try {
+        const classroom = await Admin.capNhatPhongHoc(req.body);
+        res.status(200).json({
+            classroom,
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 const baoTriPhongHoc = async (req, res) => {
     try {
         const classroom = await Admin.baoTriPhongHoc(req.body);
         res.status(200).json({
             classroom,
         });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+const getPhongHocPhuHop = async (req, res) => {
+    try {
+        const move = await Admin.getPhongHocPhuHop(req.body);
+        res.status(200).json({
+            message: 'Chuyển lịch học thành công',
+            move,
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+const chuyenLichHoc = async (req, res) => {
+    try {
+        const move = await Admin.chuyenLichHoc(req.body);
+        res.status(200).json(move);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -135,7 +167,10 @@ const xoaTaiKhoan = async (req, res) => {
 
 module.exports = {
     themPhongHoc,
+    capNhatPhongHoc,
     baoTriPhongHoc,
+    getPhongHocPhuHop,
+    chuyenLichHoc,
     themLichHoc,
     capNhatLichHoc,
     tamHoanLichHoc,

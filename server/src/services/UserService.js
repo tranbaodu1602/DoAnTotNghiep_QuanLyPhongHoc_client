@@ -148,7 +148,6 @@ const userLogin = async (dataLogin) => {
                     const DSPH = await PhongHoc.find();
                     const DSTK = await TaiKhoan.find();
                     const DSGV = await GiaoVien.find();
-                    console.log(DSGV);
                     if (!DSHP || !DSTB || !DSPH || !DSTK) {
                         reslove({
                             status: 'success',
@@ -239,7 +238,6 @@ const userLogin = async (dataLogin) => {
                     const data = await GiaoVien.findOne({ 'ThongTinCaNhan.maGV': username });
                     const DSTB = await ThongBao.find({ danhCho: 'giaovien' });
                     const DSTBALL = await ThongBao.find({ danhCho: 'tatca' });
-                    console.log('data', data);
                     const lich = [];
                     await Promise.all(
                         data.ThongTinGiangDay.lichDay.map(async (value) => {

@@ -16,7 +16,10 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage: storage });
 
 routes.post('/add-classroom', adminController.themPhongHoc);
+routes.post('/update-classroom', adminController.capNhatPhongHoc);
 routes.post('/maintaince-classroom', adminController.baoTriPhongHoc);
+routes.post('/move-schedule', adminController.chuyenLichHoc);
+routes.post('/get-match-schedule', adminController.getPhongHocPhuHop);
 routes.post('/add-schedule', adminController.themLichHoc);
 routes.post('/update-schedule', adminController.capNhatLichHoc);
 routes.post('/cancel-schedule', adminController.tamHoanLichHoc);

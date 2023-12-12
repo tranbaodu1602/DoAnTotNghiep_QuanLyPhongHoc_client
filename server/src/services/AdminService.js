@@ -1,6 +1,8 @@
 const slugify = require('slugify');
 const unidecode = require('unidecode');
 const moment = require('moment');
+const moment2 = require('moment-timezone'); // Import thư viện moment-timezone
+const VIETNAM_TIMEZONE = 'Asia/Ho_Chi_Minh';
 const bcrypt = require('bcrypt');
 const PhongHoc = require('../models/ModalPhongHoc');
 const ThongBao = require('../models/ModalThongBao');
@@ -16,20 +18,63 @@ const themPhongHoc = async (data) => {
             const checkExist = await PhongHoc.findOne({
                 maPhong: data.maPhong,
             });
-            if (!checkExist) {
-                const newPhongHoc = new PhongHoc(data);
-                await newPhongHoc.save();
+            if (checkExist) {
                 reslove({
-                    status: 'Success',
-                    message: 'them phong hoc thanh cong',
-                    data: newPhongHoc,
-                });
-            } else {
-                reslove({
-                    status: 'FAIL',
+                    status: 'fail',
                     message: 'Đã tồn tại phòng học có mã ' + data.maPhong,
                 });
             }
+
+            // let found = false;
+            // const typePhong = await PhongHoc.find({ 'loaiPhong.tenLoaiPhong': data.loaiPhong.tenLoaiPhong });
+            // typePhong.forEach((key) => {
+            //     if (key.tenNha === data.tenNha) {
+            //         found = true;
+            //     }
+            // });
+            // if (!found) {
+            //     reslove({
+            //         status: 'fail',
+            //         message:
+            //             'Không tìm thấy tòa nhà ' + data.tenNha + ' trong danh sách ' + data.loaiPhong.tenLoaiPhong,
+            //     });
+            // }
+
+            const newPhongHoc = new PhongHoc(data);
+            await newPhongHoc.save();
+
+            const DSPH = await PhongHoc.find();
+            const io = getIO();
+            io.sockets.emit('addClassroom', DSPH);
+            reslove({
+                status: 'success',
+                message: 'Thêm phòng học thành công',
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+const capNhatPhongHoc = async (data) => {
+    return new Promise(async (reslove, reject) => {
+        try {
+            const phongHoc = await PhongHoc.findOneAndUpdate({ maPhong: data.maPhong }, { $set: data });
+
+            if (!phongHoc) {
+                reslove({
+                    status: 'fail',
+                    message: 'Không tìm thấy phòng học để cập nhật',
+                });
+            }
+
+            const DSPH = await PhongHoc.find();
+            const io = getIO();
+            io.sockets.emit('updateClassroom', DSPH);
+            reslove({
+                status: 'success',
+                message: 'Cập nhật thành công',
+            });
         } catch (error) {
             reject(error);
         }
@@ -39,21 +84,14 @@ const themPhongHoc = async (data) => {
 const baoTriPhongHoc = async (data) => {
     return new Promise(async (reslove, reject) => {
         try {
+            console.log(data);
             const updatedData = await Promise.all(
                 data.map(async (item) => {
                     const hocPhan = await HocPhan.findOne({ tenMonHoc: item.title });
                     if (!hocPhan) {
                         throw new Error('Học phần không tồn tại');
                     }
-                    // const convertedStartDate = new Date(item.startDate);
-                    // const convertedEndDate = new Date(item.endDate);
-                    // Sửa ghi chú của thông tin lịch học
                     hocPhan.thongTinLich.forEach((lichHoc, key) => {
-                        // const itemStartDate = new Date(lichHoc.startDate);
-                        // const itemEndDate = new Date(lichHoc.endDate);
-                        // if (itemStartDate >= convertedStartDate && itemEndDate <= convertedEndDate) {
-                        //     lichHoc.ghiChu = 'hehehe'; // Thay đổi ghi chú thành ghi chú mới
-                        // }
                         const lichid = lichHoc._id.toString();
                         if (lichid === item._id) {
                             lichHoc.ghiChu = 'Tạm ngưng';
@@ -69,8 +107,96 @@ const baoTriPhongHoc = async (data) => {
             io.sockets.emit('maintanceClassroom', DSHP);
 
             reslove({
-                status: 'FAIL',
-                message: 'oke',
+                status: 'success',
+                message: 'Đã tạp ngưng lịch để tiến hành bảo trì',
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+const getPhongHocPhuHop = async (data) => {
+    return new Promise(async (reslove, reject) => {
+        try {
+            // console.log(data);
+            const typePhong = await PhongHoc.findOne({ maPhong: data[0].phongHoc });
+            const phonghoc = await PhongHoc.find({
+                maPhong: { $ne: data[0].phongHoc },
+                'loaiPhong.tenLoaiPhong': typePhong.loaiPhong.tenLoaiPhong,
+                sucChua: { $gte: typePhong.sucChua },
+            });
+            const lich = await HocPhan.find();
+            const mergedLich = lich.reduce((acc, curr) => {
+                curr.thongTinLich.forEach((item) => {
+                    acc.push(item);
+                });
+                return acc;
+            }, []);
+
+            const filteredLich = mergedLich.filter((item) => {
+                return phonghoc.some((phong) => phong.maPhong === item.phongHoc);
+            });
+
+            const convertedData = data.map((item) => {
+                return {
+                    ...item,
+                    startDate: moment2
+                        .tz(item.startDate, 'MM/DD/YYYY, hh:mm:ss A', VIETNAM_TIMEZONE)
+                        .add(7, 'hours') // Cộng thêm 7 giờ do trễ múi giờ
+                        .toDate(),
+                    endDate: moment2
+                        .tz(item.endDate, 'MM/DD/YYYY, hh:mm:ss A', VIETNAM_TIMEZONE)
+                        .add(7, 'hours') // Cộng thêm 7 giờ do trễ múi giờ
+                        .toDate(),
+                };
+            });
+
+            const sameLich = filteredLich.filter((item1) => {
+                return convertedData.some((item2) => {
+                    return (
+                        new Date(item1.startDate).getTime() === new Date(item2.startDate).getTime() &&
+                        new Date(item1.endDate).getTime() === new Date(item2.endDate).getTime()
+                    );
+                });
+            });
+
+            const filteredPhongHoc = phonghoc.filter((phong) => {
+                return !sameLich.some((lich) => phong.maPhong === lich.phongHoc);
+            });
+            if (!filteredPhongHoc) {
+                reslove({
+                    status: 'fail',
+                    message: 'không tìm thấy phòng học trống cho những lịch trên',
+                });
+            }
+            reslove({
+                status: 'success',
+                data: filteredPhongHoc,
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+const chuyenLichHoc = async (data) => {
+    return new Promise(async (reslove, reject) => {
+        try {
+            const DSHP = await HocPhan.find();
+            for (const hocPhan of DSHP) {
+                hocPhan.thongTinLich.forEach((lich) => {
+                    const found = data.appointments.some((item) => item._id.toString() === lich._id.toString());
+                    if (found) {
+                        lich.phongHoc = data.room.maPhong;
+                    }
+                });
+                await hocPhan.save();
+            }
+            reslove({
+                status: 'success',
+                message: 'Đã chuyển lịch sang phòng mới: ' + data.room.maPhong,
+                data: DSHP,
             });
         } catch (error) {
             reject(error);
@@ -406,7 +532,10 @@ const xoaTaiKhoan = async (data) => {
 
 module.exports = {
     themPhongHoc,
+    capNhatPhongHoc,
     baoTriPhongHoc,
+    getPhongHocPhuHop,
+    chuyenLichHoc,
     themLichHoc,
     capNhatLichHoc,
     tamHoanLichHoc,
