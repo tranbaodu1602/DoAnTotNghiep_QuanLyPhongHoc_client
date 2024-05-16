@@ -29,7 +29,7 @@ const Content: React.FC = () => {
         { title: 'Số tiết', dataIndex: 'soBuoiHoc', key: 'soBuoiHoc' },
     ];
 
-    const mangMoi = data.lich.map(({ tenMonHoc, soTinChi, soBuoiHoc, maLopHocPhan }) => ({
+    const mangMoi = data.lich.map(({ tenMonHoc, soTinChi, soBuoiHoc, maLopHocPhan }:any) => ({
         key: maLopHocPhan,
         tenMonHoc,
         soTinChi,

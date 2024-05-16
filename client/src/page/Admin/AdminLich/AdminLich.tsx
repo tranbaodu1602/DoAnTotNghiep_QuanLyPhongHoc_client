@@ -56,7 +56,7 @@ const AdminLich: React.FC<{ maLich: string }> = ({ maLich }) => {
         const monHocDaTim = MonHoc.data.roomData.find(item => item.maLopHocPhan === tenMonHocCanTim);
         if (monHocDaTim) {
             // Nếu tìm thấy môn học, cập nhật data bằng môn học đó
-            setData(monHocDaTim.thongTinLich);
+            setData(monHocDaTim?.thongTinLich);
         }
     }, [maLich]);
 

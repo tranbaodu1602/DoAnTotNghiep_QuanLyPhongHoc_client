@@ -25,7 +25,7 @@ function* getDataLogin(action: TypesAction.ActionReqGetDataLogin) {
             password,
         );
         3;
-        const dataLogin = response.dataLogin.data;
+        const dataLogin = response.dataLogin?.data;
 
         yield put(loginAction.resGetDataLogin({ dataLogin }));
         console.log('put success');
