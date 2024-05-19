@@ -31,7 +31,6 @@ const Content: React.FC = () => {
         { title: 'Số tiết', dataIndex: 'soBuoiHoc', key: 'soBuoiHoc' },
     ];
 
-<<<<<<< HEAD
     const dataPoints = [
         { subject: 'Hệ quản trị cơ sở dữ liệu', yourScore: 5.5, avgScore: 5.7 },
         { subject: 'Lập Trình WWW', yourScore: 4.2, avgScore: 4.6 },
@@ -41,9 +40,6 @@ const Content: React.FC = () => {
     ];
 
     const mangMoi = data.lich.map(({ tenMonHoc, soTinChi, soBuoiHoc, maLopHocPhan }) => ({
-=======
-    const mangMoi = data.lich.map(({ tenMonHoc, soTinChi, soBuoiHoc, maLopHocPhan }:any) => ({
->>>>>>> e678a03ee9d69303cd0c3c2c48d39e1e09acbe88
         key: maLopHocPhan,
         tenMonHoc,
         soTinChi,
