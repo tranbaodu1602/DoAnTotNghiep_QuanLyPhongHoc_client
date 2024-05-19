@@ -14,5 +14,7 @@ declare module '@devexpress/dx-react-scheduler-material-ui' {
     export const TodayButton: any;
     export const AppointmentTooltip: any;
     export const DayScale: any;
+    export const TimeTableCell: any;
+    export const Appointment: any;
     // Thêm các phần còn lại cần thiết ở đây
 }

@@ -6,7 +6,6 @@ import './navbar.scss';
 import { ToastContainer, toast } from 'react-toastify';
 
 const NavBar: React.FC = () => {
-
     const storedData: any = localStorage.getItem('myDataKey');
     const data = JSON.parse(storedData);
 
@@ -54,25 +53,23 @@ const NavBar: React.FC = () => {
             });
 
             if (response.ok) {
-                toast.success("Đổi mật khẩu thành công")
+                toast.success('Đổi mật khẩu thành công');
                 setChangePass(false);
             } else {
-                toast.error("Đổi mật khẩu thất bại")
+                toast.error('Đổi mật khẩu thất bại');
             }
         } catch (error) {
-            toast.error("Lỗi kết nối")
+            toast.error('Lỗi kết nối');
         }
-
-
     };
-
-
 
     return (
         <div className="navbar-component">
             <ToastContainer />
             <div className="logo">
-                <img src={logo} alt="" />
+                <Link to="/home">
+                    <img src={logo} alt="" />
+                </Link>
             </div>
             <div className="search-bar">
                 <input className="search-input" type="text" placeholder="Tìm kiếm..." />
@@ -80,29 +77,29 @@ const NavBar: React.FC = () => {
             <div className="menu">
                 <ul className="ul">
                     <Link className="dir" to="/home">
-                        <li>
+                        <li className="li-menu">
                             <i className="fa-solid fa-house-chimney"></i>
-                            Trang Chủ
+                            <span>Trang Chủ</span>
                         </li>
                     </Link>
 
                     <Link className="dir" to="/home/thongbao">
-                        <li>
+                        <li className="li-menu">
                             <i className="fa-solid fa-message"></i>
-                            Thông báo
+                            <span>Thông báo</span>
                         </li>
                     </Link>
 
                     <Link className="dir" to="/home/lichhoc">
-                        <li>
+                        <li className="li-menu">
                             <i className="fa-solid fa-calendar-days"></i>
-                            {data.checkUser.loaitaikhoan === 'sinhvien' ? 'Lịch Học' : 'Lịch Dạy'}
+                            <span>{data.checkUser.loaitaikhoan === 'sinhvien' ? 'Lịch Học' : 'Lịch Dạy'}</span>
                         </li>
                     </Link>
 
                     {data.checkUser.loaitaikhoan === 'giaovien' ? (
                         <Link className="dir" to="/home/yeucau">
-                            <li>
+                            <li className="li-menu">
                                 <i className="fa-solid fa fa-calendar-times-o"></i>
                                 Yêu Cầu
                             </li>
@@ -136,6 +133,16 @@ const NavBar: React.FC = () => {
                                     <></>
                                 )}
 
+                                <Link
+                                    className="dangki-hocphan"
+                                    style={{ width: 100 + '%', padding: 0 + '!important', margin: 0 }}
+                                    to="/home/dangkihocphan"
+                                >
+                                    <li>
+                                        <span>Đăng kí học phần</span>
+                                    </li>
+                                </Link>
+
                                 <li onClick={handleShowChangePass}>
                                     <span>Đổi mật khẩu</span>
                                 </li>
@@ -150,7 +157,6 @@ const NavBar: React.FC = () => {
             </div>
             {changePass ? (
                 <>
-
                     <div className="modalshowChangePass">
                         <div className="container">
                             <div className="row vh-100 justify-content-center align-items-center ">

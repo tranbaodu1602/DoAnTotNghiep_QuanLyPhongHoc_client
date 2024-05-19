@@ -59,10 +59,16 @@
             box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
         }
 
-        & .ul li {
+        & .dangki-hocphan {
+            text-decoration: none;
+            color: #878787;
+            font-weight: 400;
+        }
+
+        & ul li {
             text-decoration: none;
             display: inline-block;
-            margin: 0px 8px;
+
             color: #878787;
             padding: 8px 10px;
 
@@ -169,5 +175,40 @@
         background-color: transparent;
         float: right;
         padding: 8px 16px;
+    }
+}
+
+@media screen and (max-width: 840px) {
+    .navbar-component {
+        & .logo {
+            width: 30%;
+        }
+
+        & .search-bar {
+            display: none;
+        }
+
+        & .menu {
+            width: 40%;
+
+            & ul {
+                padding: 0;
+                & .li-menu span {
+                    display: none;
+                }
+
+                & .infomation {
+                    width: 200px;
+                    font-size: 10px;
+
+                    & .modal-logout {
+                        width: 160px;
+                        right: 2vw;
+                    }
+                }
+
+                // display: none;
+            }
+        }
     }
 }

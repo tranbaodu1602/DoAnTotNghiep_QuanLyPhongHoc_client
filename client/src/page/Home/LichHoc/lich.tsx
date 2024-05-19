@@ -17,10 +17,6 @@ import {
     TodayButton,
 } from '@devexpress/dx-react-scheduler-material-ui';
 
-// import { io, Socket } from 'socket.io-client';
-
-// const socket: Socket = io('http://localhost:3001');
-
 const ExternalViewSwitcher = ({
     currentViewName,
     onChange,
@@ -40,23 +36,37 @@ const ExternalViewSwitcher = ({
     </RadioGroup>
 );
 
-const CustomTimeTableCell: React.FC<{ startDate: Date }> = ({ startDate }) => {
+const CustomTimeTableCell: React.FC<{ startDate: Date; endDate: Date; resources: any; groupingInfo: any }> = ({
+    startDate,
+    ...restProps
+}) => {
     const hour = startDate.getHours();
     let timeSlotText = '';
 
-    if (hour >= 6 && hour < 12) {
+    if (hour === 6) {
         timeSlotText = 'Buổi sáng';
-    } else if (hour >= 12 && hour < 18) {
+    } else if (hour === 12) {
         timeSlotText = 'Buổi chiều';
-    } else {
+    } else if (hour === 18) {
         timeSlotText = 'Buổi tối';
     }
 
-    return <div style={{ textAlign: 'center' }}>{timeSlotText}</div>;
+    return (
+        <WeekView.TimeTableCell
+            {...restProps}
+            startDate={startDate}
+            style={{
+                ...restProps.style,
+                textAlign: 'center',
+                backgroundColor: '#f5f5f5',
+            }}
+        >
+            {timeSlotText && <div style={{ color: '#888', fontSize: '0.75em' }}>{timeSlotText}</div>}
+        </WeekView.TimeTableCell>
+    );
 };
 
 const LearningCalendar: React.FC = () => {
-    //const [data] = useState(MonHoc.data.roomData[0].thongTinLich);
     const [currentViewName, setCurrentViewName] = useState('Week');
 
     const currentViewNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,38 +75,14 @@ const LearningCalendar: React.FC = () => {
 
     const storedData = localStorage.getItem('myDataKey');
     const thongtin = storedData ? JSON.parse(storedData) : [];
-
-    // socket.on('cancelSchedule', (data: { monhoc: any }) => {
-    //     const foundIndex = thongtin.DanhSachHocPhan.findIndex((item: any) => {
-    //         return item.maLopHocPhan === data.monhoc.maLopHocPhan;
-    //     });
-
-    //     if (foundIndex !== -1) {
-    //         thongtin.DanhSachHocPhan[foundIndex] = data.monhoc; // Cập nhật giá trị tại chỉ mục đã tìm thấy
-    //         localStorage.setItem('myDataKey', JSON.stringify(thongtin));
-    //     }
-    // });
-
-    // socket.on('updateSchedule', (data: { monhoc: any }) => {
-    //     const foundIndex = thongtin.DanhSachHocPhan.findIndex((item: any) => {
-    //         return item.maLopHocPhan === data.monhoc.maLopHocPhan;
-    //     });
-
-    //     if (foundIndex !== -1) {
-    //         thongtin.DanhSachHocPhan[foundIndex] = data.monhoc; // Cập nhật giá trị tại chỉ mục đã tìm thấy
-    //         localStorage.setItem('myDataKey', JSON.stringify(thongtin));
-    //     }
-    // });
-
     const [data, setNewData] = useState([]);
+    const [appointmentData, setAppointmentData] = useState(null);
 
     useEffect(() => {
-        // Tạo mảng mới để lưu trữ tất cả lịch học
-        const updatedData = [];
+        const updatedData: any[] = [];
 
-        thongtin.lich.forEach((monHoc) => {
-            monHoc.thongTinLich.forEach((lich) => {
-                // Chuyển đổi endDate và startDate sang địa phương không thay đổi giá trị thời gian
+        thongtin.lich.forEach((monHoc: any) => {
+            monHoc.thongTinLich.forEach((lich: any) => {
                 const localEndDate = new Date(lich.endDate).toLocaleString('en-US', { timeZone: 'UTC' });
                 const localStartDate = new Date(lich.startDate).toLocaleString('en-US', { timeZone: 'UTC' });
 
@@ -108,11 +94,8 @@ const LearningCalendar: React.FC = () => {
             });
         });
 
-        // Cập nhật state bằng mảng mới
         setNewData(updatedData);
     }, []);
-
-    console.log('datas', data);
 
     const Appointment: React.FC<{
         children: React.ReactNode;
@@ -127,20 +110,21 @@ const LearningCalendar: React.FC = () => {
                     ...style,
                     backgroundColor: dynamicBackgroundColor,
                     borderRadius: '8px',
+                    fontSize: '12px', // Tăng kích thước chữ
                 }}
             >
                 {children}
-                <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
+                <div style={{ color: '#000', paddingLeft: '4%' }}>
                     GV: <span style={{ color: 'red' }}>{data.tenGV}</span>
                 </div>
-                <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
+                <div style={{ color: '#000', paddingLeft: '4%' }}>
                     Tiết: <span style={{ color: 'red' }}>{data.tietHoc}</span>
                 </div>
-                <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
+                <div style={{ color: '#000', paddingLeft: '4%' }}>
                     Phòng: <span style={{ color: 'red' }}>{data.phongHoc}</span>
                 </div>
-                <div style={{ color: '#000', paddingLeft: 4 + '%' }}>
-                    Ghi chú: <span style={{ color: 'red' }}>{data.ghiChu}</span>{' '}
+                <div style={{ color: '#000', paddingLeft: '4%' }}>
+                    Ghi chú: <span style={{ color: 'red' }}>{data.ghiChu}</span>
                 </div>
             </Appointments.Appointment>
         );
@@ -154,12 +138,34 @@ const LearningCalendar: React.FC = () => {
             {...restProps}
             style={{
                 ...style,
-                /* backgroundColor: '#FFC107', */
                 borderRadius: '8px',
+                fontSize: '14px', // Tăng kích thước chữ
             }}
         >
             {children}
         </Appointments.Appointment>
+    );
+
+    const CustomAppointmentTooltipContent = ({ appointmentData, ...restProps }) => (
+        <AppointmentTooltip.Content {...restProps} appointmentData={appointmentData}>
+            <div style={{ padding: '10px' }}>
+                <div>
+                    <strong>Tên môn học:</strong> {appointmentData.title}
+                </div>
+                <div>
+                    <strong>Giáo viên:</strong> {appointmentData.tenGV}
+                </div>
+                <div>
+                    <strong>Phòng học:</strong> {appointmentData.phongHoc}
+                </div>
+                <div>
+                    <strong>Tiết học:</strong> {appointmentData.tietHoc}
+                </div>
+                <div>
+                    <strong>Ghi chú:</strong> {appointmentData.ghiChu}
+                </div>
+            </div>
+        </AppointmentTooltip.Content>
     );
 
     return (
@@ -169,17 +175,21 @@ const LearningCalendar: React.FC = () => {
                 <Scheduler data={data} height={620}>
                     <ViewState defaultCurrentDate="2023-10-24" currentViewName={currentViewName} />
                     <WeekView
-                        startDayHour={5.5} // Giờ bắt đầu buổi sáng
-                        endDayHour={22} // Giờ kết thúc buổi tối
+                        startDayHour={6}
+                        endDayHour={22}
                         cellDuration={60}
-                        // timeTableCellComponent={CustomTimeTableCell}
+                        timeTableCellComponent={CustomTimeTableCell}
                     />
                     <MonthView />
                     <Toolbar />
                     <DateNavigator />
                     <TodayButton />
                     <Appointments appointmentComponent={currentViewName === 'Week' ? Appointment : customAppointment} />
-                    {currentViewName === 'Month' ? <AppointmentTooltip showCloseButton /> : <></>}
+                    <AppointmentTooltip
+                        showCloseButton
+                        showOpenButton
+                        contentComponent={CustomAppointmentTooltipContent}
+                    />
                 </Scheduler>
             </Paper>
         </React.Fragment>

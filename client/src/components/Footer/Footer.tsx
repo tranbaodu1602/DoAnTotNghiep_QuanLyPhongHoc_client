@@ -44,7 +44,7 @@ const Footer: React.FC = () => {
                 </Col>
             </Row>
             <Row className="row2">
-                <p>Copyright © 2020 - Phát triển bởi Trung tâm Quản trị Hệ thống - ĐHCN TP.HCM</p>
+                <p>Copyright © 2024 - Phát triển bởi sinh viên: Ngô Hữu Nghị - Trần Bảo Dự - ĐHCN TP.HCM</p>
             </Row>
         </div>
     );

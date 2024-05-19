@@ -5,6 +5,8 @@ import './content.scss';
 import avt from '../../assets/images/avt4.jpg';
 import { Link } from 'react-router-dom';
 import HomeGiangVien from '../../page/GiangVien/HomeGiangVien';
+import ProgressChart from '../PointChart/ProgressChart';
+import ResultChart from '../PointChart/ResultChart';
 
 const Content: React.FC = () => {
     const [statusScroll, setStatusScroll] = useState(false);
@@ -27,6 +29,14 @@ const Content: React.FC = () => {
         { title: 'Môn học/học phần', dataIndex: 'tenMonHoc', key: 'tenMonHoc' },
         { title: 'Số tín chỉ', dataIndex: 'soTinChi', key: 'soTinChi' },
         { title: 'Số tiết', dataIndex: 'soBuoiHoc', key: 'soBuoiHoc' },
+    ];
+
+    const dataPoints = [
+        { subject: 'Hệ quản trị cơ sở dữ liệu', yourScore: 5.5, avgScore: 5.7 },
+        { subject: 'Lập Trình WWW', yourScore: 4.2, avgScore: 4.6 },
+        { subject: 'Nhập môn dữ liệu lớn', yourScore: 7.4, avgScore: 5.8 },
+        { subject: 'Phát triển ứng dụng', yourScore: 5.3, avgScore: 3.9 },
+        { subject: 'Tiếng việt thực hành', yourScore: 9.5, avgScore: 9.5 },
     ];
 
     const mangMoi = data.lich.map(({ tenMonHoc, soTinChi, soBuoiHoc, maLopHocPhan }) => ({
@@ -56,7 +66,7 @@ const Content: React.FC = () => {
                                 <img src={avt} alt="" />
                             )}
 
-                            <Link to="/home/chitietsinhvien">
+                            <Link style={{ textDecoration: 'none' }} to="/home/chitietsinhvien">
                                 <span>Xem chi tiết</span>
                             </Link>
                         </div>
@@ -153,9 +163,9 @@ const Content: React.FC = () => {
                                     </Card>
                                 </Link>
                                 <Card
-                                    className={`card ${statusScroll === false ? '' : 'animate__jackInTheBox'} `}
+                                    className={`card ${statusScroll === false ? '' : 'animate__jackInTheBox'} mt-3 `}
                                     title="Số môn học trong học kì"
-                                    style={{ color: '#737373', position: 'absolute', bottom: 0 }}
+                                    style={{ color: '#737373' }}
                                 >
                                     <div className="" style={{ display: 'flex', justifyContent: 'space-between' }}>
                                         <h1>{mangMoi.length}</h1>
@@ -170,6 +180,23 @@ const Content: React.FC = () => {
                             <Col className="col2">
                                 <Card className="card2" title="Lớp học phần" style={{ color: '#1da1f2' }}>
                                     <Table dataSource={mangMoi} columns={columns} pagination={{ pageSize: 3 }} />
+                                </Card>
+                            </Col>
+                        </Row>
+
+                        <Row className="row3">
+                            <Col className="col3">
+                                <Card title="Tổng số tín chỉ đạt được" className="card">
+                                    <div className="chart">
+                                        <ProgressChart progress={139} total={146} />
+                                    </div>
+                                </Card>
+                            </Col>
+                            <Col style={{ width: 64 + '%' }} className="col3">
+                                <Card className="card2 result-chart">
+                                    <div className="chart">
+                                        <ResultChart dataPoints={dataPoints} />
+                                    </div>
                                 </Card>
                             </Col>
                         </Row>

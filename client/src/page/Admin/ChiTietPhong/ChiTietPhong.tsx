@@ -625,7 +625,7 @@ const ChiTietPhongHoc: React.FC = () => {
                                                         startDayHour={5.5} // Giờ bắt đầu buổi sáng
                                                         endDayHour={21} // Giờ kết thúc buổi tối
                                                         cellDuration={60}
-                                                    // timeTableCellComponent={CustomTimeTableCell}
+                                                        // timeTableCellComponent={CustomTimeTableCell}
                                                     />
                                                     <MonthView />
                                                     <Toolbar />
@@ -697,8 +697,9 @@ const ChiTietPhongHoc: React.FC = () => {
                                         <div className="PhongDoiLichGrid">
                                             {phongDapUng.map((phong: any, i) => (
                                                 <div
-                                                    className={`PhongDoiLichItem${i === selectedRoom ? ' clicked' : ''
-                                                        }`}
+                                                    className={`PhongDoiLichItem${
+                                                        i === selectedRoom ? ' clicked' : ''
+                                                    }`}
                                                     key={i}
                                                     onClick={() => handleClick(i, phong)}
                                                 >
@@ -784,7 +785,7 @@ const ChiTietPhongHoc: React.FC = () => {
                                                         placeholder="Tên phòng"
                                                         value={phong.maPhong}
 
-                                                    // onChange={(e) => handleInputChange('maPhong', e.target.value)}
+                                                        // onChange={(e) => handleInputChange('maPhong', e.target.value)}
                                                     />
                                                 </div>
                                                 <div className="form-input">
@@ -868,8 +869,11 @@ const ChiTietPhongHoc: React.FC = () => {
                                                                 }
                                                             />
                                                         </div>
-                                                        <div style={{ marginLeft: "15px", marginTop: "5px" }}>
-                                                            <Button type="primary" onClick={() => handleRemoveButtonClick(index)}>
+                                                        <div style={{ marginLeft: '15px', marginTop: '5px' }}>
+                                                            <Button
+                                                                type="primary"
+                                                                onClick={() => handleRemoveButtonClick(index)}
+                                                            >
                                                                 -
                                                             </Button>
                                                         </div>

@@ -106,3 +106,33 @@ b {
     margin-top: 15px;
     width: 100%;
 }
+
+@media screen and (max-width: 840px) {
+    .ChiTietSinhVien_content-coponent {
+        padding-top: 50px;
+        width: 80%;
+        margin: auto;
+        padding-bottom: 40px;
+        & .ChiTietSinhVien_my-info {
+            & .ChiTietSinhVien_avt {
+                display: none;
+            }
+
+            & .ChiTietSinhVien_text-info {
+                width: 50%;
+
+                & ul {
+                    margin: 0 !important;
+                }
+            }
+
+            & .ChiTietSinhVien_text-info2 {
+                width: 50%;
+
+                & ul {
+                    margin: 0 !important;
+                }
+            }
+        }
+    }
+}
