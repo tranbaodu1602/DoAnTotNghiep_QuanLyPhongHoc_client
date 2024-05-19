@@ -14,6 +14,10 @@ const lichHocSchema = new mongoose.Schema({
     tietHoc: String,
 });
 
+const sinhVienSchema = new mongoose.Schema({
+    maSinhVien: String,
+});
+
 const hocPhanSchema = new mongoose.Schema({
     maLopHocPhan: String,
     tenMonHoc: String,
@@ -23,7 +27,9 @@ const hocPhanSchema = new mongoose.Schema({
     soBuoiHoc: Number,
     tenNhomThucHanh: String,
     trangThai: String,
+    soLuong: Number,
     thongTinLich: [lichHocSchema],
+    danhSachSinhVien: [sinhVienSchema],
 });
 
 const HocPhan = db.model('HocPhan', hocPhanSchema);

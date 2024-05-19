@@ -198,6 +198,7 @@ const userLogin = async (dataLogin) => {
                     const data = await SinhVien.findOne({ 'ThongTinCaNhan.maSV': username });
                     const DSTB = await ThongBao.find({ danhCho: 'sinhvien' });
                     const DSTBALL = await ThongBao.find({ danhCho: 'tatca' });
+                    const DSHP = await HocPhan.find();
                     const lich = [];
                     await Promise.all(
                         data.ThongTinHocPhan.data[0].dsHocPhan.map(async (value) => {
@@ -217,6 +218,7 @@ const userLogin = async (dataLogin) => {
                                 checkUser,
                                 data: data,
                                 DanhSachThongBao: { DSTB, DSTBALL },
+                                DanhSachHocPhan: DSHP,
                                 lich: 'Không có lịch học trong học kì',
                                 path: '/home',
                             },
@@ -229,6 +231,7 @@ const userLogin = async (dataLogin) => {
                                 checkUser,
                                 data: data,
                                 DanhSachThongBao: { DSTB, DSTBALL },
+                                DanhSachHocPhan: DSHP,
                                 lich: lich,
                                 path: '/home',
                             },

@@ -360,7 +360,7 @@ const taoThongBao = async (data) => {
             ) {
                 link = data.files['dinhKem'][0].path;
             }
-            const thongBaoNew = new ThongBao({
+            const thongBaoNew = await new ThongBao({
                 tenThongBao,
                 slug: convertedStr,
                 chiTiet,
