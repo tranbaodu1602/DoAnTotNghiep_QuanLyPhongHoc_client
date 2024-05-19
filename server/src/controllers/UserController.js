@@ -42,8 +42,9 @@ const userLogin = async (req, res) => {
             // const payload = { id: data.id, username: data.username };
 
             // Tạo token với thời gian hết hạn là 7 ngày
+            console.log("test" + data.data.checkUser.loaitaikhoan);
             const token = jwt.generateToken(
-                { user_id : data._id , role : data.loaitaikhoan},
+                { user_id : data.data.checkUser._id , role : data.data.checkUser.loaitaikhoan},
                 "7d"
               );            
               return res.status(200).json({
