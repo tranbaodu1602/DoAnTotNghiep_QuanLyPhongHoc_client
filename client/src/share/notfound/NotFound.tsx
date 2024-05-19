@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface NotFondProps {}
-const NotFond: React.FC<NotFondProps> = (props) => {
+const NotFond: React.FC<NotFondProps> = () => {
     return <React.Fragment>Not found</React.Fragment>;
 };
 

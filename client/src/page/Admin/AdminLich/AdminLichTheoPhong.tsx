@@ -41,7 +41,7 @@ const ExternalViewSwitcher = ({
         style={{ flexDirection: 'row' }}
         name="views"
         value={currentViewName}
-        onChange={onChange}
+        onChange={onChange} 
     >
         <FormControlLabel value="Week" control={<Radio />} label="Lịch theo Tuần" />
         <FormControlLabel value="Month" control={<Radio />} label="Lịch theo Tháng" />

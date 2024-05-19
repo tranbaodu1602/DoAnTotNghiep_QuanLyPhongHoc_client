@@ -356,11 +356,6 @@ export const GiaoVien = {
     },
 };
 
-const ChuyenVienPhongKhoa = {
-    ThongTinCaNhan: {},
-};
-
-const ChuyenVienPhongDaoTao = {};
 
 export const MonHoc = {
     data: {
