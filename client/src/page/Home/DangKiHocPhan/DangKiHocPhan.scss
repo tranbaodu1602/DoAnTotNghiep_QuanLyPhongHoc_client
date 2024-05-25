@@ -10,6 +10,9 @@
         background-color: #fff;
         box-shadow: rgba(33, 35, 38, 0.3) 0px 10px 10px -10px;
         border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
 
         & .title {
             width: 100%;

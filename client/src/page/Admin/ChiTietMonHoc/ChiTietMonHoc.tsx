@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Table, Button, Modal, Form, Input, InputNumber, DatePicker, Empty } from 'antd';
+import { Layout, Table, Button, Modal, Form, Input, InputNumber, DatePicker, Spin } from 'antd';
 import { CheckOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import AdminSider from '../AdminSider/AdminSider';
 import AdminNavbar from '../AdminNavbar/AdminNavbar';
@@ -7,7 +7,6 @@ import Footer from '../../../components/Footer/Footer';
 import './ChiTietMonHoc.scss';
 import { useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { set } from 'immer/dist/internal.js';
 
 type ParamType = {
     maMonHoc: string;
@@ -32,6 +31,7 @@ type ParamType = {
 // } from '@devexpress/dx-react-scheduler-material-ui';
 
 // import { io, Socket } from 'socket.io-client';
+import { set } from 'immer/dist/internal.js';
 
 // const socket: Socket = io('http://localhost:3001');
 
@@ -272,6 +272,7 @@ const ChiTietMonHoc: React.FC = () => {
     const [dataCourse3, setDataCourse3] = useState<Course[]>([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [form] = Form.useForm();
 
     const dataToShow = data.DanhSachHocPhan.filter((item: any) => item.trangThai === 'Chấp nhận mở lớp').map(
@@ -285,6 +286,10 @@ const ChiTietMonHoc: React.FC = () => {
             soTietTH: item.soTietTH,
         }),
     );
+
+    const timeout = (ms: number) => {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+    };
 
     useEffect(() => {
         let sinhVien = 0;
@@ -366,7 +371,7 @@ const ChiTietMonHoc: React.FC = () => {
         }
     };
 
-    const handleCancel = async (key: string) => {
+    const handleDelete = async (key: string) => {
         const course = dataCourse.find((course) => course.key === key);
 
         if (course && course.danhSachSinhVien?.length !== 0) {
@@ -393,6 +398,44 @@ const ChiTietMonHoc: React.FC = () => {
                             localStorage.setItem('myDataKey', JSON.stringify(data));
 
                             setIsModalVisible(false);
+                            setRerender(!rerender);
+                        }
+                    });
+                }
+            } catch (error) {
+                toast.error('Có lỗi xảy ra');
+            }
+        }
+    };
+
+    const handleCancel = async (key: string) => {
+        const course = dataCourse.find((course) => course.key === key);
+
+        if (course && course.danhSachSinhVien?.length !== 0) {
+            toast.error('Không thể đóng lớp đã có sinh viên đăng ký');
+        } else {
+            try {
+                const response = await fetch('http://localhost:3001/course/status-change', {
+                    method: 'POST',
+                    body: JSON.stringify({ key }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    const rs = response.json();
+
+                    rs.then((result) => {
+                        if (result.course.status === 'fail') {
+                            toast.error(result.course.message);
+                        } else {
+                            if (selectedRowKeys[0] === key) {
+                                setDataCourse3([]);
+                            }
+                            toast.success(result.course.message);
+                            data.DanhSachHocPhan = result.course.DSHP;
+                            localStorage.setItem('myDataKey', JSON.stringify(data));
                             setRerender(!rerender);
                         }
                     });
@@ -456,33 +499,35 @@ const ChiTietMonHoc: React.FC = () => {
         setIsModalVisible(false);
     };
 
-    const onSelectChange = (selectedRowKeys: any) => {
+    const onSelectChange = async (selectedRowKeys: any) => {
         setSelectedRowKeys(selectedRowKeys);
+        setLoading(true);
+        await timeout(500);
         const selectedRow = dataToShow.find((item: any) => item.key === selectedRowKeys[0]);
 
         const courseSeleted = data.DanhSachHocPhan.find((item: any) => item._id === selectedRow.key);
         console.log(courseSeleted);
 
-        let sinhVien = 0;
+        const dssv = courseSeleted.danhSachSinhVien
+            .map((item: any, index: number) => {
+                const sinhvien = data.DanhSachSinhVien.find((sv: any) => sv.ThongTinCaNhan.maSV === item);
+                if (sinhvien) {
+                    return {
+                        key: sinhvien.ThongTinCaNhan._id,
+                        stt: index + 1,
+                        hoTen: sinhvien.ThongTinCaNhan.hoTenSV,
+                        maSinhVien: sinhvien.ThongTinCaNhan.maSV,
+                        gioiTinh: sinhvien.ThongTinCaNhan.gioiTinh,
+                        soDienThoai: sinhvien.ThongTinCaNhan.SDT,
+                        email: sinhvien.ThongTinCaNhan.email,
+                    };
+                }
+                return null;
+            })
+            .filter((item: any) => item !== null);
 
-        if (courseSeleted.danhSachSinhVien) {
-            sinhVien = courseSeleted.danhSachSinhVien.length;
-        }
-        setDataCourse3([
-            {
-                key: courseSeleted._id,
-                maLopHocPhan: courseSeleted.maLopHocPhan,
-                tenMonHoc: courseSeleted.tenMonHoc,
-                soLuong: `${sinhVien}/${courseSeleted.soLuong}`,
-                trangThai: courseSeleted.trangThai,
-                soTinChi: courseSeleted.soTinChi,
-                tenNhomThucHanh: courseSeleted.tenNhomThucHanh,
-                tenGiaoVien: courseSeleted.thongTinLich[0].tenGV,
-                soTietLT: courseSeleted.soTietLT,
-                soTietTH: courseSeleted.soTietTH,
-                danhSachSinhVien: courseSeleted.danhSachSinhVien,
-            },
-        ]);
+        setDataCourse3(dssv);
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -517,6 +562,7 @@ const ChiTietMonHoc: React.FC = () => {
                   dataIndex: 'tenNhomThucHanh',
                   key: 'tenNhomThucHanh',
                   width: 150,
+                  align: 'center',
               }
             : {
                   title: 'Nhóm Thực Hành',
@@ -552,7 +598,7 @@ const ChiTietMonHoc: React.FC = () => {
             key: 'confirm',
             width: 60,
             align: 'center',
-            render: (text, record) =>
+            render: (text: any, record: any) =>
                 record.trangThai === 'Đã mở đăng kí' ? (
                     <Button type="primary" icon={<CheckOutlined />} onClick={() => handleConfirm(record.key)}>
                         Xác nhận mở lớp
@@ -568,7 +614,7 @@ const ChiTietMonHoc: React.FC = () => {
                 <Button
                     danger={true}
                     icon={<CloseCircleOutlined style={{ color: 'red' }} />}
-                    onClick={() => handleCancel(record.key)}
+                    onClick={() => handleDelete(record.key)}
                 >
                     Hủy lớp
                 </Button>
@@ -607,9 +653,9 @@ const ChiTietMonHoc: React.FC = () => {
             width: 150,
         },
         {
-            title: 'Ngày bắt đầu',
-            dataIndex: 'startDate',
-            key: 'startDate',
+            title: 'Tên Nhóm Thực Hành',
+            dataIndex: 'tenNhomThucHanh',
+            key: 'tenNhomThucHanh',
             width: 100,
             align: 'center',
         },
@@ -638,7 +684,7 @@ const ChiTietMonHoc: React.FC = () => {
                     icon={<CloseCircleOutlined style={{ color: 'red' }} />}
                     onClick={() => handleCancel(record.key)}
                 >
-                    Hủy lớp
+                    Đóng lớp
                 </Button>
             ),
         },
@@ -670,6 +716,13 @@ const ChiTietMonHoc: React.FC = () => {
             title: 'Giới Tính',
             dataIndex: 'gioiTinh',
             key: 'gioiTinh',
+            width: 100,
+            align: 'center',
+        },
+        {
+            title: 'Số điện thoại',
+            dataIndex: 'soDienThoai',
+            key: 'soDienThoai',
             width: 100,
             align: 'center',
         },
@@ -796,13 +849,24 @@ const ChiTietMonHoc: React.FC = () => {
                     <div className="course-table">
                         <Table columns={columns2} dataSource={dataCourse2} pagination={false} scroll={{ x: true }} />
                     </div>
-                    <div style={{ borderTop: '1px solid #ccc', marginTop: '2vh' }} className="title">
-                        {/* <h1>{`Danh sách học phần ${dataCourse ? dataCourse[0].tenMonHoc : ''}`}</h1> */}
-                        <h1>Danh sách sinh viên</h1>
-                    </div>
-                    <div className="course-table">
-                        <Table columns={columns3} dataSource={[]} pagination={false} scroll={{ x: true }} />
-                    </div>
+                    {loading ? (
+                        <Spin style={{ width: 100 + '%', margin: 'auto' }} size="large" />
+                    ) : (
+                        <>
+                            <div style={{ borderTop: '1px solid #ccc', marginTop: '2vh' }} className="title">
+                                {/* <h1>{`Danh sách học phần ${dataCourse ? dataCourse[0].tenMonHoc : ''}`}</h1> */}
+                                <h1>Danh sách sinh viên</h1>
+                            </div>
+                            <div className="course-table">
+                                <Table
+                                    columns={columns3}
+                                    dataSource={dataCourse3}
+                                    pagination={false}
+                                    scroll={{ x: true }}
+                                />
+                            </div>
+                        </>
+                    )}
                 </div>
                 {/* <Layout>
                         <Content>
