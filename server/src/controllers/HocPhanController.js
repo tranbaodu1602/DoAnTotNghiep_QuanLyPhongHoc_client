@@ -33,6 +33,39 @@ const moLopHocPhan = async (req, res) => {
     }
 };
 
+const dongLopHocPhan = async (req, res) => {
+    try {
+        const course = await HocPhan.dongLopHocPhan(req.body);
+        res.status(200).json({
+            course,
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const dangKiHocPhan = async (req, res) => {
+    try {
+        const course = await HocPhan.dangKiHocPhan(req.body);
+        res.status(200).json({
+            course,
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const huyLopHocPhan = async (req, res) => {
+    try {
+        const course = await HocPhan.huyLopHocPhan(req.body);
+        res.status(200).json({
+            course,
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 const getHocPhanTheoMaHP = async (req, res) => {
     try {
         const hocPhan = await HocPhan.getHocPhanTheoMaHP(req.body);
@@ -63,6 +96,9 @@ module.exports = {
     taoHocPhan,
     xoaHocPhan,
     moLopHocPhan,
+    dongLopHocPhan,
+    dangKiHocPhan,
+    huyLopHocPhan,
     getHocPhanTheoMaHP,
     getAllHocPhan,
 };

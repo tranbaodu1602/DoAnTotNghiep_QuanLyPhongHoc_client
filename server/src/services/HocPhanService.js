@@ -170,6 +170,100 @@ const moLopHocPhan = (data) => {
     });
 };
 
+const dongLopHocPhan = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const hocPhan = await HocPhan.findOne({ _id: data.key });
+            if (!hocPhan) {
+                return resolve({
+                    status: 'fail',
+                    message: 'Không tìm thấy học phần',
+                });
+            } else {
+                await hocPhan.updateOne({ trangThai: 'Đã mở đăng kí' });
+                const DSHP = await HocPhan.find();
+                return resolve({
+                    status: 'success',
+                    message: 'Đóng lớp thành công',
+                    DSHP,
+                });
+            }
+        } catch (error) {
+            return reject(error);
+        }
+    });
+};
+
+const dangKiHocPhan = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const hp = await HocPhan.findOne({ _id: data._id });
+            console.log(data.mssv);
+
+            if (!hp) {
+                return resolve({
+                    status: 'fail',
+                    message: 'Không tìm thấy học phần',
+                });
+            } else {
+                if (hp.danhSachSinhVien.includes(data.mssv)) {
+                    return resolve({
+                        status: 'fail',
+                        message: 'Sinh viên đã đăng ký học phần này',
+                    });
+                }
+                hp.danhSachSinhVien.push(data.mssv);
+                await hp.save();
+
+                const DSHP = await HocPhan.find();
+
+                return resolve({
+                    status: 'success',
+                    message: 'Đăng kí học phần thành công',
+                    DSHP,
+                });
+            }
+        } catch (error) {
+            return reject(error);
+        }
+    });
+};
+
+const huyLopHocPhan = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            console.log(data);
+            const hp = await HocPhan.findOne({ _id: data.key });
+
+            if (!hp) {
+                return resolve({
+                    status: 'fail',
+                    message: 'Không tìm thấy học phần',
+                });
+            } else {
+                if (!hp.danhSachSinhVien.includes(data.mssv)) {
+                    return resolve({
+                        status: 'fail',
+                        message: 'Có lỗi xảy ra, vui lòng thử lại sau',
+                    });
+                }
+                hp.danhSachSinhVien.pull(data.mssv);
+                await hp.save();
+
+                const DSHP = await HocPhan.find();
+
+                return resolve({
+                    status: 'success',
+                    message: 'Hủy học phần học phần thành công',
+                    DSHP,
+                });
+            }
+        } catch (error) {
+            return reject(error);
+        }
+    });
+};
+
 const getHocPhanTheoMaHP = (maHP) => {
     return new Promise(async (reslove, reject) => {
         try {
@@ -216,6 +310,9 @@ module.exports = {
     taoHocPhan,
     xoaHocPhan,
     moLopHocPhan,
+    dongLopHocPhan,
+    dangKiHocPhan,
+    huyLopHocPhan,
     getHocPhanTheoMaHP,
     getAllHocPhan,
 };

@@ -148,6 +148,7 @@ const userLogin = async (dataLogin) => {
                     const DSPH = await PhongHoc.find();
                     const DSTK = await TaiKhoan.find();
                     const DSGV = await GiaoVien.find();
+                    const DSSV = await SinhVien.find();
                     if (!DSHP || !DSTB || !DSPH || !DSTK) {
                         reslove({
                             status: 'success',
@@ -188,6 +189,7 @@ const userLogin = async (dataLogin) => {
                                     DanhSachPhongHoc: DSPH,
                                     DanhSachTaiKhoan: modifiedDSTK,
                                     DanhSachGiaoVien: DSGV,
+                                    DanhSachSinhVien: DSSV,
                                     checkUser,
                                     path: '/admin/home',
                                 },
