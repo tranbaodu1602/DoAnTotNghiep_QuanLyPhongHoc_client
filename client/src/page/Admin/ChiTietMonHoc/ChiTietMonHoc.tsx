@@ -452,6 +452,8 @@ const ChiTietMonHoc: React.FC = () => {
             startDate: e.startDate.format('YYYY-MM-DD'),
         };
 
+        console.log(formattedValues);
+
         try {
             const response = await fetch('http://localhost:3001/course/create', {
                 method: 'POST',
@@ -485,14 +487,13 @@ const ChiTietMonHoc: React.FC = () => {
 
     const showModal = () => {
         setIsModalVisible(true);
-        console.log(dataCourse);
-
-        form.setFieldsValue({
-            tenHocPhan: dataCourse[0].tenMonHoc,
-            maHP: dataCourse[0].maLopHocPhan,
-            tinChi: dataCourse[0].soTinChi,
-            soLuong: dataCourse[0].soLuong.split('/')[1],
-        });
+        // console.log(dataCourse);
+        // form.setFieldsValue({
+        //     tenHocPhan: dataCourse[0].tenMonHoc,
+        //     maHP: dataCourse[0].maLopHocPhan,
+        //     tinChi: dataCourse[0].soTinChi,
+        //     soLuong: dataCourse[0].soLuong.split('/')[1],
+        // });
     };
 
     const handleCancelModal = () => {
